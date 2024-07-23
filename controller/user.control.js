@@ -23,7 +23,10 @@ const userService = require("../service/userService")
   
 
     
+async function sendUseremail(req,res){
+  
 
+}
 
     //   res.status(200).json({data:userCreate})
     // } catch (error) {
