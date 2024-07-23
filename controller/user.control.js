@@ -15,7 +15,10 @@ const userService = require("../service/userService")
     }
     }
     
+async function sendUseremail(req,res){
+  
 
+}
 
 
 module.exports ={
