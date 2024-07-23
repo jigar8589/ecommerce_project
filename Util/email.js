@@ -35,10 +35,10 @@ transporter.sendMail(mailOptions, function(error, info){
         res.send('Email sent: ' + info.response)
         console.log('Email sent: ' + info.response);
     }
-    resp.end();
+    res.end();
 });
 }
 
 
 
-module.exports = sendmail
+module.exports = {sendmail,genrateOTP}
