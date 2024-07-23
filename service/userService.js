@@ -1,38 +1,27 @@
 const bcrypt = require("bcryptjs");
 const saltRounds = 10;
-const {genrateOTP} = require("../Util/email");
-const user=require('../model/user.model')
+const { genrateOTP } = require("../Util/email");
+const user = require("../model/user.model");
 
 // Define the manageUser function
 async function manageUser(body) {
-  
-    const { firstName, lastName, email, phoneNo, password } = body; 
-    
-    
-        // Encrypt the password
-        const encryptedPassword = await bcrypt.hash(password, saltRounds);
+  // const { firstName, lastName, email, phoneNo, password } = body;
 
-        // Generate OTP
-        // const otp = genrateOTP();
+  // Encrypt the password
+  const encryptedPassword = await bcrypt.hash(body.password, saltRounds);
 
-        // Create user in the database
-        const createUser = await user.create({
-            firstName,
-            lastName,
-            email,
-            phoneNo,
-            password: encryptedPassword,
-            otp:genrateOTP()
-        });
+  // Generate OTP
+  // const otp = genrateOTP();
+  body.password = encryptedPassword;
+  body.otp = genrateOTP();
+  body.role = "user";
 
-        return createUser;
-    }
+  // Create user in the database
+  const createUser = await user.create(body);
 
+  return createUser;
+}
 
 module.exports = {
-    manageUser
+  manageUser,
 };
-
-
-
-
