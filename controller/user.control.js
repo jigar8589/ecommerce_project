@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const user = require("../model/user.model");
 const userService = require("../service/userService")
+const Util = require('../Util/email')
 // require('../Util/email')
 
 
@@ -23,15 +24,17 @@ const userService = require("../service/userService")
   
 
     
-async function sendUseremail(req,res){
+}
+
+
+async function  sendUseremail(req,res){
+ try {
+
+  const sendmail = await Util.sendmail(req.body)
+  res.json({data:sendmail})
   
-
+ } catch (error) {
+      console.log(error);
+ }
 }
-
-    //   res.status(200).json({data:userCreate})
-    // } catch (error) {
-    //   console.log("error is ",error);
-    // }
-}
-
-module.exports={handleUser}
+module.exports={handleUser,sendUseremail}

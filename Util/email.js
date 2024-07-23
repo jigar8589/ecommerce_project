@@ -1,42 +1,28 @@
-// const nodemailer = require("nodemailer");
+ const nodemailer = require("nodemailer");
 
-function genrateOTP(){
-    let  otp = Math.floor(1000+ Math.random()*9000 );
+function genrateOTP() {
+    let otp = Math.floor(1000 + Math.random() * 9000);
     return otp;
 
 }
 
 
- 
+function sendmail(req,res) {
+
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'jigs.dev2001@gmail.com',  // Your email address
+            pass: 'xdiv omgd sicv hbks'  // Your email passkey
+        }
+    });
 
 
-
-
-function sendmail(email,otp){
-    
-let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'jigs.dev2001@gmail.com',  // Your email address
-        pass: 'xdiv omgd sicv hbks'  // Your email passkey
-    }
-});
-
-
-
-
-
-
-
-
-
-
-
-let mailOptions = {
-    from: 'jigs.dev2001@gmail.com',
-    to: req.body.email,  // Customer's email address
-    subject: 'OTP Verification',
-    html: `
+    let mailOptions = {
+        from: 'jigs.dev2001@gmail.com',
+        to: req.body.email,  // Customer's email address
+        subject: 'OTP Verification',
+        html: `
         <!DOCTYPE html>
         <html>
         <head>
@@ -107,24 +93,24 @@ let mailOptions = {
             </div>
         </body>
         </html>
-    `.replace('{{OTP}}',genrateOTP()) // Replace the placeholder with the actual OTP
-};
+    `.replace('{{OTP}}', genrateOTP()) // Replace the placeholder with the actual OTP
+    };
 
 
 
 
-// Sending email
-transporter.sendMail(mailOptions, function(error, info){
-    if (error) {
-        console.log(error);
-    } else {
-        res.send('Email sent: ' + info.response)
-        console.log('Email sent: ' + info.response);
-    }
-    res.end();
-});
+    // Sending email
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+           res.send('Email sent: ' + info.response)
+            console.log('Email sent: ' + info.response);
+        }
+       // res.end();
+    });
 }
 
 
 
-module.exports = {sendmail,genrateOTP}
+module.exports = { sendmail, genrateOTP }
