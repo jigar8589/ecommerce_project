@@ -1,5 +1,12 @@
 
-const { manageUser, getUser ,getUserById } = require("../service/userService")
+const { manageUser,
+  getUser,
+  getUserById,
+  findUserByEmail,
+  checkUserPassword,
+  updatePassword ,
+  userIsActiveCheck}
+  = require("../service/userService")
 const Util = require('../Util/email')
 
 
@@ -13,7 +20,7 @@ async function handleUser(req, res) {
       res.json({ massage: "User not create" })
     } else {
       const sendmailservice = await Util.sendmail(req.body.email, req.body.otp)
-      res.json({ massage: "OTP send successfully" })
+      res.json({ massage: "User create" })
     }
 
     res.status(200).json({ data: userCreate })
@@ -54,6 +61,41 @@ async function getUserId(req, res) {
 
 
 
-module.exports = { handleUser,
-   getAllUser ,
-   getUserId}
+async function resetPassword(req, res) {
+
+  const rest = await findUserByEmail(req.body)
+  if (rest) {
+
+    const active = await userIsActiveCheck(req.body)
+    if (active) {
+      const userPasscheck = await checkUserPassword(req.body)
+      if (!userPasscheck) {
+        res.json({ massage: "Email and password incorrect" })
+      } else {
+        const newPassword = await updatePassword(req.body)
+        res.status(200).json({ massage: "password update successfuly" })
+      }
+
+    }
+    else {
+      res.json({ massage: "user is not active" })
+    }
+  } 
+  else {
+    // const userpasscheck = await checkUser(req.body)
+    res.send("user  not exist")
+  }
+
+
+
+}
+
+
+
+
+
+module.exports = {
+  handleUser,
+  getAllUser,
+  getUserId, resetPassword
+}
