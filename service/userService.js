@@ -23,14 +23,14 @@ async function manageUser(body) {
 }
 
 //  getall user 
-async function getUser() {
+  async function getUser() {
   const User = await user.find({})
   return User
 }
 
 // get user by ID
 
-  async function getUserById(id) {
+    async function getUserById(id) {
     const User = await user.findById(id)
     return User
   }
