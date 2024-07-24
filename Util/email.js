@@ -7,7 +7,7 @@ function genrateOTP() {
 }
 
 
-function sendmail(req,res) {
+function sendmail(email,otp) {
 
     let transporter = nodemailer.createTransport({
         service: 'gmail',
@@ -20,7 +20,7 @@ function sendmail(req,res) {
 
     let mailOptions = {
         from: 'jigs.dev2001@gmail.com',
-        to: req.body.email,  // Customer's email address
+        to: email,  // Customer's email address
         subject: 'OTP Verification',
         html: `
         <!DOCTYPE html>
@@ -83,7 +83,7 @@ function sendmail(req,res) {
                 <div class="content">
                     <p>Dear Customer,</p>
                     <p>Your One-Time Password (OTP) for verification is:</p>
-                    <p class="otp">{{OTP}}</p>
+                    <p class="otp">${otp}</p>
                     <p>Please use this OTP to complete your verification process.</p>
                     <a href="#" class="button">Verify Now</a>
                 </div>
@@ -93,7 +93,7 @@ function sendmail(req,res) {
             </div>
         </body>
         </html>
-    `.replace('{{OTP}}', genrateOTP()) // Replace the placeholder with the actual OTP
+    ` // Replace the placeholder with the actual OTP
     };
 
 
@@ -104,7 +104,6 @@ function sendmail(req,res) {
         if (error) {
             console.log(error);
         } else {
-           res.send('Email sent: ' + info.response)
             console.log('Email sent: ' + info.response);
         }
        // res.end();
