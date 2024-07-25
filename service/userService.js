@@ -22,9 +22,9 @@ async function manageUser(body) {
     body.otp = genrateOTP();
     body.role = "user";
 
-  // Create user in the database
-  const createUser = await user.create(body);
-  return createUser;
+    // Create user in the database
+    const createUser = await user.create(body);
+    return createUser;
   }
   // Encrypt the password
 }
@@ -32,8 +32,8 @@ async function manageUser(body) {
 async function verfiyUser(body) {
   const email = body.email;
   const otp = body.otp;
-  const verfiyUser = await user.findOne({email,otp});
-  
+  const verfiyUser = await user.findOne({ email, otp });
+
   return verfiyUser;
 }
 
@@ -52,9 +52,16 @@ async function getUserById(id) {
 
 
 async function findUserByEmail(body) {
-  const useremail = body.email;
-  const users = await user.findOne({ email: useremail });
-  return users;
+  try {
+
+    const useremail = body.email;
+    const users = await user.findOne({ email: useremail });
+    return users;
+
+  } catch (error) {
+    return error
+
+  }
 }
 
 
@@ -76,9 +83,9 @@ async function updatePassword(body) {
   try {
 
     const newPassWord = body.newpassowrd
-    const updatedpass = await bcrypt.hash(newPassWord,10);
+    const updatedpass = await bcrypt.hash(newPassWord, 10);
     const email = body.email
-    const updatedUser = await user.findOneAndUpdate({ email:email }, { $set: { password: updatedpass } });
+    const updatedUser = await user.findOneAndUpdate({ email: email }, { $set: { password: updatedpass } });
     return updatedUser
 
   } catch (error) {
@@ -99,6 +106,30 @@ async function userIsActiveCheck(body) {
   }
 }
 
+// Login user checkpassword correct or not 
+
+async function checkUserLoginPassword(body) {
+  //... fetch user from a db etc.
+  try {
+    const users = await user.findOne({ email: body.email }).populate("password");
+    const pass = body.password;
+    const match = await bcrypt.compare(pass, users.password);
+    return match;
+  } catch (error) {
+    return error
+  }
+
+}
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -111,4 +142,5 @@ module.exports = {
   updatePassword,
   userIsActiveCheck,
   verfiyUser,
+  checkUserLoginPassword
 };

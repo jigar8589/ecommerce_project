@@ -1,5 +1,14 @@
  const nodemailer = require("nodemailer");
  require('dotenv').config()
+ const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'jigs.dev2001@gmail.com',  // Your email address
+        pass: process.env.KEY   // Your email passkey
+    }
+});
+
+
 function genrateOTP() {
     let otp = Math.floor(1000 + Math.random() * 9000);
     return otp;
@@ -7,16 +16,7 @@ function genrateOTP() {
 }
 
 
-function sendmail(email,otp) {
-
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'jigs.dev2001@gmail.com',  // Your email address
-            pass: process.env.KEY  // Your email passkey
-        }
-    });
-
+async function sendmail(email,otp) {
 
     let mailOptions = {
         from: 'jigs.dev2001@gmail.com',
@@ -100,7 +100,7 @@ function sendmail(email,otp) {
 
 
     // Sending email
-    transporter.sendMail(mailOptions, function (error, info) {
+    await transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
         } else {

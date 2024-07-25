@@ -11,9 +11,12 @@ const {
   findUserByEmail,
   checkUserPassword,
   updatePassword,
-  userIsActiveCheck,
+  userIsActiveCheck,checkUserLoginPassword
 } = require("../service/userService");
 const Util = require("../Util/email");
+
+
+
 
 async function handleUser(req, res) {
   try {
@@ -72,27 +75,59 @@ async function resetPassword(req, res) {
   const rest = await findUserByEmail(req.body);
   if (rest) {
     const active = await userIsActiveCheck(req.body);
+
     if (active) {
       const userPasscheck = await checkUserPassword(req.body);
+
       if (!userPasscheck) {
-        res.json({ massage: "Email and password incorrect" });
+        res.status(404).json({ massage: "Email and password incorrect" });
       } else {
         const newPassword = await updatePassword(req.body);
         res.status(200).json({ massage: "password update successfuly" });
       }
-    } else {
-      res.json({ massage: "user is not active" });
+
+    }else {
+      res.status(404).json({ massage: "user is not active" });
     }
-  } else {
-    // const userpasscheck = await checkUser(req.body)
-    res.send("user  not exist");
+  }else {
+ 
+    res.status(404).send("user  not exist");
   }
 }
 
+
+//  user login verify
+
+async function loginUser(req, res) {
+  try {
+    const user = await findUserByEmail(req.body);
+    if (!user) {
+      return res.status(404).json({ message: "User not exist" });
+    }
+
+    if (!user.isActive) {
+      return res.status(403).json({ message: "User is not active" });
+    }
+
+    const isPasswordCorrect = await checkUserLoginPassword(req.body);
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ message: "Email and password incorrect" });
+    }
+
+    return res.status(200).json({ message: "User login successfully",data: user });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+}
+
+
+
 module.exports = {
-  handleUser,
+  createUser,
   getAllUser,
   getUserId,
   resetPassword,
   handleVerification,
+  loginUser
 };
