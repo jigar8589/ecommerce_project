@@ -25,10 +25,6 @@ async function manageUser(body) {
   // Create user in the database
   const createUser = await user.create(body);
   return createUser;
-    // Create user in the database
-    const createUser = await user.create(body);
-
-    return createUser;
   }
   // Encrypt the password
 }
@@ -113,6 +109,6 @@ module.exports = {
   findUserByEmail,
   checkUserPassword,
   updatePassword,
-  userIsActiveCheck
+  userIsActiveCheck,
   verfiyUser,
 };
