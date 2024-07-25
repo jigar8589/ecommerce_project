@@ -1,5 +1,5 @@
  const nodemailer = require("nodemailer");
-
+ require('dotenv').config()
 function genrateOTP() {
     let otp = Math.floor(1000 + Math.random() * 9000);
     return otp;
@@ -13,7 +13,7 @@ function sendmail(email,otp) {
         service: 'gmail',
         auth: {
             user: 'jigs.dev2001@gmail.com',  // Your email address
-            pass: 'xdiv omgd sicv hbks'  // Your email passkey
+            pass: process.env.KEY  // Your email passkey
         }
     });
 
