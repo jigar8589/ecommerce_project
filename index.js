@@ -6,6 +6,7 @@ const { prototype } = require('nodemailer/lib/mime-node')
 const app = express();
 require("./config")
 require("./passwordencrept")
+app.use(express.json())
 const port = process.env.PORT;
 app.use(express.urlencoded({extended:true}))
 
