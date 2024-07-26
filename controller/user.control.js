@@ -9,7 +9,10 @@ const {
   findUserByEmail,
   checkUserPassword,
   updatePassword,
-  userIsActiveCheck,checkUserLoginPassword
+  userIsActiveCheck,
+  checkUserLoginPassword,
+  findUser,
+  updateuser
 } = require("../service/userService");
 const Util = require("../Util/email");
 
@@ -18,14 +21,21 @@ const Util = require("../Util/email");
 
 async function handleUser(req, res) {
   try {
-    const userCreate = await manageUser(req.body);
-    if (!userCreate) {
-      res.json({ massage: "User not create" });
-    } else {
-      const sendmailservice = await Util.sendmail(req.body.email, req.body.otp);
-      res.json({ massage: "User create" });
+    const findUser=await userService.findUser(req.body)
+    if (findUser) {
+      res.status(404).send("User already exists..")
     }
-    res.status(200).json({ data: userCreate });
+    else{
+      const userCreate = await manageUser(req.body);
+      if (!userCreate) {
+        res.status(404).send({ massage: "User not create" });
+      } 
+      else {
+        const sendmailservice = await Util.sendmail(req.body.email, req.body.otp);
+        res.status(200).send("User created");
+      }
+    }
+    // res.status(200).send({ data: userCreate });
   } catch (error) {
     console.log(error);
   }
@@ -35,14 +45,10 @@ async function handleVerification(req, res) {
   try {
     const verifyUser = await userService.verfiyUser(req.query);
     if (verifyUser) {
-      const updateUser = await user.findOneAndUpdate(
-        { _id: verifyUser._id },
-        { isActive: true },
-        { new: true }
-      );
+      const updateUser = await userService.updateuser(verifyUser._id,req.query.isActive);
       res.status(200).send({ data: updateUser });
     } else {
-      res.status(404).send("user not verified");
+      res.status(404).send("user not found");
     }
   } catch (error) {
     console.log(error);
@@ -58,7 +64,6 @@ async function getAllUser(req, res) {
     console.log(error);
   }
 }
-//get user by id router
 
 async function getUserId(req, res) {
   try {
@@ -87,9 +92,8 @@ async function resetPassword(req, res) {
     }else {
       res.status(404).json({ massage: "user is not active" });
     }
-  }else {
- 
-    res.status(404).send("user  not exist");
+  } else {
+    res.send("user  not exist");
   }
 }
 
