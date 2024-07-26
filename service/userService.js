@@ -121,18 +121,6 @@ async function checkUserLoginPassword(body) {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 module.exports = {
   manageUser,
   getUser,

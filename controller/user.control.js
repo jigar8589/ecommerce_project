@@ -1,8 +1,6 @@
 const mongoose = require("mongoose");
 const user = require("../model/user.model");
 const userService = require("../service/userService");
-const User = require("../model/user.model");
-// require('../Util/email')
 
 const {
   manageUser,
@@ -122,9 +120,16 @@ async function loginUser(req, res) {
 }
 
 
+function updateUser(user){
+
+ 
+
+}
+
+
 
 module.exports = {
-  createUser,
+  handleUser,
   getAllUser,
   getUserId,
   resetPassword,
