@@ -101,7 +101,7 @@ async function userIsActiveCheck(body) {
 // Login user checkpassword correct or not 
 
 async function checkUserLoginPassword(body) {
-  //... fetch user from a db etc.
+  
   try {
     const users = await user.findOne({ email: body.email }).populate("password");
     const pass = body.password;
@@ -113,14 +113,35 @@ async function checkUserLoginPassword(body) {
 
 }
 
+
+async function updateUserByOne(body){
+  try {
+    const email = body.email;
+    const firstname  = body.firstName;
+    const lastname = body.lastName;
+    const phoneno = body.phoneNo
+   const updatedUser = await user.findOneAndUpdate({email:email},{ $set: { firstName: firstname , lastName:lastname , phoneNo:phoneno} })
+   return updatedUser;
+  } catch (error) {
+    return  error
+  }
+}
+
+
+
 module.exports = {
   manageUser,
   getUser,
   getUserById,
   checkUserPassword,
+  findUserByEmail,
   updatePassword,
   userIsActiveCheck,
   verfiyUser,
   checkUserLoginPassword,
-  updateuser
+  updateuser,
+  updateUserByOne 
 };
+
+
+

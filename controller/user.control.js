@@ -1,7 +1,5 @@
 const mongoose = require("mongoose");
 const user = require("../model/user.model");
-const userService = require("../service/userService");
-
 const {
   manageUser,
   getUser,
@@ -11,8 +9,9 @@ const {
   updatePassword,
   userIsActiveCheck,
   checkUserLoginPassword,
-  findUser,
-  updateuser
+  updateuser,
+  verfiyUser,
+  updateUserByOne
 } = require("../service/userService");
 const Util = require("../Util/email");
 
@@ -21,7 +20,7 @@ const Util = require("../Util/email");
 
 async function handleUser(req, res) {
   try {
-    const findUser=await userService.findUser(req.body)
+    const findUser=await verfiyUser(req.body)
     if (findUser) {
       res.status(404).send("User already exists..")
     }
@@ -45,7 +44,7 @@ async function handleVerification(req, res) {
   try {
     const verifyUser = await userService.verfiyUser(req.query);
     if (verifyUser) {
-      const updateUser = await userService.updateuser(verifyUser._id,req.query.isActive);
+      const updateUser = await updateuser(verifyUser._id,req.query.isActive);
       res.status(200).send({ data: updateUser });
     } else {
       res.status(404).send("user not found");
@@ -123,10 +122,18 @@ async function loginUser(req, res) {
   }
 }
 
+// put requiest update user 
 
-function updateUser(user){
-
- 
+async function updateUser(req,res){
+  const user = await findUserByEmail(req.body);
+  if (!user) {
+    return res.status(404).json({ message: "User not exist" });
+  }else{
+    const updateUser = await updateUserByOne(req.body)
+    console.log(updateUser);
+    res.json({massage:"UserUpdate Successfully" })
+  }
+  
 
 }
 
@@ -138,5 +145,7 @@ module.exports = {
   getUserId,
   resetPassword,
   handleVerification,
-  loginUser
+  loginUser,
+  updateUser,
+
 };
