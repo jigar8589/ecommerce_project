@@ -2,7 +2,7 @@ const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 const { genrateOTP } = require("../Util/email");
 const user = require("../model/user.model");
-const Util=require("../Util/email")
+const Util = require("../Util/email");
 
 // Define the manageUser function
 async function manageUser(body) {
@@ -17,21 +17,19 @@ async function manageUser(body) {
   return createUser;
 }
 
-async function findUserEmail(body){
-  const email=body.email;
-  const findUser=await user.findOne({email:email})
+async function findUserEmail(body) {
+  const email = body.email;
+  const findUser = await user.findOne({ email: email });
   return findUser;
 }
 
 async function verfiyUser(body) {
   const email = body.email;
   const otp = body.otp;
-  const verfiyUser = await user.findOne({ email:email, otp:otp });
+  const verfiyUser = await user.findOne({ email: email, otp: otp });
 
   return verfiyUser;
 }
-
-
 
 //  getall user
 async function getUser() {
@@ -46,17 +44,13 @@ async function getUserById(id) {
   return User;
 }
 
-
 async function findUserByEmail(body) {
   try {
-
     const useremail = body.email;
     const users = await user.findOne({ email: useremail });
     return users;
-
   } catch (error) {
-    return error
-
+    return error;
   }
 }
 async function updateuser(id, isActive) {
@@ -107,19 +101,19 @@ async function userIsActiveCheck(body) {
   }
 }
 
-// Login user checkpassword correct or not 
+// Login user checkpassword correct or not
 
 async function checkUserLoginPassword(body) {
-  //... fetch user from a db etc.
   try {
-    const users = await user.findOne({ email: body.email }).populate("password");
+    const users = await user
+      .findOne({ email: body.email })
+      .populate("password");
     const pass = body.password;
     const match = await bcrypt.compare(pass, users.password);
     return match;
   } catch (error) {
-    return error
+    return error;
   }
-
 }
 
 //forget password
@@ -128,15 +122,15 @@ async function forgetUserPassword(body) {
   try {
     const email = body.email;
     const userActive = await user.findOne({ email: email });
-    
+
     if (userActive && userActive.isActive) {
       const otp = generateOTP();
       await Util.sendmail(email, otp);
       await user.findOneAndUpdate({ email: email }, { $set: { otp: otp } });
-      
+
       return { email: email, otpSent: true };
     } else {
-      throw new Error('User is not active');
+      throw new Error("User is not active");
     }
   } catch (error) {
     console.log(error);
@@ -148,13 +142,11 @@ function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-
-async function verifyOtp(body){
-  const otp=body.otp
-  const verifyOtp=await user.findOne({otp:otp});
+async function verifyOtp(body) {
+  const otp = body.otp;
+  const verifyOtp = await user.findOne({ otp: otp });
   return verifyOtp;
 }
-
 
 // async function updatepassword(body,email){
 //   const newpassword=body.password;
@@ -162,6 +154,41 @@ async function verifyOtp(body){
 //   return updatePasswordCheck
 // }
 
+async function updateUserByOne(body) {
+  try {
+    const email = body.email;
+    const firstname = body.firstName;
+    const lastname = body.lastName;
+    const phoneno = body.phoneNo;
+    const updatedUser = await user.findOneAndUpdate(
+      { email: email },
+      { $set: { firstName: firstname, lastName: lastname, phoneNo: phoneno } }
+    );
+    console.log(updatedUser);
+    return updatedUser;
+  } catch (error) {
+    return error;
+  }
+}
+
+async function userExist(query) {
+  try {
+    const useremail = query.email;
+    const users = await user.findOne({ email: useremail });
+    return users;
+  } catch (error) {
+    return error;
+  }
+}
+
+async function UpdateOTP(query, otp) {
+  const userEmail = query.email;
+  const OTP = await user.findOneAndUpdate(
+    { email: userEmail },
+    { $set: { otp: otp } }
+  );
+  return OTP;
+}
 
 module.exports = {
   findUserEmail,
@@ -169,6 +196,7 @@ module.exports = {
   getUser,
   getUserById,
   checkUserPassword,
+  findUserByEmail,
   updatePassword,
   userIsActiveCheck,
   verfiyUser,
@@ -176,4 +204,7 @@ module.exports = {
   updateuser,
   forgetUserPassword,
   verifyOtp,
+  updateUserByOne,
+  UpdateOTP,
+  userExist,
 };

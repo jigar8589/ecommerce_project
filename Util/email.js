@@ -102,7 +102,7 @@ async function sendmail(email,otp) {
     // Sending email
     await transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
-            console.log(error);
+            console.log("this error",error);
         } else {
             console.log('Email sent: ' + info.response);
         }

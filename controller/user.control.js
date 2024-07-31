@@ -12,6 +12,11 @@ const {
   updatePassword,
   userIsActiveCheck,
   checkUserLoginPassword,
+  updateuser,
+  verfiyUser,
+  updateUserByOne,
+  UpdateOTP,
+  userExist,
 } = require("../service/userService");
 const Util = require("../Util/email");
 
@@ -22,6 +27,7 @@ async function handleUser(req, res) {
       res.status(404).send("User already exists..");
     } else {
       const userCreate = await manageUser(req.body);
+      res.json({ data: userCreate });
       if (!userCreate) {
         res.status(404).send({ massage: "User not create" });
       } else {
@@ -40,7 +46,7 @@ async function handleUser(req, res) {
 
 async function handleVerification(req, res) {
   try {
-    const verifyUser = await userService.verfiyUser(req.query);
+    const verifyUser = await verfiyUser(req.query);
     if (verifyUser) {
       const updateUser = await userService.updateuser(
         verifyUser._id,
@@ -130,12 +136,15 @@ async function forgotPassword(req, res) {
     const verifyUser = await userService.findUserEmail(req.body);
 
     if (verifyUser && verifyUser.isActive == true) {
-      const {otp, password: newpassword,email } = req.body;
+      const { otp, password: newpassword, email } = req.body;
       // const userWithOtp = await user.findOne({ email: email, otp: otp });
       if (verifyUser.otp != otp) {
         return res.status(400).json({ message: "Invalid otp" });
       }
-      const updateUser=await userService.updatePassword({newpassword,email})
+      const updateUser = await userService.updatePassword({
+        newpassword,
+        email,
+      });
 
       return res
         .status(200)
@@ -148,6 +157,34 @@ async function forgotPassword(req, res) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }
+// put requiest update user
+
+async function updateUser(req, res) {
+  const user = await findUserByEmail(req.body);
+  if (!user) {
+    return res.status(404).json({ message: "User not exist" });
+  } else {
+    const isActive = await userIsActiveCheck(req.body);
+    if (!isActive) {
+      res.json({ massage: "User is not active" });
+    } else {
+      const updateuserone = await updateUserByOne(req.body);
+      res.json({ massage: "User Update Successfully" });
+    }
+  }
+}
+
+async function sendOtp(req, res) {
+  const checkUserExist = await userExist(req.query);
+  if (!checkUserExist) {
+    res.send({ massage: "User not exist" });
+  } else {
+    const otp = Util.genrateOTP();
+    const sendemailis = await Util.sendmail(req.query.email, otp);
+    const otpUpdate = await UpdateOTP(req.query, otp);
+    res.json({ massage: "send email successfully", data: sendemailis });
+  }
+}
 
 module.exports = {
   handleUser,
@@ -157,4 +194,6 @@ module.exports = {
   handleVerification,
   loginUser,
   forgotPassword,
+  updateUser,
+  sendOtp,
 };
