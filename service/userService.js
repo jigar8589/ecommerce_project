@@ -101,7 +101,7 @@ async function userIsActiveCheck(body) {
 // Login user checkpassword correct or not 
 
 async function checkUserLoginPassword(body) {
-  
+
   try {
     const users = await user.findOne({ email: body.email }).populate("password");
     const pass = body.password;
@@ -114,17 +114,41 @@ async function checkUserLoginPassword(body) {
 }
 
 
-async function updateUserByOne(body){
+async function updateUserByOne(body) {
   try {
     const email = body.email;
-    const firstname  = body.firstName;
+    const firstname = body.firstName;
     const lastname = body.lastName;
     const phoneno = body.phoneNo
-   const updatedUser = await user.findOneAndUpdate({email:email},{ $set: { firstName: firstname , lastName:lastname , phoneNo:phoneno} })
-   return updatedUser;
+    const updatedUser = await user.findOneAndUpdate({ email: email }, { $set: { firstName: firstname, lastName: lastname, phoneNo: phoneno } })
+    console.log(updatedUser)
+    return updatedUser;
   } catch (error) {
-    return  error
+    return error
   }
+}
+
+
+
+
+async function userExist(query) {
+  try {
+
+    const useremail = query.email;
+    const users = await user.findOne({ email: useremail });
+    return users;
+
+  } catch (error) {
+    return error
+
+  }
+}
+
+async function UpdateOTP(query, otp) {
+  const userEmail = query.email;
+  const OTP = await user.findOneAndUpdate({ email: userEmail }, { $set: { otp: otp } })
+  return OTP;
+
 }
 
 
@@ -140,7 +164,7 @@ module.exports = {
   verfiyUser,
   checkUserLoginPassword,
   updateuser,
-  updateUserByOne 
+  updateUserByOne, UpdateOTP,userExist
 };
 
 

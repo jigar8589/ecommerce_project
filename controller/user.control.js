@@ -11,7 +11,7 @@ const {
   checkUserLoginPassword,
   updateuser,
   verfiyUser,
-  updateUserByOne
+  updateUserByOne, UpdateOTP,userExist
 } = require("../service/userService");
 const Util = require("../Util/email");
 
@@ -20,15 +20,16 @@ const Util = require("../Util/email");
 
 async function handleUser(req, res) {
   try {
-    const findUser=await verfiyUser(req.body)
+    const findUser = await verfiyUser(req.body)
     if (findUser) {
       res.status(404).send("User already exists..")
     }
-    else{
+    else {
       const userCreate = await manageUser(req.body);
+      res.json({ data: userCreate })
       if (!userCreate) {
         res.status(404).send({ massage: "User not create" });
-      } 
+      }
       else {
         const sendmailservice = await Util.sendmail(req.body.email, req.body.otp);
         res.status(200).send("User created");
@@ -42,9 +43,9 @@ async function handleUser(req, res) {
 
 async function handleVerification(req, res) {
   try {
-    const verifyUser = await userService.verfiyUser(req.query);
+    const verifyUser = await verfiyUser(req.query);
     if (verifyUser) {
-      const updateUser = await updateuser(verifyUser._id,req.query.isActive);
+      const updateUser = await updateuser(verifyUser._id, req.query.isActive);
       res.status(200).send({ data: updateUser });
     } else {
       res.status(404).send("user not found");
@@ -88,7 +89,7 @@ async function resetPassword(req, res) {
         res.status(200).json({ massage: "password update successfuly" });
       }
 
-    }else {
+    } else {
       res.status(404).json({ massage: "user is not active" });
     }
   } else {
@@ -115,7 +116,7 @@ async function loginUser(req, res) {
       return res.status(401).json({ message: "Email and password incorrect" });
     }
 
-    return res.status(200).json({ message: "User login successfully",data: user });
+    return res.status(200).json({ message: "User login successfully", data: user });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
@@ -124,16 +125,36 @@ async function loginUser(req, res) {
 
 // put requiest update user 
 
-async function updateUser(req,res){
+async function updateUser(req, res) {
   const user = await findUserByEmail(req.body);
   if (!user) {
     return res.status(404).json({ message: "User not exist" });
-  }else{
-    const updateUser = await updateUserByOne(req.body)
-    console.log(updateUser);
-    res.json({massage:"UserUpdate Successfully" })
+  } else {
+    const isActive = await userIsActiveCheck(req.body)
+    if (!isActive) {
+      res.json({ massage: "User is not active" })
+
+    } else {
+      const updateuserone = await updateUserByOne(req.body)
+      res.json({ massage: "User Update Successfully" })
+    }
   }
-  
+
+}
+
+async function sendOtp(req, res) {
+
+  const checkUserExist = await userExist(req.query)
+  if (!checkUserExist) {res.send({massage:"User not exist"})}
+  else {
+  const otp = Util.genrateOTP()
+  const sendemailis = await Util.sendmail(req.query.email, otp)
+  res.json({ massage: "send email successfully", data: sendemailis })
+  const otpUpdate = await UpdateOTP(req.query, otp)
+
+  }
+
+  // res.json({massage:otpUpdate,massage:"otp update successfuly"})
 
 }
 
@@ -147,5 +168,6 @@ module.exports = {
   handleVerification,
   loginUser,
   updateUser,
+  sendOtp
 
 };

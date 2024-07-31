@@ -6,7 +6,7 @@ const {
   getAllUser,
   getUserId,
   resetPassword,
-  handleVerification,loginUser,updateUser
+  handleVerification,loginUser,updateUser,sendOtp
 } = require("../controller/user.control");
 const { updateuser } = require("../service/userService");
 
@@ -17,6 +17,7 @@ router.post("/resetpassword", resetPassword);
 router.post("/verify", handleVerification);
 router.post("/login",loginUser)
 router.put("/updateuser",updateUser)
+router.post("/sendotp",sendOtp)
 
 
 module.exports = router;
