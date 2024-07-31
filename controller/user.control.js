@@ -1,5 +1,3 @@
-const mongoose = require("mongoose");
-const user = require("../model/user.model");
 const {
   manageUser,
   getUser,
@@ -11,7 +9,7 @@ const {
   checkUserLoginPassword,
   updateuser,
   verfiyUser,
-  updateUserByOne, UpdateOTP,userExist
+  updateUserByOne, UpdateOTP, userExist
 } = require("../service/userService");
 const Util = require("../Util/email");
 
@@ -145,16 +143,15 @@ async function updateUser(req, res) {
 async function sendOtp(req, res) {
 
   const checkUserExist = await userExist(req.query)
-  if (!checkUserExist) {res.send({massage:"User not exist"})}
+  if (!checkUserExist) { res.send({ massage: "User not exist" }) }
   else {
-  const otp = Util.genrateOTP()
-  const sendemailis = await Util.sendmail(req.query.email, otp)
-  res.json({ massage: "send email successfully", data: sendemailis })
-  const otpUpdate = await UpdateOTP(req.query, otp)
-
+    const otp = Util.genrateOTP()
+    const sendemailis = await Util.sendmail(req.query.email, otp)
+    const otpUpdate = await UpdateOTP(req.query, otp)
+    res.json({ massage: "send email successfully", data: sendemailis })
   }
 
-  // res.json({massage:otpUpdate,massage:"otp update successfuly"})
+
 
 }
 

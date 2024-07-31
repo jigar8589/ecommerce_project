@@ -8,7 +8,7 @@ const {
   resetPassword,
   handleVerification,loginUser,updateUser,sendOtp
 } = require("../controller/user.control");
-const { updateuser } = require("../service/userService");
+
 
 router.get("/", getAllUser);
 router.get("/:id", getUserId);
