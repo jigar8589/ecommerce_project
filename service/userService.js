@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const saltRounds = 10;
 const { genrateOTP } = require("../Util/email");
 const user = require("../model/user.model");
+const Util=require("../Util/email")
 
 // Define the manageUser function
 async function manageUser(body) {
@@ -16,13 +17,21 @@ async function manageUser(body) {
   return createUser;
 }
 
+async function findUserEmail(body){
+  const email=body.email;
+  const findUser=await user.findOne({email:email})
+  return findUser;
+}
+
 async function verfiyUser(body) {
   const email = body.email;
   const otp = body.otp;
-  const verfiyUser = await user.findOne({ email, otp });
+  const verfiyUser = await user.findOne({ email:email, otp:otp });
 
   return verfiyUser;
 }
+
+
 
 //  getall user
 async function getUser() {
@@ -74,7 +83,7 @@ async function checkUserPassword(body) {
 
 async function updatePassword(body) {
   try {
-    const newPassWord = body.newpassowrd;
+    const newPassWord = body.newpassword;
     const updatedpass = await bcrypt.hash(newPassWord, 10);
     const email = body.email;
     const updatedUser = await user.findOneAndUpdate(
@@ -113,7 +122,49 @@ async function checkUserLoginPassword(body) {
 
 }
 
+//forget password
+
+async function forgetUserPassword(body) {
+  try {
+    const email = body.email;
+    const userActive = await user.findOne({ email: email });
+    
+    if (userActive && userActive.isActive) {
+      const otp = generateOTP();
+      await Util.sendmail(email, otp);
+      await user.findOneAndUpdate({ email: email }, { $set: { otp: otp } });
+      
+      return { email: email, otpSent: true };
+    } else {
+      throw new Error('User is not active');
+    }
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+function generateOTP() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
+
+async function verifyOtp(body){
+  const otp=body.otp
+  const verifyOtp=await user.findOne({otp:otp});
+  return verifyOtp;
+}
+
+
+// async function updatepassword(body,email){
+//   const newpassword=body.password;
+//   const updatePasswordCheck=await user.findOneAndUpdate({email:email},{$set:{password:newpassword}})
+//   return updatePasswordCheck
+// }
+
+
 module.exports = {
+  findUserEmail,
   manageUser,
   getUser,
   getUserById,
@@ -122,5 +173,7 @@ module.exports = {
   userIsActiveCheck,
   verfiyUser,
   checkUserLoginPassword,
-  updateuser
+  updateuser,
+  forgetUserPassword,
+  verifyOtp,
 };
