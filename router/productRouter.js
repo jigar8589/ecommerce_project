@@ -8,10 +8,10 @@ const {
   getProductcontroler
 } = require("../controller/product.control");
 
-productrouter.post("/addproduct", createProduct);
-productrouter.put("/updateproduct/:id", updateproduct);
-productrouter.delete("/deleteproduct/:id", deleteProductControl);
-productrouter.get("/getallproducts",allProducts)
+productrouter.post("/", createProduct);
+productrouter.put("/:id", updateproduct);
+productrouter.delete("/:id", deleteProductControl);
+productrouter.get("/",allProducts)
 productrouter.get("/:id",getProductcontroler)
 
 
