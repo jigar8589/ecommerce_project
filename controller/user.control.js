@@ -21,7 +21,7 @@ const Util = require("../Util/email");
 
 async function handleUser(req, res) {
   try {
-    const findUser = await userService.verfiyUser(req.body);
+    const findUser = await userService.userExist(req.body);
     if (findUser) {
       res.status(404).send("User already exists..");
     } else {
@@ -45,7 +45,7 @@ async function handleUser(req, res) {
 
 async function handleVerification(req, res) {
   try {
-    const verifyUser = await verfiyUser(req.query);
+    const verifyUser = await userService.verfiyUser(req.query);
     if (verifyUser) {
       const updateUser = await userService.updateuser(
         verifyUser._id,

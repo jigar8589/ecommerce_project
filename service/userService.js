@@ -54,9 +54,9 @@ async function findUserByEmail(body) {
   }
 }
 async function updateuser(id, isActive) {
-  const updateUser = await user.findOneAndUpdate(
+  const updateUser = await user.findOneAndUpdate(    
     { _id: id },
-    { isActive: isActive }
+    { isActive:isActive }
   );
   return updateUser;
 }
