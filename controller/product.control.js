@@ -11,4 +11,25 @@ async function createProduct(req, res) {
   }
 }
 
-module.exports = { createProduct };
+
+// Update product 
+async function updateproduct(req,res){
+  const id = req.params.id
+  const Name= req.body.name;
+  const Price= req.body.price;
+  const description = req.body.description
+  const quantity= req.body.quantity;
+  const productUpdated = await productService.productUpdate(id,Name,Price,description,quantity)
+  res.json({massage:"Product update sucessfully"})
+
+}
+
+
+// Delete product
+async function deleteProductControl(req,res){
+  const id = req.params.id
+  const productDeleted = await productService.productDelete(id)
+  res.json({massage:"Product delete sucessfully"})
+  }
+
+module.exports = { createProduct, updateproduct,  deleteProductControl};

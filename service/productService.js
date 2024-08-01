@@ -11,4 +11,32 @@ async function addproduct(body) {
   return createdProduct;
 }
 
-module.exports = { addproduct };
+// Update product
+
+async function productUpdate(id, name, price, description, quantity) {
+  try {
+    const Update = product.findOneAndUpdate(
+      { _id: id },
+      {
+        $set: {
+          name: name,
+          price: price,
+          description: description,
+          quantity: quantity,
+        },
+      }
+    );
+
+    return Update;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+}
+
+async function productDelete(id) {
+  const Delete = await product.findByIdAndDelete({ _id: id });
+  return Delete;
+}
+
+module.exports = { addproduct, productUpdate, productDelete };
