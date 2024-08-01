@@ -1,4 +1,4 @@
-const productService = require("../service/productService");
+const productService = require("../service/productService")
 
 async function createProduct(req, res) {
   try {
@@ -37,4 +37,14 @@ async function allProducts(req,res){
   res.status(200).json({data:allProducts})
 }
 
-module.exports = { createProduct, updateproduct,  deleteProductControl,allProducts};
+
+// get all product 
+
+
+async function getProductcontroler(req,res){
+  const id = req.params.id
+  const product = await productService.getproductById(id)
+  res.json(product)
+}
+
+module.exports = { createProduct, updateproduct,  deleteProductControl,getProductcontroler,allProducts};
