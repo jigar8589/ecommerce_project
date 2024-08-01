@@ -32,4 +32,9 @@ async function deleteProductControl(req,res){
   res.json({massage:"Product delete sucessfully"})
   }
 
-module.exports = { createProduct, updateproduct,  deleteProductControl};
+async function allProducts(req,res){
+  const allProducts=await productService.getAllProducts();
+  res.status(200).json({data:allProducts})
+}
+
+module.exports = { createProduct, updateproduct,  deleteProductControl,allProducts};

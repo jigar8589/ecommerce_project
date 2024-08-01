@@ -39,4 +39,9 @@ async function productDelete(id) {
   return Delete;
 }
 
-module.exports = { addproduct, productUpdate, productDelete };
+async function getAllProducts(){
+  const allProduct=await product.find({});
+  return allProduct;
+}
+
+module.exports = { addproduct, productUpdate, productDelete,getAllProducts };
