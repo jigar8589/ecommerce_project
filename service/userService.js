@@ -190,6 +190,12 @@ async function UpdateOTP(query, otp) {
   return OTP;
 }
 
+
+
+
+
+
+
 module.exports = {
   findUserEmail,
   manageUser,

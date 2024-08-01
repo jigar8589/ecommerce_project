@@ -1,7 +1,6 @@
-const mongoose = require("mongoose");
-const user = require("../model/user.model");
+
 const userService = require("../service/userService");
-const bcrypt = require("bcryptjs");
+
 
 const {
   manageUser,
@@ -185,6 +184,9 @@ async function sendOtp(req, res) {
     res.json({ massage: "send email successfully", data: sendemailis });
   }
 }
+
+
+
 
 module.exports = {
   handleUser,

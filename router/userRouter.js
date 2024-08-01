@@ -1,4 +1,5 @@
 const express = require("express");
+
 const router = express.Router();
 
 const {
@@ -21,4 +22,9 @@ router.put("/updateuser",updateUser)
 router.post("/sendotp",sendOtp)
 
 
+
+
 module.exports = router;
+
+
+
