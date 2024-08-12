@@ -1,6 +1,4 @@
-
 const userService = require("../service/userService");
-
 
 const {
   manageUser,
@@ -48,8 +46,8 @@ async function handleVerification(req, res) {
     const verifyUser = await userService.verfiyUser(req.query);
     if (verifyUser) {
       const updateUser = await userService.updateuser(
-        verifyUser._id,
-        req.isActive
+        verifyUser.id,
+        verifyUser.isActive
       );
       res.status(200).send({ data: updateUser });
     } else {
@@ -184,9 +182,6 @@ async function sendOtp(req, res) {
     res.json({ massage: "send email successfully", data: sendemailis });
   }
 }
-
-
-
 
 module.exports = {
   handleUser,

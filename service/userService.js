@@ -3,6 +3,7 @@ const saltRounds = 10;
 const { genrateOTP } = require("../Util/email");
 const user = require("../model/user.model");
 const Util = require("../Util/email");
+const { default: mongoose } = require("mongoose");
 
 // Define the manageUser function
 async function manageUser(body) {
@@ -24,9 +25,9 @@ async function findUserEmail(body) {
 }
 
 async function verfiyUser(body) {
-  const email = body.email;
-  const otp = body.otp;
-  const verfiyUser = await user.findOne({ email: email, otp: otp });
+  const userEmail = body.email;
+  const userOtp = body.otp;
+  const verfiyUser = await user.findOne({email: userEmail},{otp: userOtp });
 
   return verfiyUser;
 }
@@ -40,7 +41,21 @@ async function getUser() {
 // get user by ID
 
 async function getUserById(id) {
-  const User = await user.findById(id);
+  const User = await user.aggregate([
+    {
+      $match: {
+        _id:mongoose.Types.ObjectId.createFromHexString(id)
+      },
+    },
+    {
+      $lookup: {
+        from: "addresses",
+        localField: "_id",
+        foreignField: "userId",
+        as: "Addresses",
+      },
+    },
+  ]);
   return User;
 }
 
@@ -54,9 +69,9 @@ async function findUserByEmail(body) {
   }
 }
 async function updateuser(id, isActive) {
-  const updateUser = await user.findOneAndUpdate(    
+  const updateUser = await user.findByIdAndUpdate(
     { _id: id },
-    { isActive:isActive }
+    {isActive: isActive}
   );
   return updateUser;
 }
@@ -189,12 +204,6 @@ async function UpdateOTP(query, otp) {
   );
   return OTP;
 }
-
-
-
-
-
-
 
 module.exports = {
   findUserEmail,

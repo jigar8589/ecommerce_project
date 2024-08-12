@@ -1,4 +1,4 @@
-const product = require("../model/product.model")
+const product = require("../model/product.model");
 
 async function addproduct(body) {
   const productdata = new product({
@@ -39,17 +39,33 @@ async function productDelete(id) {
   return Delete;
 }
 
-async function getAllProducts(){
-  const allProduct=await product.find({});
+async function getAllProducts(query) {
+  // page=page;
+  // limit=limit;
+  if (query.page < 1 || query.limit < 1) {
+    return "page number or limit should be greater than 0";
+  }
+  const totalDocuments=await product.find().countDocuments()
+  console.log(totalDocuments);
+   
+  const allProduct = await product
+  .find()  
+  .skip((query.page - 1) * query.limit)
+  .limit(query.limit);
   return allProduct;
 }
 
 // get product in databases
 
-async function getproductById(id){
-  const productFind = await product.findById(id)
+async function getproductById(id) {
+  const productFind = await product.findById(id);
   return productFind;
 }
 
-module.exports = { addproduct, productUpdate, productDelete, getproductById,getAllProducts};
-
+module.exports = {
+  addproduct,
+  productUpdate,
+  productDelete,
+  getproductById,
+  getAllProducts,
+};
