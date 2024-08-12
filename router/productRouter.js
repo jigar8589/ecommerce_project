@@ -5,15 +5,13 @@ const {
   updateproduct,
   deleteProductControl,
   allProducts,
-  getProductcontroler
+  getProductcontroler,
 } = require("../controller/product.control");
 
 productrouter.post("/", createProduct);
 productrouter.put("/:id", updateproduct);
 productrouter.delete("/:id", deleteProductControl);
-productrouter.get("/",allProducts)
-productrouter.get("/:id",getProductcontroler)
-
-
+productrouter.get("/", allProducts);
+productrouter.get("/:id", getProductcontroler);
 
 module.exports = productrouter;

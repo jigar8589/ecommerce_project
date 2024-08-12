@@ -1,4 +1,4 @@
-const product = require("../model/product.model")
+const product = require("../model/product.model");
 
 async function addproduct(body) {
   const productdata = new product({
@@ -39,17 +39,22 @@ async function productDelete(id) {
   return Delete;
 }
 
-async function getAllProducts(){
-  const allProduct=await product.find({});
+async function getAllProducts() {
+  const allProduct = await product.find({});
   return allProduct;
 }
 
 // get product in databases
 
-async function getproductById(id){
-  const productFind = await product.findById(id)
+async function getproductById(id) {
+  const productFind = await product.findById(id);
   return productFind;
 }
 
-module.exports = { addproduct, productUpdate, productDelete, getproductById,getAllProducts};
-
+module.exports = {
+  addproduct,
+  productUpdate,
+  productDelete,
+  getproductById,
+  getAllProducts,
+};

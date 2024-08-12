@@ -1,15 +1,16 @@
 
 const multer =  require('multer')
+const path = require('path')
 
 
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, '/tmp/my-uploads')
+      cb(null, path.resolve('./'))
     },
     filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + file.originalname
-      cb(null, file.originalname)
+      const filename = `${Date.now()}-${file.originalname}`;
+      cb(null, filename)
     }
   })
   

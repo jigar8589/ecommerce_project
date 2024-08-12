@@ -1,29 +1,25 @@
- const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer");
 
- require('dotenv').config()
- const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: 'jigs.dev2001@gmail.com',  // Your email address
-        pass: process.env.KEY   // Your email passkey
-    }
+require("dotenv").config();
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "jigs.dev2001@gmail.com", // Your email address
+    pass: process.env.KEY, // Your email passkey
+  },
 });
 
-
 function genrateOTP() {
-    let otp = Math.floor(1000 + Math.random() * 9000);
-    return otp;
-
+  let otp = Math.floor(1000 + Math.random() * 9000);
+  return otp;
 }
 
-
-async function sendmail(email,otp) {
-
-    let mailOptions = {
-        from: 'jigs.dev2001@gmail.com',
-        to: email,  // Customer's email address
-        subject: 'OTP Verification',
-        html: `
+async function sendmail(email, otp) {
+  let mailOptions = {
+    from: "jigs.dev2001@gmail.com",
+    to: email, // Customer's email address
+    subject: "OTP Verification",
+    html: `
         <!DOCTYPE html>
         <html>
         <head>
@@ -94,28 +90,18 @@ async function sendmail(email,otp) {
             </div>
         </body>
         </html>
-    ` // Replace the placeholder with the actual OTP
-    };
+    `, // Replace the placeholder with the actual OTP
+  };
 
-
-
-
-    // Sending email
-    await transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log("this error",error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-       // res.end();
-    });
+  // Sending email
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log("this error", error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+    // res.end();
+  });
 }
 
-
-
-
-
-
-
-
-module.exports = { sendmail, genrateOTP }
+module.exports = { sendmail, genrateOTP };

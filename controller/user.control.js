@@ -1,6 +1,4 @@
-
 const userService = require("../service/userService");
-
 
 const {
   manageUser,
@@ -27,6 +25,7 @@ async function handleUser(req, res) {
     } else {
       const userCreate = await manageUser(req.body);
       res.json({ data: userCreate });
+
       if (!userCreate) {
         res.status(404).send({ massage: "User not create" });
       } else {
@@ -34,6 +33,7 @@ async function handleUser(req, res) {
           req.body.email,
           req.body.otp
         );
+
         res.status(200).send("User created");
       }
     }
@@ -45,12 +45,9 @@ async function handleUser(req, res) {
 
 async function handleVerification(req, res) {
   try {
-    const verifyUser = await userService.verfiyUser(req.query);
+    const verifyUser = await verfiyUser(req.query);
     if (verifyUser) {
-      const updateUser = await userService.updateuser(
-        verifyUser._id,
-        req.isActive
-      );
+      const updateUser = await updateuser(verifyUser._id, (isActive = true));
       res.status(200).send({ data: updateUser });
     } else {
       res.status(404).send("user not found");
@@ -72,8 +69,9 @@ async function getAllUser(req, res) {
 
 async function getUserId(req, res) {
   try {
-    const user = await getUserById(req.params.id);
-    res.status(200).send(user);
+    const id = req.params.id;
+    const user = await getUserById(id);
+    res.status(200).json({ data: user });
   } catch (error) {
     console.log(error);
   }
@@ -81,6 +79,7 @@ async function getUserId(req, res) {
 
 async function resetPassword(req, res) {
   const rest = await findUserByEmail(req.body);
+
   if (rest) {
     const active = await userIsActiveCheck(req.body);
 
@@ -122,6 +121,7 @@ async function loginUser(req, res) {
     return res
       .status(200)
       .json({ message: "User login successfully", data: user });
+
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
@@ -131,15 +131,18 @@ async function loginUser(req, res) {
 //forget password
 
 async function forgotPassword(req, res) {
+
   try {
     const verifyUser = await userService.findUserEmail(req.body);
 
     if (verifyUser && verifyUser.isActive == true) {
       const { otp, password: newpassword, email } = req.body;
+
       // const userWithOtp = await user.findOne({ email: email, otp: otp });
       if (verifyUser.otp != otp) {
         return res.status(400).json({ message: "Invalid otp" });
       }
+
       const updateUser = await userService.updatePassword({
         newpassword,
         email,
@@ -148,9 +151,11 @@ async function forgotPassword(req, res) {
       return res
         .status(200)
         .json({ message: "Password updated successfully", updateUser });
-    } else {
+    }
+     else {
       return res.status(404).json({ message: "User is not verified" });
     }
+
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal Server Error" });
@@ -159,18 +164,23 @@ async function forgotPassword(req, res) {
 // put requiest update user
 
 async function updateUser(req, res) {
+
   const user = await findUserByEmail(req.body);
+
   if (!user) {
     return res.status(404).json({ message: "User not exist" });
   } else {
     const isActive = await userIsActiveCheck(req.body);
+
     if (!isActive) {
       res.json({ massage: "User is not active" });
-    } else {
+    } 
+    else {
       const updateuserone = await updateUserByOne(req.body);
       res.json({ massage: "User Update Successfully" });
     }
   }
+
 }
 
 async function sendOtp(req, res) {
@@ -185,17 +195,14 @@ async function sendOtp(req, res) {
   }
 }
 
-
-
-
 module.exports = {
   handleUser,
   getAllUser,
-  getUserId,
   resetPassword,
   handleVerification,
   loginUser,
   forgotPassword,
   updateUser,
   sendOtp,
+  getUserId,
 };

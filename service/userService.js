@@ -1,8 +1,10 @@
 const bcrypt = require("bcryptjs");
+const mongoose = require("mongoose");
 const saltRounds = 10;
 const { genrateOTP } = require("../Util/email");
 const user = require("../model/user.model");
 const Util = require("../Util/email");
+const Address = require("../model/address.model");
 
 // Define the manageUser function
 async function manageUser(body) {
@@ -33,14 +35,36 @@ async function verfiyUser(body) {
 
 //  getall user
 async function getUser() {
-  const User = await user.find({});
+  const User = await user.find()
   return User;
 }
 
-// get user by ID
+// get user by ID and get address
 
 async function getUserById(id) {
-  const User = await user.findById(id);
+  if (!mongoose.isValidObjectId(id)) {
+    throw new Error("Invalid ObjectId format");
+  }
+  const User = await user.aggregate([
+    {
+      $match: {
+        _id: mongoose.Types.ObjectId.createFromHexString(id),
+      },
+    },
+    {
+      $project: {
+        password: 0,
+      },
+    },
+    {
+      $lookup: {
+        from: "addresses",
+        localField: "_id",
+        foreignField: "userId",
+        as: "addresses",
+      },
+    },
+  ]);
   return User;
 }
 
@@ -54,9 +78,9 @@ async function findUserByEmail(body) {
   }
 }
 async function updateuser(id, isActive) {
-  const updateUser = await user.findOneAndUpdate(    
+  const updateUser = await user.findOneAndUpdate(
     { _id: id },
-    { isActive:isActive }
+    { isActive: isActive }
   );
   return updateUser;
 }
@@ -112,7 +136,7 @@ async function checkUserLoginPassword(body) {
     const match = await bcrypt.compare(pass, users.password);
     return match;
   } catch (error) {
-    return error;
+    throw new Error("error !!!!!!!!!!");
   }
 }
 
@@ -189,12 +213,6 @@ async function UpdateOTP(query, otp) {
   );
   return OTP;
 }
-
-
-
-
-
-
 
 module.exports = {
   findUserEmail,
