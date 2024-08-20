@@ -27,7 +27,7 @@ async function findUserEmail(body) {
 async function verfiyUser(body) {
   const userEmail = body.email;
   const userOtp = body.otp;
-  const verfiyUser = await user.findOne({email: userEmail},{otp: userOtp });
+  const verfiyUser = await user.findOne({ email: userEmail }, { otp: userOtp });
 
   return verfiyUser;
 }
@@ -44,7 +44,7 @@ async function getUserById(id) {
   const User = await user.aggregate([
     {
       $match: {
-        _id:mongoose.Types.ObjectId.createFromHexString(id)
+        _id: mongoose.Types.ObjectId.createFromHexString(id),
       },
     },
     {
@@ -71,7 +71,7 @@ async function findUserByEmail(body) {
 async function updateuser(id, isActive) {
   const updateUser = await user.findByIdAndUpdate(
     { _id: id },
-    {isActive: isActive}
+    { isActive: isActive }
   );
   return updateUser;
 }

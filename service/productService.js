@@ -45,13 +45,13 @@ async function getAllProducts(query) {
   if (query.page < 1 || query.limit < 1) {
     return "page number or limit should be greater than 0";
   }
-  const totalDocuments=await product.find().countDocuments()
+  const totalDocuments = await product.find().countDocuments();
   console.log(totalDocuments);
-   
+
   const allProduct = await product
-  .find()  
-  .skip((query.page - 1) * query.limit)
-  .limit(query.limit);
+    .find()
+    .skip((query.page - 1) * query.limit)
+    .limit(query.limit);
   return allProduct;
 }
 

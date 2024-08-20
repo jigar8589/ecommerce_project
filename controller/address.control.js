@@ -51,17 +51,20 @@ async function checkDefault(req, res) {
   try {
     const addressId = req.params.id;
     const userId = req.body.userId;
-    const findWithAddressId=await addressService.findUserWithAddress(addressId,userId)
+    const findWithAddressId = await addressService.findUserWithAddress(
+      addressId,
+      userId
+    );
     if (findWithAddressId) {
-      res.status(200).json({message:"Default updated."})
+      res.status(200).json({ message: "Default updated." });
     }
     // res.status(200).json(findWithAddressId)
-    else{
+    else {
       res.status(404).json("Address not found..");
     }
   } catch (error) {
     console.log(error);
-    
+
     res.status(404).json({ message: "User not found." });
   }
 }
