@@ -33,7 +33,7 @@ async function verfiyUser(body) {
 
 //  getall user
 async function getUser() {
-  const User = await user.find({});
+  const User = await user.find();
   return User;
 }
 
