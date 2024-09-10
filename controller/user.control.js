@@ -49,11 +49,11 @@ async function handleVerification(req, res) {
     if (verifyUser) {
       const updateUser = await userService.updateuser(
         verifyUser._id,
-        req.isActive
+        (isActive = true)
       );
-      res.status(200).send({ data: updateUser });
+      res.status(200).json({ massage:"User Verify Successfully" });
     } else {
-      res.status(404).send("user not found");
+      res.status(404).json("user not found");
     }
   } catch (error) {
     console.log(error);
