@@ -1,12 +1,16 @@
 
 const multer =  require('multer')
 const path = require('path')
+require("")
 
+
+async function uploadsIamge(req,res) {
+  
 
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, path.resolve('./'))
+      cb(null, path.resolve('../public/uploads'))
     },
     filename: function (req, file, cb) {
       const filename = `${Date.now()}-${file.originalname}`;
@@ -15,3 +19,10 @@ const storage = multer.diskStorage({
   })
   
   const upload = multer({ storage: storage })
+
+}
+
+
+  module.exports ={
+    uploadsIamge
+  }

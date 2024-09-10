@@ -14,6 +14,7 @@ function genrateOTP() {
   return otp;
 }
 
+
 async function sendmail(email, otp) {
   let mailOptions = {
     from: "jigs.dev2001@gmail.com",

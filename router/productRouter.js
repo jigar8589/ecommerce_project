@@ -1,5 +1,9 @@
 const express = require("express");
+const multer = require("multer");
+const path = require("path");
+const auth = require("../middlewere/auth");
 const productrouter = express.Router();
+
 const {
   createProduct,
   updateproduct,
@@ -8,10 +12,22 @@ const {
   getProductcontroler,
 } = require("../controller/product.control");
 
-productrouter.post("/", createProduct);
-productrouter.put("/:id", updateproduct);
-productrouter.delete("/:id", deleteProductControl);
-productrouter.get("/", allProducts);
-productrouter.get("/:id", getProductcontroler);
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, path.resolve(__dirname, "../public/uploads"));
+  },
+  filename: function (req, file, cb) {
+    const filename = `${Date.now()}-${file.originalname}`;
+    cb(null, filename);
+  },
+});
+
+const upload = multer({ storage: storage });
+
+productrouter.post("/", auth, upload.array("images"), createProduct);
+productrouter.put("/:id", auth ,updateproduct);
+productrouter.delete("/:id",auth, deleteProductControl);
+productrouter.get("/", auth,allProducts);
+productrouter.get("/:id",auth, getProductcontroler);
 
 module.exports = productrouter;

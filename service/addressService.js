@@ -2,15 +2,15 @@ const Address = require("../model/address.model");
 const mongoose = require("mongoose");
 
 //create address in databases
-async function PostAdress(body) {
+async function PostAdress(body,tokenid) {
   const bodydata = body;
-  const userid = body.userId;
-  const findUserId = await Address.find({userId:userid});
+  bodydata.userId = tokenid
+  const findUserId = await Address.find({userId:tokenid});
   if (findUserId.length < 1 ) {
     bodydata.isDefault = true;
   } 
     const adress = new Address(bodydata);
-    const saveadress = await adress.save();
+     const saveadress = await adress.save();
     console.log(saveadress);
     return saveadress;
   }
@@ -75,7 +75,7 @@ async function updateAddressById(id, body) {
 // verify user in make dafualt
 async function userVerify(id, userId) {
   const userIdfind = await Address.findOne({ _id: id, userId: userId });
-  console.log(userIdfind);
+  // console.log(userIdfind);
   return userIdfind;
 }
 
@@ -111,6 +111,15 @@ async function setDefaultAddress(id) {
   }
 }
 
+
+
+
+async function DeleteAddressById(id) {
+
+  const deleteaddress = await Address.findByIdAndDelete(id)
+  return deleteaddress 
+}
+
 module.exports = {
   PostAdress,
   getAddressData,
@@ -120,5 +129,6 @@ module.exports = {
   userVerify,
   defaultCheck,
   setDefaultAddress,
+  DeleteAddressById
  
 };

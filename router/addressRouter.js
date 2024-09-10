@@ -3,15 +3,16 @@ const {
   allAdressget,
   allAdressgetById,
   UpdateAddress,
-  makeDafulatAddress
-  
+  makeDafulatAddress,DeleteAddress
 } = require("../controller/address.control");
 const express = require("express");
+const auth = require("../middlewere/auth");
 const addressRouter = express();
 
-addressRouter.post("/", adress);
-addressRouter.get("/", allAdressget);
-addressRouter.get("/:id", allAdressgetById);
-addressRouter.put("/:id", UpdateAddress);
-addressRouter.patch("/:id/make-default",makeDafulatAddress)
+addressRouter.post("/", auth, adress);
+addressRouter.get("/", auth, allAdressget);
+addressRouter.get("/:id", auth, allAdressgetById);
+addressRouter.put("/:id", auth, UpdateAddress);
+addressRouter.patch("/:id/make-default", auth, makeDafulatAddress);
+addressRouter.delete("/:id",auth,DeleteAddress)
 module.exports = addressRouter;

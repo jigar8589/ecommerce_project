@@ -1,5 +1,5 @@
 const userService = require("../service/userService");
-
+require("dotenv").config();
 const {
   manageUser,
   getUser,
@@ -14,22 +14,26 @@ const {
   updateUserByOne,
   UpdateOTP,
   userExist,
+  createTokenPromise,
 } = require("../service/userService");
 const Util = require("../Util/email");
 
+//******************************** * create new user controller ****************************************
+
 async function handleUser(req, res) {
   try {
-    const findUser = await userService.userExist(req.body);
+    const findUser = await userService.userExist(req.body); // Check User Exist or not
     if (findUser) {
       res.status(404).send("User already exists..");
     } else {
-      const userCreate = await manageUser(req.body);
+      const userCreate = await manageUser(req.body); // new user save in  databases
       res.json({ data: userCreate });
 
       if (!userCreate) {
-        res.status(404).send({ massage: "User not create" });
+        res.status(404).send({ massage: "User not create" }); // user not create then resopnse in server
       } else {
         const sendmailservice = await Util.sendmail(
+          // send otp in user Email id using sendEmail function
           req.body.email,
           req.body.otp
         );
@@ -42,12 +46,13 @@ async function handleUser(req, res) {
     console.log(error);
   }
 }
+//************************************ User otp verify controller ************************************** */
 
 async function handleVerification(req, res) {
   try {
-    const verifyUser = await verfiyUser(req.query);
+    const verifyUser = await verfiyUser(req.query); // check user Verify
     if (verifyUser) {
-      const updateUser = await updateuser(verifyUser._id, (isActive = true));
+      const updateUser = await updateuser(verifyUser._id, (isActive = true)); // user veify and isActive: true
       res.status(200).send({ data: updateUser });
     } else {
       res.status(404).send("user not found");
@@ -58,84 +63,112 @@ async function handleVerification(req, res) {
   }
 }
 
+
+//************************************ get all User in databases controller *****************************/
+
 async function getAllUser(req, res) {
   try {
-    const Userall = await getUser();
+    const Userall = await getUser(); // get all user function call
     res.status(200).send(Userall);
   } catch (error) {
     console.log(error);
   }
 }
 
+// ******************************** get user using Id ***************************************************/
 async function getUserId(req, res) {
   try {
     const id = req.params.id;
-    const user = await getUserById(id);
+    const userid = req.user._id;
+    console.log("id", id);
+    console.log("userid", userid);
+    if (id != userid) {
+      res.status(404).json({ massage: "Somthing went wrong" });
+    }
+    const user = await getUserById(id); // get user function
     res.status(200).json({ data: user });
   } catch (error) {
     console.log(error);
   }
 }
 
-async function resetPassword(req, res) {
-  const rest = await findUserByEmail(req.body);
+// ************************************** restpassword controller *********************************************/
 
-  if (rest) {
-    const active = await userIsActiveCheck(req.body);
+async function resetPassword(req, res) {
+  try {
+    const userEmail = req.body.email;
+    const tokenEmail = req.user.email;
+    if (userEmail == tokenEmail) {
+      const rest = await findUserByEmail(req.body);                        // find user using Email funcation call
+
+    if (rest) {
+        const active = await userIsActiveCheck(req.body);                  // User Active or not check
 
     if (active) {
-      const userPasscheck = await checkUserPassword(req.body);
+          const userPasscheck = await checkUserPassword(req.body);        // verify password
 
-      if (!userPasscheck) {
-        res.status(404).json({ massage: "Email and password incorrect" });
-      } else {
-        const newPassword = await updatePassword(req.body);
-        res.status(200).json({ massage: "password update successfuly" });
+    if (!userPasscheck) {
+            res.status(404).json({ massage: "Email and password incorrect" });
+         } else {
+            const newPassword = await updatePassword(req.body);
+            res.status(200).json({ massage: "password update successfuly" });
+          }
+        } else {
+          res.status(404).json({ massage: "user is not active" });
+        }
+        } else {
+        res.send("user  not exist");
       }
-    } else {
-      res.status(404).json({ massage: "user is not active" });
+       } else {
+      res.json({ massage: "somthing went wrong" });
     }
-  } else {
-    res.send("user  not exist");
+  } catch (error) {
+    console.log(error);
   }
 }
 
-//  user login verify
+// *************************************  user login  *********************************************************/ 
 
 async function loginUser(req, res) {
   try {
-    const user = await findUserByEmail(req.body);
-    if (!user) {
+    const User = await findUserByEmail(req.body); // check user Exist or not using email
+    if (!User) {
       return res.status(404).json({ message: "User not exist" });
     }
 
-    if (!user.isActive) {
+    if (!User.isActive) {
+      // check user Active ot not
       return res.status(403).json({ message: "User is not active" });
     }
 
-    const isPasswordCorrect = await checkUserLoginPassword(req.body);
+    const isPasswordCorrect = await checkUserLoginPassword(req.body); // verify password
     if (!isPasswordCorrect) {
       return res.status(401).json({ message: "Email and password incorrect" });
     }
 
+    const token = await createTokenPromise(
+      // create jwttoken
+      { userId: User._id, email: User.email },
+      process.env.JWT_SECRECT,
+      { expiresIn: "2d" }
+    );
     return res
       .status(200)
-      .json({ message: "User login successfully", data: user });
-
+      .json({ message: "User login successfully", data: User, token: token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 }
 
-//forget password
+//*************************************** forget password controller **************************************** */
 
 async function forgotPassword(req, res) {
-
   try {
-    const verifyUser = await userService.findUserEmail(req.body);
+    const verifyUser = await userService.findUserEmail(req.body); // find user using Email
 
     if (verifyUser && verifyUser.isActive == true) {
+      // check user verify or not
       const { otp, password: newpassword, email } = req.body;
 
       // const userWithOtp = await user.findOne({ email: email, otp: otp });
@@ -144,6 +177,7 @@ async function forgotPassword(req, res) {
       }
 
       const updateUser = await userService.updatePassword({
+        // update password
         newpassword,
         email,
       });
@@ -151,37 +185,44 @@ async function forgotPassword(req, res) {
       return res
         .status(200)
         .json({ message: "Password updated successfully", updateUser });
-    }
-     else {
+    } else {
       return res.status(404).json({ message: "User is not verified" });
     }
-
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }
-// put requiest update user
+// *************************************** update user controller ***************************************** */
 
 async function updateUser(req, res) {
+  try {
+    const userEmail = req.body.email;
+    const tokenEmail = req.user.email;
 
-  const user = await findUserByEmail(req.body);
+    if (userEmail == tokenEmail) {
+      const user = await findUserByEmail(req.body); // find user using email id
+      if (!user) {
+        return res.status(404).json({ message: "User not exist" });
+      } else {
+        const isActive = await userIsActiveCheck(req.body); // check user verify or not
 
-  if (!user) {
-    return res.status(404).json({ message: "User not exist" });
-  } else {
-    const isActive = await userIsActiveCheck(req.body);
-
-    if (!isActive) {
-      res.json({ massage: "User is not active" });
-    } 
-    else {
-      const updateuserone = await updateUserByOne(req.body);
-      res.json({ massage: "User Update Successfully" });
+        if (!isActive) {
+          res.json({ massage: "User is not active" });
+        } else {
+          const updateuserone = await updateUserByOne(req.body); // update user
+          res.json({ massage: "User Update Successfully" });
+        }
+      }
+    } else {
+      res.json({ massage: "somthing went wrong" });
     }
+  } catch (error) {
+    console.log(error);
   }
-
 }
+
+// *************************************** send otp controller ********************************************* */
 
 async function sendOtp(req, res) {
   const checkUserExist = await userExist(req.query);

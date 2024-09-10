@@ -5,6 +5,9 @@ const { genrateOTP } = require("../Util/email");
 const user = require("../model/user.model");
 const Util = require("../Util/email");
 const Address = require("../model/address.model");
+const jwt = require('jsonwebtoken')
+
+
 
 // Define the manageUser function
 async function manageUser(body) {
@@ -71,12 +74,16 @@ async function getUserById(id) {
 async function findUserByEmail(body) {
   try {
     const useremail = body.email;
-    const users = await user.findOne({ email: useremail });
-    return users;
-  } catch (error) {
+      const users = await user.findOne({ email: useremail });
+      return users;
+    }
+  
+   catch (error) {
     return error;
+  
   }
 }
+
 async function updateuser(id, isActive) {
   const updateUser = await user.findOneAndUpdate(
     { _id: id },
@@ -214,6 +221,17 @@ async function UpdateOTP(query, otp) {
   return OTP;
 }
 
+
+const createTokenPromise = (payload, key, options) => {
+  return new Promise((resolve, reject) => {
+    jwt.sign(payload, key, options, (error, token) => {
+      if (error) return reject(error);
+      resolve(token);
+    });
+  });
+
+}
+
 module.exports = {
   findUserEmail,
   manageUser,
@@ -231,4 +249,6 @@ module.exports = {
   updateUserByOne,
   UpdateOTP,
   userExist,
+  createTokenPromise,
+
 };
