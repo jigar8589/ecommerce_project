@@ -7,11 +7,12 @@ const {
   getAddress,
   checkDefault,
 } = require("../controller/address.control");
+const authToken = require("../middleware/auth");
 
 addressrouter.post("/", createAddress);
-addressrouter.get("/:id", getUserById);
-addressrouter.delete("/:id", deleteAddressById);
-addressrouter.get("/:id", getAddress);
+addressrouter.get("/:id", authToken, getUserById);
+addressrouter.delete("/:id", authToken, deleteAddressById);
+addressrouter.get("/:id", authToken, getAddress);
 addressrouter.patch("/:id", checkDefault);
 
 module.exports = addressrouter;

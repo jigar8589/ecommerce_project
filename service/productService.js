@@ -46,7 +46,6 @@ async function getAllProducts(query) {
     return "page number or limit should be greater than 0";
   }
   const totalDocuments = await product.find().countDocuments();
-  console.log(totalDocuments);
 
   const allProduct = await product
     .find()

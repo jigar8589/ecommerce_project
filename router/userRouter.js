@@ -13,15 +13,16 @@ const {
   updateUser,
   sendOtp,
 } = require("../controller/user.control");
+const authToken = require("../middleware/auth");
 
 router.get("/", getAllUser);
-router.get("/:id", getUserId);
+router.get("/:id", authToken, getUserId);
 router.post("/signup", handleUser);
-router.post("/resetpassword", resetPassword);
+router.post("/resetpassword", authToken, resetPassword);
 router.post("/verify", handleVerification);
 router.post("/login", loginUser);
 router.post("/forgotpassword", forgotPassword);
-router.put("/updateuser", updateUser);
+router.put("/updateuser", authToken, updateUser);
 router.post("/sendotp", sendOtp);
 
 module.exports = router;

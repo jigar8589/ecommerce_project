@@ -1,4 +1,6 @@
 const userService = require("../service/userService");
+const jwt = require("jsonwebtoken");
+require("dotenv");
 
 const {
   manageUser,
@@ -21,10 +23,10 @@ async function handleUser(req, res) {
   try {
     const findUser = await userService.userExist(req.body);
     if (findUser) {
-      res.status(404).send("User already exists..");
+      res.status(404).send({ message: "User already exists.." });
     } else {
       const userCreate = await manageUser(req.body);
-      res.json({ data: userCreate });
+      res.json({ message: "user registered successfully.." });
       if (!userCreate) {
         res.status(404).send({ massage: "User not create" });
       } else {
@@ -43,19 +45,18 @@ async function handleUser(req, res) {
 
 async function handleVerification(req, res) {
   try {
-    const verifyUser = await userService.verfiyUser(req.query);
+    const verifyUser = await userService.verifyUser(req.query);
     if (verifyUser) {
-      const updateUser = await userService.updateuser(
-        verifyUser.id,
-        verifyUser.isActive
-      );
-      res.status(200).send({ data: updateUser });
+      const updateUser = await userService.updateUser(verifyUser.id, {
+        isActive: true,
+      });
+      return res.status(200).send({ data: updateUser });
     } else {
-      res.status(404).send("user not found");
+      return res.status(404).send("User not found or OTP is incorrect");
     }
   } catch (error) {
-    console.log(error);
-    res.status(404).json({ massage: "user not verified" });
+    console.error(error);
+    return res.status(500).json({ message: "Error verifying user" });
   }
 }
 
@@ -71,7 +72,11 @@ async function getAllUser(req, res) {
 async function getUserId(req, res) {
   try {
     const user = await getUserById(req.params.id);
-    res.status(200).send(user);
+    if (req.params.id != req.user.id) {
+      return res.status(404).json({ error: "something went wrong.!" });
+    } else {
+      res.status(200).send(user);
+    }
   } catch (error) {
     console.log(error);
   }
@@ -79,6 +84,9 @@ async function getUserId(req, res) {
 
 async function resetPassword(req, res) {
   const rest = await findUserByEmail(req.body);
+  if (req.body.email != req.user.email) {
+    return res.status(404).json({ error: "something went wrong..!" });
+  }
   if (rest) {
     const active = await userIsActiveCheck(req.body);
 
@@ -117,9 +125,14 @@ async function loginUser(req, res) {
       return res.status(401).json({ message: "Email and password incorrect" });
     }
 
+    const token = jwt.sign(
+      { id: user._id, email: user.email },
+      "process.env.SECREAT_KEY",
+      { expiresIn: "5d" }
+    );
     return res
       .status(200)
-      .json({ message: "User login successfully", data: user });
+      .json({ message: "User login successfully", token: token });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Internal server error" });
@@ -154,10 +167,13 @@ async function forgotPassword(req, res) {
     return res.status(500).json({ message: "Internal Server Error" });
   }
 }
-// put requiest update user
+// put request update user
 
 async function updateUser(req, res) {
   const user = await findUserByEmail(req.body);
+  if (req.body.email != req.user.email) {
+    return res.status(404).json({ error: "something went wrong.!" });
+  }
   if (!user) {
     return res.status(404).json({ message: "User not exist" });
   } else {

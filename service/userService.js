@@ -24,12 +24,13 @@ async function findUserEmail(body) {
   return findUser;
 }
 
-async function verfiyUser(body) {
+async function verifyUser(body) {
   const userEmail = body.email;
   const userOtp = body.otp;
-  const verfiyUser = await user.findOne({ email: userEmail }, { otp: userOtp });
 
-  return verfiyUser;
+  // Find user by both email and OTP
+  const verifyUser = await user.findOne({ email: userEmail, otp: userOtp });
+  return verifyUser;
 }
 
 //  getall user
@@ -68,16 +69,12 @@ async function findUserByEmail(body) {
     return error;
   }
 }
-async function updateuser(id, isActive) {
-  const updateUser = await user.findByIdAndUpdate(
-    { _id: id },
-    { isActive: isActive }
-  );
-  return updateUser;
+async function updateUser(userId, updateData) {
+  const updatedUser = await user.findByIdAndUpdate(userId, updateData);
+  return updatedUser;
 }
 
 async function checkUserPassword(body) {
-  //... fetch user from a db etc.
   try {
     const users = await user
       .findOne({ email: body.email })
@@ -86,7 +83,7 @@ async function checkUserPassword(body) {
     const match = await bcrypt.compare(oldpass, users.password);
     return match;
   } catch (error) {
-    throw new Error(error);
+    return new Error("something wrong..!");
   }
 }
 
@@ -214,9 +211,9 @@ module.exports = {
   findUserByEmail,
   updatePassword,
   userIsActiveCheck,
-  verfiyUser,
+  verifyUser,
   checkUserLoginPassword,
-  updateuser,
+  updateUser,
   forgetUserPassword,
   verifyOtp,
   updateUserByOne,
