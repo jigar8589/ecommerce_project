@@ -40,8 +40,7 @@ async function updateproduct(req, res) {
       Price,
       description,
       quantity
-      // category,
-      // SubCategory
+      
     );
     res.json({ massage: "Product update sucessfully" });
   } catch (error) {

@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const category = require("./categoty.model");
-const SubCategory = require("./subcategory.model")
+
 
 const productSchema = new mongoose.Schema({
   name: {
@@ -36,10 +36,7 @@ const productSchema = new mongoose.Schema({
     type:mongoose.Schema.Types.ObjectId,
     ref:"category"
   },
-  // subCategory_id:{
-  //   type:mongoose.Schema.Types.ObjectId,
-  //   ref:"SubCategory"
-  // }
+  
 });
 
 const product = mongoose.model("product", productSchema);
