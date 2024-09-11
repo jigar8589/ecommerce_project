@@ -55,7 +55,7 @@ async function handleVerification(req, res) {
       const updateUser = await updateuser(verifyUser._id, (isActive = true)); // user veify and isActive: true
       res.status(200).send({ data: updateUser });
     } else {
-      res.status(404).send("user not found");
+      res.status(404).json("user not found");
     }
   } catch (error) {
     console.log(error);

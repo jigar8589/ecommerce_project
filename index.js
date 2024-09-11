@@ -1,6 +1,8 @@
-require('dotenv').config()
-const express = require('express')
-const router= require("./router/userRouter")
+require("dotenv").config();
+const cors = require("cors");
+
+const express = require("express");
+const router = require("./router/userRouter");
 const productrouter = require("./router/productRouter");
 const addressRouter = require("./router/addressRouter")
 const cartRouter = require("./router/cartRouter")
@@ -10,6 +12,8 @@ const app = express();
 app.use(cors())
 require("./config");
 app.use(express.json());
+app.use(cors());
+
 const port = process.env.PORT;
 app.use(express.urlencoded({ extended: true }));
 
