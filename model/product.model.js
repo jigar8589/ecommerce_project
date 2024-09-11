@@ -35,10 +35,7 @@ const productSchema = new mongoose.Schema({
     type:mongoose.Schema.Types.ObjectId,
     ref:"category"
   },
-  // subCategory_id:{
-  //   type:mongoose.Schema.Types.ObjectId,
-  //   ref:"SubCategory"
-  // }
+  
 });
 
 const product = mongoose.model("product", productSchema);
