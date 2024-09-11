@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 const category = require("./categoty.model");
-const SubCategory = require("./subcategory.model")
 
 const productSchema = new mongoose.Schema({
   name: {
