@@ -28,15 +28,10 @@ async function deleteAddressById(req, res) {
   try {
     const userid = req.params.id;
     const findUserAddress = await addressService.serchUserAddress(userid);
-    // console.log(userid);
-    // console.log(req.user.id);
 
     if (userid != req.user.id) {
       return res.status(404).json({ error: "something went wrong.!" });
-    }
-    // if (!findUserAddress) {
-    //   res.status(404).json({ message: "Address not found..!" });
-    else {
+    } else {
       const deleteAddress = await addressService.deleteAddress(userid);
       res.status(200).json({ message: "Address deleted" });
     }
@@ -70,9 +65,7 @@ async function checkDefault(req, res) {
     );
     if (findWithAddressId) {
       res.status(200).json({ message: "Default updated." });
-    }
-    // res.status(200).json(findWithAddressId)
-    else {
+    } else {
       res.status(404).json("Address not found..");
     }
   } catch (error) {
