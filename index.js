@@ -12,7 +12,7 @@ const app = express();
 app.use(cors())
 require("./config");
 app.use(express.json());
-app.use(cors());
+
 
 const port = process.env.PORT;
 app.use(express.urlencoded({ extended: true }));
