@@ -36,10 +36,12 @@ const verifyTokenPromise = (token, key, options) => {
 
 
 const authentications =  async (req, res, next) => {
-  const  {token}  = req.headers;
+  try {
+  const  authorization  = req.headers.authorization;
+  const token = authorization.split(" ")[1]
   const key = process.env.JWT_SECRECT;
   if (!token) return res.status(401).json({ error: "Token is not provided" });
-  try {
+ 
     const payload = await verifyTokenPromise(token, key, {
       ignoreExpiration: false,
     });

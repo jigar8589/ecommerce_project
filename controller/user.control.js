@@ -15,6 +15,7 @@ const {
   UpdateOTP,
   userExist,
   createTokenPromise,
+  LoginAdmin
 } = require("../service/userService");
 const Util = require("../Util/email");
 
@@ -236,6 +237,29 @@ async function sendOtp(req, res) {
   }
 }
 
+
+
+//************************************************* Admin Login Controller **********************************/
+
+  async function AdminLogin(req,res){
+
+    const adminLogin = await LoginAdmin(req.body)
+    if(!adminLogin){
+      res.json({massage:"EmailId not Found"})
+    }
+    const CheckAdminPassword = await checkUserLoginPassword(req.body)
+    if(!CheckAdminPassword){
+      res.json({massage:"Email And Password incorrect"})
+    }
+    const Admintoken = await createTokenPromise(
+      // create jwtToken
+      { userId: adminLogin._id, email: adminLogin.email },
+      process.env.JWT_SECRECT,
+      { expiresIn: "2d" }
+    );
+    return res.status(200).json({massage:"Login Successfully",token:Admintoken})
+  }
+
 module.exports = {
   handleUser,
   getAllUser,
@@ -246,4 +270,5 @@ module.exports = {
   updateUser,
   sendOtp,
   getUserId,
+  AdminLogin
 };

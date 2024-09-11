@@ -69,11 +69,6 @@ async function deleteProductControl(req, res) {
 
 async function allProducts(req, res) {
   try {
-    const tokenid = req.user._id;
-    const verifyAdmin = await categoryService.CheckAdmin(tokenid);
-    if (!verifyAdmin) {
-      res.status(401).json({ massage: "you are Unauthorised" });
-    }
     const allProducts = await productService.getAllProducts();
     res.status(200).json({ data: allProducts });
   } catch (error) {
@@ -83,11 +78,7 @@ async function allProducts(req, res) {
  /***************************************** Get Product ById  controller **********************************************/
 async function getProductcontroler(req, res) {
   try {
-    const tokenid = req.user._id;
     const id = req.params.id;
-    if (!verifyAdmin) {
-      res.status(401).json({ massage: "you are Unauthorised" });
-    }
     const product = await productService.getproductById(id);
     res.json(product);
   } catch (error) {

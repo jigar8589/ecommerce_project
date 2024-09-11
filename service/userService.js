@@ -232,6 +232,13 @@ const createTokenPromise = (payload, key, options) => {
 
 }
 
+
+async function LoginAdmin(body){
+  const Email = body.email
+  const findAdminorNot = await user.findOne({email:Email,role:"admin"})
+  return findAdminorNot
+}
+
 module.exports = {
   findUserEmail,
   manageUser,
@@ -250,5 +257,6 @@ module.exports = {
   UpdateOTP,
   userExist,
   createTokenPromise,
+  LoginAdmin
 
 };
