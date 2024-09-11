@@ -23,12 +23,12 @@ async function handleUser(req, res) {
   try {
     const findUser = await userService.userExist(req.body);
     if (findUser) {
-      res.status(404).send({ message: "User already exists.." });
+      return res.status(404).send({ message: "User already exists.." });
     } else {
       const userCreate = await manageUser(req.body);
       res.json({ message: "user registered successfully.." });
       if (!userCreate) {
-        res.status(404).send({ massage: "User not create" });
+        return res.status(404).send({ massage: "User not create" });
       } else {
         const sendmailservice = await Util.sendmail(
           req.body.email,
