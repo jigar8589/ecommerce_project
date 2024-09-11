@@ -1,13 +1,12 @@
-require("dotenv").config();
-const cors = require("cors");
 
+const cors = require("cors");
 const express = require("express");
+require("dotenv").config();
 const router = require("./router/userRouter");
 const productrouter = require("./router/productRouter");
 const addressRouter = require("./router/addressRouter")
 const cartRouter = require("./router/cartRouter")
 const categoryRouter = require("./router/categoryRouter")
-const cors = require('cors')
 const app = express();
 app.use(cors())
 require("./config");
