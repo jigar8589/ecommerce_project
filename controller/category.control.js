@@ -1,5 +1,8 @@
 const service = require("../service/categoryService");
 
+
+//***************************************  Add Category  ******************************************************/
+
 async function Addcategory(req, res) {
   try {
     const tokenId = req.user._id;
@@ -17,6 +20,8 @@ async function Addcategory(req, res) {
   }
 }
 
+//****************************************** get All product *************************************************** */
+
 async function getAllCategory(req, res) {
   try {
     const tokenId = req.user._id;
@@ -33,6 +38,8 @@ async function getAllCategory(req, res) {
   }
 }
 
+
+//****************************************** Update Category *************************************************** */
 async function UpdateCategory(req, res) {
   try {
     const tokenId = req.user._id;
@@ -49,6 +56,8 @@ async function UpdateCategory(req, res) {
     console.log(error);
   }
 }
+
+//******************************************* Delete Category ************************************************** */
 
 async function DeleteCategory(req, res) {
   try {
