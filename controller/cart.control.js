@@ -28,7 +28,7 @@ async function getProductFromCart(req, res) {
   }
 }
 
-async function updateProductToCart(req, res) {
+async function  updateProductToCart(req, res) {
   try {
     const user_id = req.body.userId;
     const product_id = req.body.productId;
