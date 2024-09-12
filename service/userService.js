@@ -139,6 +139,7 @@ async function checkUserLoginPassword(body) {
     const users = await user
       .findOne({ email: body.email })
       .populate("password");
+      console.log("users",users)
     const pass = body.password;
     const match = await bcrypt.compare(pass, users.password);
     return match;

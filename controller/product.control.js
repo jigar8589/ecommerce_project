@@ -51,7 +51,7 @@ async function updateproduct(req, res) {
 
 async function deleteProductControl(req, res) {
   try {
-    const tokenid = req.user_id;
+    const tokenid = req.user._id;
     const id = req.params.id;
     const verifyAdmin = await categoryService.CheckAdmin(tokenid);
     if (!verifyAdmin) {

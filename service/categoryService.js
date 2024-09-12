@@ -32,7 +32,7 @@ async function getCategory(){
 // **************************************** Check Admin Controller  ********************************************* /
 async function CheckAdmin(tokenId){
     const findAdmin = await user.findOne({ _id: tokenId, role: "admin" });
-    // console.log(findAdmin)
+     console.log(findAdmin)
     return findAdmin
 }
 

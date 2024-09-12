@@ -19,7 +19,7 @@ router.get("/", auth, getAllUser);
 router.get("/:id", auth, getUserId);
 router.post("/signup", handleUser);
 router.post("/forgotpassword", forgotPassword);
-router.post("/resetpassword", auth, resetPassword);
+router.post("/resetpassword", auth,resetPassword);
 router.post("/verify", handleVerification);
 router.post("/login", loginUser);
 router.put("/updateuser", auth, updateUser);
