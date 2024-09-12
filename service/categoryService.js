@@ -1,10 +1,10 @@
 const category = require("../model/categoty.model")
+const product = require("../model/product.model")
 const user = require("../model/user.model")
 
 
 
-
-//*****************************************  Add category Controller  ************************************** /
+//*****************************************  Add category   ************************************** /
 async function AddCategory(categoryName,product_id){
     const createCategory = await category.create({
         categoryName:categoryName,
@@ -15,13 +15,13 @@ async function AddCategory(categoryName,product_id){
 }
 
 
-//*****************************************  Update category Controller ************************************* /
+//*****************************************  Update category  ************************************* /
 async function UpdateCategory(id,categoryName){
     const categoryUpdated = await category.findByIdAndUpdate({_id:id},{$set:{categoryName:categoryName}})
     return categoryUpdated
 }
 
-//*****************************************  get all category Conteroller ************************************* /
+//*****************************************  get all category  ************************************* /
 
 async function getCategory(){
     const getAllCategory = await category.find()
@@ -29,14 +29,14 @@ async function getCategory(){
 }
 
 
-// **************************************** Check Admin Controller  ********************************************* /
+// **************************************** Check Admin   ********************************************* /
 async function CheckAdmin(tokenId){
     const findAdmin = await user.findOne({ _id: tokenId, role: "admin" });
-     console.log(findAdmin)
+    //  console.log(findAdmin)
     return findAdmin
 }
 
-// **************************************** Delete category Controller ***************************************** /
+// **************************************** Delete category  ***************************************** /
 
 async function DeleteCategory(id){
         const DeletedCategory = await category.findByIdAndDelete(id)
@@ -44,11 +44,20 @@ async function DeleteCategory(id){
 }
 
 
+async function getProduct(category_id){
+    
+    const getproductbycategory = await product.find({category:category_id})
+    console.log(getproductbycategory)
+    return getproductbycategory
+
+}
+
 module.exports ={
     AddCategory,
     UpdateCategory,
     getCategory,
-    CheckAdmin,DeleteCategory
+    CheckAdmin,DeleteCategory,
+    getProduct
 }
 
 

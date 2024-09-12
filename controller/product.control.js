@@ -10,13 +10,13 @@ async function createProduct(req, res) {
     const body = req.body;
     const verifyAdmin = await categoryService.CheckAdmin(tokenid);   // verify Admin in category service
     if (!verifyAdmin) {
-      res.status(401).json({ massage: "you are Unauthorised" });
+      res.status(401).json({ Message: "you are Unauthorised" });
     }
     const createproduct = await productService.addproduct(body, reqfile);
-    res.status(200).json({ message: "Product created..",data:createProduct });
+    res.status(200).json({ Message: "Product created..",data:createProduct });
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: "Product not created.." });
+    res.status(404).json({ Message: "Product not created.." });
   }
 }
 /***************************************** Update Product controller ************************************************ */
@@ -25,26 +25,26 @@ async function updateproduct(req, res) {
   try {
     const id = req.params.id;
     const tokenid = req.user._id;
-    const Name = req.body.name;
-    const Price = req.body.price;
-    const description = req.body.description;
-    const quantity = req.body.quantity;
+    const file = req.files
+    const {name,price,description,category_id,quantity} = req.body
 
     const verifyAdmin = await categoryService.CheckAdmin(tokenid);
     if (!verifyAdmin) {
-      res.status(401).json({ massage: "you are Unauthorised" });
+      res.status(401).json({ Message: "you are Unauthorised" });
     }
     const productUpdated = await productService.productUpdate(
       id,
-      Name,
-      Price,
+      name,
+      price,
       description,
-      quantity
+      quantity,
+      category_id,
+      file
       
     );
-    res.json({ massage: "Product update sucessfully" });
+    res.json({ Message: "Product update sucessfully" });
   } catch (error) {
-    res.json({ massage: "some error please tya again latter" });
+    res.json({ Message: "some error please tya again latter" });
   }
 }
 //**************************************** Delete Product Controller************************************************** */
@@ -55,12 +55,12 @@ async function deleteProductControl(req, res) {
     const id = req.params.id;
     const verifyAdmin = await categoryService.CheckAdmin(tokenid);
     if (!verifyAdmin) {
-      res.status(401).json({ massage: "somthing went wrong" });
+      res.status(401).json({ message: "somthing went wrong" });
     }
     const productDeleted = await productService.productDelete(id);
-    res.json({ massage: "Product delete sucessfully" });
+    res.json({ message: "Product delete sucessfully" });
   } catch (error) {
-    res.json({ massage: "some error please try again letter" });
+    res.json({ message: "some error please try again letter" });
   }
 }
 
@@ -71,7 +71,7 @@ async function allProducts(req, res) {
     const allProducts = await productService.getAllProducts();
     res.status(200).json({ data: allProducts });
   } catch (error) {
-    res.json({ massage: "some error please try again letter" });
+    res.json({ Message: "some error please try again letter" });
   }
 }
  /***************************************** Get Product ById  controller **********************************************/
@@ -81,7 +81,7 @@ async function getProductcontroler(req, res) {
     const product = await productService.getproductById(id);
     res.json(product);
   } catch (error) {
-    res.json({ massage: "some error please try agein letter" });
+    res.json({ Message: "some error please try agein letter" });
   }
 }
 

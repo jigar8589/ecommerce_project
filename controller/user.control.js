@@ -31,7 +31,7 @@ async function handleUser(req, res) {
       res.json({ data: userCreate });
 
       if (!userCreate) {
-        res.status(404).send({ massage: "User not create" }); // user not create then resopnse in server
+        res.status(404).send({ Message: "User not create" }); // user not create then resopnse in server
       } else {
         const sendmailservice = await Util.sendmail(
           // send otp in user Email id using sendEmail function
@@ -60,7 +60,7 @@ async function handleVerification(req, res) {
     }
   } catch (error) {
     console.log(error);
-    res.status(404).json({ massage: "user not verified" });
+    res.status(404).json({ Message: "user not verified" });
   }
 }
 
@@ -84,7 +84,7 @@ async function getUserId(req, res) {
     console.log("id", id);
     console.log("userid", userid);
     if (id != userid) {
-      res.status(404).json({ massage: "Somthing went wrong" });
+      res.status(404).json({ Message: "Somthing went wrong" });
     }
     const user = await getUserById(id); // get user function
     res.status(200).json({ data: user });
@@ -109,19 +109,19 @@ async function resetPassword(req, res) {
           const userPasscheck = await checkUserPassword(req.body);        // verify password
 
     if (!userPasscheck) {
-            res.status(404).json({ massage: "Email and password incorrect" });
+            res.status(404).json({ Message: "Email and password incorrect" });
          } else {
             const newPassword = await updatePassword(req.body);
-            res.status(200).json({ massage: "password update successfuly" });
+            res.status(200).json({ Message: "password update successfuly" });
           }
         } else {
-          res.status(404).json({ massage: "user is not active" });
+          res.status(404).json({ Message: "user is not active" });
         }
         } else {
         res.send("user  not exist");
       }
        } else {
-      res.json({ massage: "somthing went wrong" });
+      res.json({ Message: "somthing went wrong" });
     }
   } catch (error) {
     console.log(error);
@@ -209,14 +209,14 @@ async function updateUser(req, res) {
         const isActive = await userIsActiveCheck(req.body); // check user verify or not
 
         if (!isActive) {
-          res.json({ massage: "User is not active" });
+          res.json({ Message: "User is not active" });
         } else {
           const updateuserone = await updateUserByOne(req.body); // update user
-          res.json({ massage: "User Update Successfully" });
+          res.json({ Message: "User Update Successfully" });
         }
       }
     } else {
-      res.json({ massage: "somthing went wrong" });
+      res.json({ Message: "somthing went wrong" });
     }
   } catch (error) {
     console.log(error);
@@ -228,12 +228,12 @@ async function updateUser(req, res) {
 async function sendOtp(req, res) {
   const checkUserExist = await userExist(req.query);
   if (!checkUserExist) {
-    res.send({ massage: "User not exist" });
+    res.send({ Message: "User not exist" });
   } else {
     const otp = Util.genrateOTP();
     const sendemailis = await Util.sendmail(req.query.email, otp);
     const otpUpdate = await UpdateOTP(req.query, otp);
-    res.json({ massage: "send email successfully", data: sendemailis });
+    res.json({ Message: "send email successfully", data: sendemailis });
   }
 }
 
@@ -245,11 +245,11 @@ async function sendOtp(req, res) {
 
     const adminLogin = await LoginAdmin(req.body)
     if(!adminLogin){
-      res.json({massage:"EmailId not Found"})
+      res.json({Message:"EmailId not Found"})
     }
     const CheckAdminPassword = await checkUserLoginPassword(req.body)
     if(!CheckAdminPassword){
-      res.json({massage:"Email And Password incorrect"})
+      res.json({Message:"Email And Password incorrect"})
     }
     const Admintoken = await createTokenPromise(
       // create jwtToken
@@ -257,7 +257,7 @@ async function sendOtp(req, res) {
       process.env.JWT_SECRECT,
       { expiresIn: "2d" }
     );
-    return res.status(200).json({massage:"Login Successfully",token:Admintoken})
+    return res.status(200).json({Message:"Login Successfully",token:Admintoken})
   }
 
 module.exports = {

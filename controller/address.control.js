@@ -47,17 +47,17 @@ async function UpdateAddress(req, res) {
 //     const verifyAddress = await service.verifyAddressById(req.params.id);
 //     // console.log(verifyAddress.userId.toHexString())
 //     if (tokenId !== verifyAddress.userId.toHexString()) {
-//       res.status(401).json({ massage: "Somthing went wrong" });
+//       res.status(401).json({ Message: "Somthing went wrong" });
 //     }
 //     if (verifyAddress) {
 //       const addressUpdated = await service.updateAddressById(req.params.id, req.body);
-//       res.json({ massage:"Address Update sucessfully" });
+//       res.json({ Message:"Address Update sucessfully" });
 //     } else {
-//       res.json({ massage: "Address not found" });
+//       res.json({ Message: "Address not found" });
 //     }
 //   } catch (error) {
 //     console.log(error);
-//     res.json({ massage: "Address not Update " });
+//     res.json({ Message: "Address not Update " });
 //   }
 
   try {
@@ -91,14 +91,14 @@ async function makeDafulatAddress(req, res) {
     const verifyUserId = await service.userVerify(id, tokenId);
 
     if (!verifyUserId) {
-       return res.status(404).json({ massage: "User address not found " });
+       return res.status(404).json({ Message: "User address not found " });
     } 
       const addressDefualat = await service.defaultCheck(tokenId);
       const data = await service.setDefaultAddress(id);
-       res.json({ massage: "address default successfully" });
+       res.json({ Message: "address default successfully" });
   } catch (error) {
     console.log(error);
-    res.json({ massage: "Address Id wrong",  });
+    res.json({ Message: "Address Id wrong",  });
   }
 }
 
@@ -111,7 +111,7 @@ async function DeleteAddress(req, res) {
     return res.status(404).json({ error: "Address not found" });
   }
   const deleteAdress = service.DeleteAddressById(req.params.id);
-  res.status(200).json({ massage: "Address Delete Sucessfully" });
+  res.status(200).json({ Message: "Address Delete Sucessfully" });
 }
 
 module.exports = {

@@ -11,7 +11,7 @@ async function Addcategory(req, res) {
 
     const findAdmin = await service.CheckAdmin(tokenId);
     if (!findAdmin) {
-      res.json({ massage: " can't access" });
+      res.json({ Message: " can't access" });
     }
     const category = await service.AddCategory(categoryName,product_id);
     res.json({ Message: "Add category Successfully" });
@@ -28,7 +28,7 @@ async function getAllCategory(req, res) {
 
     const findAdmin = await service.CheckAdmin(tokenId);
     if (!findAdmin) {
-      res.json({ massage: " can't access" });
+      res.json({ Message: " can't access" });
     }
 
     const category = await service.getCategory();
@@ -47,11 +47,11 @@ async function UpdateCategory(req, res) {
     const categoryName = req.body.categoryName;
     const findAdmin = await service.CheckAdmin(tokenId);
     if (!findAdmin) {
-      res.status(401).json({ massage: "can't Access" });
+      res.status(401).json({ Message: "can't Access" });
     }
 
     const categoryUpdated = await service.UpdateCategory(id, categoryName);
-    res.status(200).json({ massage: "category updated" });
+    res.status(200).json({ Message: "category updated" });
   } catch (error) {
     console.log(error);
   }
@@ -65,13 +65,33 @@ async function DeleteCategory(req, res) {
     const id = req.params.id;
     const findAdmin = await service.CheckAdmin(tokenId);
     if (!findAdmin) {
-      res.status(401).json({ massage: "can't Access" });
+      res.status(401).json({ Message: "can't Access" });
     }
 
     const deletecategory = await service.DeleteCategory(id);
-    res.json({massage:"category Deleted successfully",data:deletecategory})
+    res.json({Message:"category Deleted successfully",data:deletecategory})
   } catch (error) {
     console.log(error);
+  }
+}
+
+
+//******************************************** Get Product By category *******************************************/
+
+
+async function getProductByCategory(req,res){
+  try {
+    const category_id = req.params.id
+    const getProductdata = await service.getProduct(category_id)
+    if(getProductdata.length === 0){
+      return res.status(404).json({ message: 'No products found in this category' });
+  }
+  res.json(getProductdata);
+    
+  } catch (error) {
+    console.log(error)
+    res.json({error:"Some error please try agian"})
+    
   }
 }
 
@@ -80,6 +100,7 @@ module.exports = {
   getAllCategory,
   UpdateCategory,
   DeleteCategory,
+  getProductByCategory
 };
 
 

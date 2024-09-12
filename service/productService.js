@@ -1,3 +1,4 @@
+
 const product = require("../model/product.model");
 
 async function addproduct(body,requestFile) {
@@ -28,8 +29,14 @@ async function addproduct(body,requestFile) {
 
 // Update product
 
-async function productUpdate(id, name, price, description, quantity) {
-  try {
+async function productUpdate(id, name, price, description, quantity,category_id,requestFile) {
+  
+    let images = [];
+    for (let i = 0; i < requestFile.length; i++) {
+      images[i] = requestFile[i].filename;
+  
+    }
+    
     const Update = product.findOneAndUpdate(
       { _id: id },
       {
@@ -38,16 +45,14 @@ async function productUpdate(id, name, price, description, quantity) {
           price: price,
           description: description,
           quantity: quantity,
+          category:category_id,
+          images:images
         },
       }
     );
 
     return Update;
-  } catch (error) {
-    console.log(error);
-    return error;
-  }
-}
+  } 
 
 async function productDelete(id) {
   const Delete = await product.findByIdAndDelete({ _id: id });

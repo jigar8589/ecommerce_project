@@ -16,7 +16,7 @@ async function postAddtoCart(req, res) {
       res.json({ massaeg: " product in cart successfuly", data: addcart });
     } else {
       const updateQuantity = await cartservice.Updatequantity(productid);
-      res.json({ massage: "add successfully" });
+      res.json({ Message: "add successfully" });
     }
   } catch (error) {
     console.log(error);
@@ -34,7 +34,7 @@ async function getaddcartDetails(req, res) {
     res.json({ data: getaddcart });
   } catch (error) {
     console.log(error);
-    res.json({ massage: "Some Error" });
+    res.json({ Message: "Some Error" });
   }
 }
  
@@ -50,15 +50,15 @@ async function deletecartdetails(req, res) {
     );
     console.log(finduseridAndProductId);
     if (!finduseridAndProductId) {
-      res.json({ massage: "productId not found" });
+      res.json({ Message: "productId not found" });
     } else {
       const cartdeleted = await cartservice.deleteaddcartDetails(productid);
       console.log(cartdeleted);
-      res.json({ massage: "product delete Successfully", data: cartdeleted });
+      res.json({ Message: "product delete Successfully", data: cartdeleted });
     }
   } catch (error) {
     console.log(error);
-    res.json({ massage: "product not deleted" });
+    res.json({ Message: "product not deleted" });
   }
 }
 
@@ -76,7 +76,7 @@ async function updateCartProduct(req, res) {
         productid
       );
       if (!finduseridAndProductId) {
-        res.status(200).json({ massage: "ProductId not found" });
+        res.status(200).json({ Message: "ProductId not found" });
       } else {
         const UpdateCart = cartservice.UpdateCartProductDetails(
           productid,
@@ -84,10 +84,10 @@ async function updateCartProduct(req, res) {
         );
         res
           .status(200)
-          .json({ massage: "product Quantity Update Successfully" });
+          .json({ Message: "product Quantity Update Successfully" });
       }
     } else {
-      res.json({ massage: "minimum quantity is 1" });
+      res.json({ Message: "minimum quantity is 1" });
     }
   } catch (error) {
     res.status(404).json({ massaeg: "Some Error please try agian" });
