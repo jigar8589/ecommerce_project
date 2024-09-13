@@ -28,7 +28,7 @@ async function getProductFromCart(req, res) {
   }
 }
 
-async function  updateProductToCart(req, res) {
+async function updateProductToCart(req, res) {
   try {
     const user_id = req.body.userId;
     const product_id = req.body.productId;
@@ -51,4 +51,30 @@ async function  updateProductToCart(req, res) {
   }
 }
 
-module.exports = { addProductToCart, getProductFromCart, updateProductToCart };
+async function deleteProductToCart(req, res) {
+  try {
+    const userId = req.body.userId;
+    const productId = req.body.productId;
+    const findProduct = await cartService.findAndDeleteProduct(
+      productId,
+      userId
+    );
+    if (userId != req.user.id) {
+      return res.status(404).json({ message: "something went wrong.!" });
+    }
+    if (findProduct) {
+      res.status(200).json({ message: "product deleted" });
+    } else {
+      res.status(404).json({ message: "product or user not found." });
+    }
+  } catch (error) {
+    res.status(404).json({ message: "product not deleted." });
+  }
+}
+
+module.exports = {
+  addProductToCart,
+  getProductFromCart,
+  updateProductToCart,
+  deleteProductToCart,
+};

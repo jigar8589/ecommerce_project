@@ -53,4 +53,24 @@ async function findUserProduct(userid, productid, qnty) {
   }
 }
 
-module.exports = { addToCart, getFromCart, findUserProduct };
+async function findAndDeleteProduct(productId, userId) {
+  const findUser = await cart.findOne({ userId: userId });
+  if (findUser) {
+    const findProduct = await cart.findOne({ productId: productId });
+    if (findProduct) {
+      const deleteProduct = await cart.deleteOne({ productId: productId });
+      return deleteProduct;
+    } else {
+      return;
+    }
+  } else {
+    return;
+  }
+}
+
+module.exports = {
+  addToCart,
+  getFromCart,
+  findUserProduct,
+  findAndDeleteProduct,
+};
