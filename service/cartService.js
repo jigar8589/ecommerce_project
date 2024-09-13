@@ -22,8 +22,8 @@ async function Updatequantity(productid) {
 }
 
 async function addcartdetailsByUserId(userId) {
-  const addtocart = await cart.find({userId:userId});
-  // console.log(addtocart);
+  const addtocart = await cart.find({userId:userId}).populate('productId');
+  
   return addtocart;
 }
 

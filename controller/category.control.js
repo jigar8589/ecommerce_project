@@ -24,13 +24,7 @@ async function Addcategory(req, res) {
 
 async function getAllCategory(req, res) {
   try {
-    const tokenId = req.user._id;
-
-    const findAdmin = await service.CheckAdmin(tokenId);
-    if (!findAdmin) {
-      res.json({ Message: " can't access" });
-    }
-
+    // const tokenId = req.user._id;
     const category = await service.getCategory();
     res.json({ data: category });
   } catch (error) {
