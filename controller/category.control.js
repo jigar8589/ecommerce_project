@@ -84,7 +84,7 @@ async function getProductByCategory(req,res){
     
   } catch (error) {
     console.log(error)
-    res.json({error:"Some error please try agian"})
+    res.status(404).json({error:"Some error please try agian"})
     
   }
 }

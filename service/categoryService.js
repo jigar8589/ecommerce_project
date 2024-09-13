@@ -50,7 +50,7 @@ async function getProduct(category_id){
     console.log(getproductbycategory)
     return getproductbycategory
 
-}
+} 
 
 module.exports ={
     AddCategory,

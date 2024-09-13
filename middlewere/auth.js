@@ -53,7 +53,7 @@ const authentications =  async (req, res, next) => {
     if (!user) {
       return res.status(403).json({ error: "Invalid Token..." });
     }
-    // console.log("req..", req);
+   
     req.user = user;
     next();
   } catch (error) {

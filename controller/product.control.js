@@ -6,13 +6,14 @@ const categoryService = require("../service/categoryService");
 async function createProduct(req, res) {
   try {
     const tokenid = req.user._id;
-    const reqfile = req.files;
     const body = req.body;
-    const verifyAdmin = await categoryService.CheckAdmin(tokenid);   // verify Admin in category service
+    const verifyAdmin = 
+    
+    await categoryService.CheckAdmin(tokenid);   // verify Admin in category service
     if (!verifyAdmin) {
       res.status(401).json({ Message: "you are Unauthorised" });
     }
-    const createproduct = await productService.addproduct(body, reqfile);
+    const createproduct = await productService.addproduct(body);
     res.status(200).json({ Message: "Product created..",data:createProduct });
   } catch (error) {
     console.log(error);
@@ -25,8 +26,7 @@ async function updateproduct(req, res) {
   try {
     const id = req.params.id;
     const tokenid = req.user._id;
-    const file = req.files
-    const {name,price,description,category_id,quantity} = req.body
+    const {name,price,description,category_id,quantity,images} = req.body
 
     const verifyAdmin = await categoryService.CheckAdmin(tokenid);
     if (!verifyAdmin) {
@@ -39,8 +39,7 @@ async function updateproduct(req, res) {
       description,
       quantity,
       category_id,
-      file
-      
+      images
     );
     res.json({ Message: "Product update sucessfully" });
   } catch (error) {
