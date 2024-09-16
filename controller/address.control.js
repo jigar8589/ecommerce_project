@@ -1,8 +1,14 @@
 const service = require("../service/addressService");
+const { validateAddress } = require("../validation/addressValidation");
+
 
 // **************************************** Add Adress Controller ********************************************/
 async function adress(req, res) {
   try {
+
+    const {error}=validateAddress(req.body);
+    if(error) return res.status(400).json({message:error.details[0].message})
+
     const tokenid = req.user._id;
     const Adress = await service.PostAdress(req.body, tokenid); // add user address
     res.json({ data: Adress });
@@ -61,6 +67,10 @@ async function UpdateAddress(req, res) {
 //   }
 
   try {
+
+    const {error}=validateAddress(req.body);
+    if(error) return res.status(400).json({message:error.details[0].message})
+
     const tokenId = req.user._id.toHexString();
     const verifyAddress = await service.verifyAddressById(req.params.id);
 

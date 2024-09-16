@@ -18,11 +18,16 @@ const {
   LoginAdmin
 } = require("../service/userService");
 const Util = require("../Util/email");
+const {validateUser,validateLogin,validateResetPassword}=require("../validation/userValidation")
 
 //******************************** * create new user controller ****************************************
 
 async function handleUser(req, res) {
   try {
+
+    // const {error}=validateUser(req.body);
+    // if(error) return res.status(400).send(error.details[0].message);
+
     const findUser = await userService.userExist(req.body); // Check User Exist or not
     if (findUser) {
       res.status(404).send("User already exists..");
@@ -97,6 +102,10 @@ async function getUserId(req, res) {
 
 async function resetPassword(req, res) {
   try {
+
+    const {error}=validateResetPassword(req.body);
+    if(error) return res.status(400).send(error.details[0].message);
+
     const userEmail = req.body.email;
     const tokenEmail = req.user.email;
     if (userEmail == tokenEmail) {
@@ -132,6 +141,10 @@ async function resetPassword(req, res) {
 
 async function loginUser(req, res) {
   try {
+
+    // const {error}=validateLogin(req.body);
+    // if(error) return res.status(400).send(error.details[0].message)
+
     const User = await findUserByEmail(req.body); // check user Exist or not using email
     if (!User) {
       return res.status(404).json({ message: "User not exist" });
@@ -150,7 +163,7 @@ async function loginUser(req, res) {
     const token = await createTokenPromise(
       // create jwttoken
       { userId: User._id, email: User.email },
-      process.env.JWT_SECRECT,
+      "process.env.JWT_SECRECT",
       { expiresIn: "2d" }
     );
     return res

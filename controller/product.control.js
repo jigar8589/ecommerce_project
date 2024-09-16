@@ -1,10 +1,14 @@
 const productService = require("../service/productService");
 const categoryService = require("../service/categoryService");
-
+const {validateCreateProduct,validateUpdateProduct}=require("../validation/productValidation")
 
 //**************************************** create Product Controller************************************************ */
 async function createProduct(req, res) {
   try {
+
+    const{error}=validateCreateProduct(req.body);
+    if(error) return res.status(400).json({message:error.details[0].message})
+
     const tokenid = req.user._id;
     const body = req.body;
     const verifyAdmin = 
@@ -24,6 +28,10 @@ async function createProduct(req, res) {
 
 async function updateproduct(req, res) {
   try {
+
+    const {error}=validateUpdateProduct(req.body);
+    if(error) return res.status(400).json({message:error.details[0].message})
+
     const id = req.params.id;
     const tokenid = req.user._id;
     const {name,price,description,category_id,quantity,images} = req.body
