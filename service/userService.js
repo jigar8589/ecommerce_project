@@ -138,15 +138,21 @@ async function checkUserLoginPassword(body) {
   try {
     const users = await user
       .findOne({ email: body.email })
-      .populate("password");
-      console.log("users",users)
+      .select("+password");
+      const password = users.password
+      console.log("users:",password)
     const pass = body.password;
-    const match = await bcrypt.compare(pass, users.password);
+    console.log(pass)
+    const match = await bcrypt.compare(pass, password);
+    console.log(match)
     return match;
   } catch (error) {
     throw new Error("error !!!!!!!!!!");
   }
 }
+
+
+
 
 //forget password
 
