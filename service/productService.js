@@ -1,17 +1,9 @@
 
 const product = require("../model/product.model");
 
+
 async function addproduct(body) {
 
-  // let images = [];
-  // for (let i = 0; i < requestFile.length; i++) {
-  //   images[i] = requestFile[i].toString('base64');
-  // }
-  // if (images == []) {
-  //   return res.status(400).json({
-  //     message: "Please Upload Images",
-  //   });
-  // }
 
   const productdata = new product({
     name: body.name,
