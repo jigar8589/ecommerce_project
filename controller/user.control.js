@@ -26,6 +26,7 @@ async function handleUser(req, res) {
     const findUser = await userService.userExist(req.body); // Check User Exist or not
     if (findUser) {
       res.status(404).send("User already exists..");
+
     } else {
       const userCreate = await manageUser(req.body); // new user save in  databases
       res.json({ data: userCreate });
