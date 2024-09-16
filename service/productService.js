@@ -1,7 +1,7 @@
 
 const product = require("../model/product.model");
 
-async function addproduct(body,) {
+async function addproduct(body) {
 
   // let images = [];
   // for (let i = 0; i < requestFile.length; i++) {
