@@ -1,4 +1,5 @@
 const service = require("../service/categoryService");
+const {validateCategory}=require("../validation/categoryValidation")
 
 
 //***************************************  Add Category  ******************************************************/
@@ -9,12 +10,17 @@ async function Addcategory(req, res) {
     const categoryName = req.body.categoryName;
     const product_id = req.body.product_id
 
-    const findAdmin = await service.CheckAdmin(tokenId);
-    if (!findAdmin) {
-      res.json({ Message: " can't access" });
+    const {error}=validateCategory(req.body);
+    if(error) return res.status(400).send(error.details[0].message);
+
+    else{
+      const findAdmin = await service.CheckAdmin(tokenId);
+      if (!findAdmin) {
+        res.json({ Message: " can't access" });
+      }
+      const category = await service.AddCategory(categoryName,product_id);
+      res.json({ Message: "Add category Successfully" });
     }
-    const category = await service.AddCategory(categoryName,product_id);
-    res.json({ Message: "Add category Successfully" });
   } catch (error) {
     console.log(error);
   }
