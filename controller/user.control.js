@@ -269,7 +269,6 @@ try {
   if (!adminLogin) {
      res.status(404).json({ Message: "EmailId not Found" });
   }
-
   const CheckAdminPassword = await checkUserLoginPassword(req.body);
   if (!CheckAdminPassword) {
      res.status(400).json({ Message: "Email And Password incorrect" });

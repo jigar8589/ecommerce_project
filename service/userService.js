@@ -134,20 +134,45 @@ async function userIsActiveCheck(body) {
 
 // Login user checkpassword correct or not
 
+// async function checkUserLoginPassword(body) {
+//   try {
+//     const users = await user
+//       .findOne({ email: body.email })
+//       .select("+password");
+//       const password = users.password
+//       console.log("users:",password)
+//     const pass = body.password;
+//     console.log(pass)
+//     const match = await bcrypt.compare(pass, password);
+//     console.log(match)
+//     return match;
+//   } catch (error) {
+//     throw new Error("error !!!!!!!!!!");
+//   }
+// }
+
 async function checkUserLoginPassword(body) {
   try {
-    const users = await user
-      .findOne({ email: body.email })
-      .select("+password");
-      const password = users.password
-      console.log("users:",password)
-    const pass = body.password;
-    console.log(pass)
-    const match = await bcrypt.compare(pass, password);
-    console.log(match)
+    const users = await user.findOne({ email: body.email }).populate("password"); // Ensure password is selected
+    console.log(users)
+    if (!users) {
+      console.error("User not found");
+      throw new Error("User not found");
+    }
+
+    const storedPassword = users.password;
+    const inputPassword = body.password;
+
+    console.log("Stored password hash:", storedPassword);
+    console.log("Input password:", inputPassword);
+
+    const match = await bcrypt.compare(inputPassword, storedPassword);
+
+    console.log("Password match:", match);
     return match;
   } catch (error) {
-    throw new Error("error !!!!!!!!!!");
+    console.error("Error during login:", error);
+    throw new Error("Error during login");
   }
 }
 
