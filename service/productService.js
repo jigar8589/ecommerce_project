@@ -1,9 +1,8 @@
 
 const product = require("../model/product.model");
-
+const Joi = require("joi")
 
 async function addproduct(body) {
-
 
   const productdata = new product({
     name: body.name,
@@ -69,4 +68,5 @@ module.exports = {
   productDelete,
   getproductById,
   getAllProducts,
+  
 };

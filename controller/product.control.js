@@ -2,6 +2,7 @@ const productService = require("../service/productService");
 const categoryService = require("../service/categoryService");
 const {validateCreateProduct,validateUpdateProduct}=require("../validation/productValidation")
 
+
 //**************************************** create Product Controller************************************************ */
 async function createProduct(req, res) {
   try {
@@ -17,9 +18,9 @@ async function createProduct(req, res) {
     if (!verifyAdmin) {
       res.status(401).json({ Message: "you are Unauthorised" });
     }
-    const createproduct = await productService.addproduct(body);
-    res.status(200).json({ Message: "Product created..",data:createProduct });
-  } catch (error) {
+      const createproduct = await productService.addproduct(body);
+      res.status(200).json({ Message: "Product created..",data:createProduct });
+  }catch (error) {
     console.log(error);
     res.status(404).json({ Message: "Product not created.." });
   }
@@ -98,4 +99,4 @@ module.exports = {
   deleteProductControl,
   getProductcontroler,
   allProducts,
-};
+}
