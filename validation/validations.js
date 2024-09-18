@@ -20,7 +20,7 @@ const createUser = Joi.object({
   email: Joi.string().email().required().messages({
     "string.base": "Email must be a string",
     "any.required": `Email required`,
-    "string.email": `Email must be a valid `,
+    "string.email": `Email must be a valid email`,
     "string.empty": `Email should not be empty`,
     "string.min": `Email should have a minimum length of {#limit}`,
     "string.max": `Email should have a maximum length of {#limit}`,
@@ -141,7 +141,7 @@ const updateProduct = Joi.object({
     "string.max": `Product name should have a maximum length of {#limit}`,
   }),
   price: Joi.string().min(0).required().messages({
-    "string.min": "Price should be atleast 0",
+    "string.min": "Price should not be 0",
     "any.required": "Price is required",
   }),
   description: Joi.string().min(10).max(200).required().messages({

@@ -24,7 +24,7 @@ async function handleUser(req, res) {
   try {
     const findUser = await userService.userExist(req.body); // Check User Exist or not
     if (findUser) {
-      throw res.status(404).send("User already exists..");
+      return res.status(404).send("User already exists..");
     } else {
       const userCreate = await manageUser(req.body); // new user save in  databases
       res.json({ data: userCreate });
@@ -38,7 +38,7 @@ async function handleUser(req, res) {
           req.body.otp
         );
 
-        res.status(200).send("User created");
+       return res.status(200).send("User created");
       }
     }
     // res.status(200).send({ data: userCreate });
@@ -133,8 +133,6 @@ async function resetPassword(req, res) {
 
 async function loginUser(req, res) {
   try {
-    const { error } = validateLogin(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
 
     const User = await findUserByEmail(req.body); // check user Exist or not using email
     if (!User) {
