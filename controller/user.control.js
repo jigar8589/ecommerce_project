@@ -30,7 +30,7 @@ async function handleUser(req, res) {
 
     const findUser = await userService.userExist(req.body); // Check User Exist or not
     if (findUser) {
-      res.status(404).send("User already exists..");
+      return res.status(404).send("User already exists..");
     } else {
       const userCreate = await manageUser(req.body); // new user save in  databases
       res.json({ data: userCreate });
@@ -44,7 +44,7 @@ async function handleUser(req, res) {
           req.body.otp
         );
 
-        res.status(200).send("User created");
+       return res.status(200).send("User created");
       }
     }
     // res.status(200).send({ data: userCreate });
@@ -101,9 +101,8 @@ async function getUserId(req, res) {
 
 async function resetPassword(req, res) {
   try {
-
-    const {error}=validateResetPassword(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
+    const { error } = validateResetPassword(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
     const userEmail = req.body.email;
     const tokenEmail = req.user.email;
@@ -285,30 +284,30 @@ async function sendOtp(req, res) {
 // }
 
 async function AdminLogin(req, res) {
+  try {
+    const adminLogin = await LoginAdmin(req.body);
+    if (!adminLogin) {
+      res.status(404).json({ Message: "EmailId not Found" });
+    }
 
-try {
-  const adminLogin = await LoginAdmin(req.body);
-  if (!adminLogin) {
-     res.status(404).json({ Message: "EmailId not Found" });
+    const CheckAdminPassword = await checkUserLoginPassword(req.body);
+    if (!CheckAdminPassword) {
+      res.status(400).json({ Message: "Email And Password incorrect" });
+    } else {
+      const Admintoken = await createTokenPromise(
+        { userId: adminLogin._id, email: adminLogin.email },
+        process.env.JWT_SECRECT,
+        { expiresIn: "2d" }
+      );
+
+      res
+        .status(200)
+        .json({ Message: "Login Successfully", token: Admintoken });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ Message: "Internal Server Error" }); // Ensure you send an error response if something goes wrong
   }
-  const CheckAdminPassword = await checkUserLoginPassword(req.body);
-  if (!CheckAdminPassword) {
-     res.status(400).json({ Message: "Email And Password incorrect" });
-  }else{
-    const Admintoken = await createTokenPromise(
-      { userId: adminLogin._id, email: adminLogin.email },
-      process.env.JWT_SECRECT,
-      { expiresIn: "2d" }
-    );
-  
-     res
-      .status(200)
-      .json({ Message: "Login Successfully", token: Admintoken });
-  }
-} catch (error) {
-  console.log(error);
-   res.status(500).json({ Message: "Internal Server Error" }); // Ensure you send an error response if something goes wrong
-}
 }
 module.exports = {
   handleUser,

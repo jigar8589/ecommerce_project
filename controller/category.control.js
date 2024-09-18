@@ -1,6 +1,4 @@
 const service = require("../service/categoryService");
-const {validateCategory}=require("../validation/categoryValidation")
-
 
 //***************************************  Add Category  ******************************************************/
 
@@ -8,19 +6,14 @@ async function Addcategory(req, res) {
   try {
     const tokenId = req.user._id;
     const categoryName = req.body.categoryName;
-    const product_id = req.body.product_id
+    const product_id = req.body.product_id;
 
-    const {error}=validateCategory(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
-
-    else{
-      const findAdmin = await service.CheckAdmin(tokenId);
-      if (!findAdmin) {
-        res.json({ Message: " can't access" });
-      }
-      const category = await service.AddCategory(categoryName,product_id);
-      res.json({ Message: "Add category Successfully" });
+    const findAdmin = await service.CheckAdmin(tokenId);
+    if (!findAdmin) {
+      res.json({ Message: " can't access" });
     }
+    const category = await service.AddCategory(categoryName, product_id);
+    res.json({ Message: "Add category Successfully" });
   } catch (error) {
     console.log(error);
   }
@@ -37,7 +30,6 @@ async function getAllCategory(req, res) {
     console.log(error);
   }
 }
-
 
 //****************************************** Update Category *************************************************** */
 async function UpdateCategory(req, res) {
@@ -69,29 +61,30 @@ async function DeleteCategory(req, res) {
     }
 
     const deletecategory = await service.DeleteCategory(id);
-    res.json({Message:"category Deleted successfully",data:deletecategory})
+    res.json({
+      Message: "category Deleted successfully",
+      data: deletecategory,
+    });
   } catch (error) {
     console.log(error);
   }
 }
 
-
 //******************************************** Get Product By category *******************************************/
 
-
-async function getProductByCategory(req,res){
+async function getProductByCategory(req, res) {
   try {
-    const category_id = req.params.id
-    const getProductdata = await service.getProduct(category_id)
-    if(getProductdata.length === 0){
-      return res.status(404).json({ message: 'No products found in this category' });
-  }
-  res.json(getProductdata);
-    
+    const category_id = req.params.id;
+    const getProductdata = await service.getProduct(category_id);
+    if (getProductdata.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No products found in this category" });
+    }
+    res.json(getProductdata);
   } catch (error) {
-    console.log(error)
-    res.status(404).json({error:"Some error please try agian"})
-    
+    console.log(error);
+    res.status(404).json({ error: "Some error please try agian" });
   }
 }
 
@@ -100,8 +93,5 @@ module.exports = {
   getAllCategory,
   UpdateCategory,
   DeleteCategory,
-  getProductByCategory
+  getProductByCategory,
 };
-
-
-

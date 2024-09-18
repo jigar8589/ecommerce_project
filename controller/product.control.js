@@ -1,26 +1,18 @@
 const productService = require("../service/productService");
 const categoryService = require("../service/categoryService");
-const {validateCreateProduct,validateUpdateProduct}=require("../validation/productValidation")
-
 
 //**************************************** create Product Controller************************************************ */
 async function createProduct(req, res) {
   try {
-
-    const{error}=validateCreateProduct(req.body);
-    if(error) return res.status(400).json({message:error.details[0].message})
-
     const tokenid = req.user._id;
     const body = req.body;
-    const verifyAdmin = 
-    
-    await categoryService.CheckAdmin(tokenid);   // verify Admin in category service
+    const verifyAdmin = await categoryService.CheckAdmin(tokenid); // verify Admin in category service
     if (!verifyAdmin) {
       res.status(401).json({ Message: "you are Unauthorised" });
     }
-      const createproduct = await productService.addproduct(body);
-      res.status(200).json({ Message: "Product created..",data:createProduct });
-  }catch (error) {
+    const createproduct = await productService.addproduct(body);
+    res.status(200).json({ Message: "Product created..", data: createProduct });
+  } catch (error) {
     console.log(error);
     res.status(404).json({ Message: "Product not created.." });
   }
@@ -29,13 +21,10 @@ async function createProduct(req, res) {
 
 async function updateproduct(req, res) {
   try {
-
-    const {error}=validateUpdateProduct(req.body);
-    if(error) return res.status(400).json({message:error.details[0].message})
-
     const id = req.params.id;
     const tokenid = req.user._id;
-    const {name,price,description,category_id,quantity,images} = req.body
+    const { name, price, description, category_id, quantity, images } =
+      req.body;
 
     const verifyAdmin = await categoryService.CheckAdmin(tokenid);
     if (!verifyAdmin) {
@@ -82,7 +71,7 @@ async function allProducts(req, res) {
     res.json({ Message: "some error please try again letter" });
   }
 }
- /***************************************** Get Product ById  controller **********************************************/
+/***************************************** Get Product ById  controller **********************************************/
 async function getProductcontroler(req, res) {
   try {
     const id = req.params.id;
@@ -99,4 +88,4 @@ module.exports = {
   deleteProductControl,
   getProductcontroler,
   allProducts,
-}
+};
