@@ -253,6 +253,14 @@ async function UpdateOTP(query, otp) {
   return OTP;
 }
 
+async function UpdateOTPinForgetpassword(body, otp) {
+  const userEmail = body.email;
+  const OTP = await user.findOneAndUpdate(
+    { email: userEmail },
+    { $set: { otp: otp } }
+  );
+  return OTP;
+}
 
 const createTokenPromise = (payload, key, options) => {
   return new Promise((resolve, reject) => {
@@ -289,6 +297,7 @@ module.exports = {
   UpdateOTP,
   userExist,
   createTokenPromise,
-  LoginAdmin
+  LoginAdmin,
+  UpdateOTPinForgetpassword
 
 };

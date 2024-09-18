@@ -13,10 +13,10 @@ async function postAddtoCart(req, res) {
     );
     if (!CheckproductIdExist) {
       const addcart = cartservice.addToCart(productid, tokenId);
-      res.json({ massaeg: " product in cart successfuly", data: addcart });
+      res.json({ Massaeg: "New Product Add Successfully ", data: addcart });
     } else {
       const updateQuantity = await cartservice.Updatequantity(productid);
-      res.json({ Message: "add successfully" });
+      res.json({ Message: "Quntity Update Successfully" });
     }
   } catch (error) {
     console.log(error);

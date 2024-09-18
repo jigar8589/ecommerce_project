@@ -5,7 +5,7 @@ const validateCreateProduct = (data) => {
   const schema = Joi.object({
     name: Joi.string().min(3).max(100).required(),
     price: Joi.number().min(1).required(),
-    description: Joi.string().optional(),
+    description: Joi.string().required(),
     category_id: Joi.string().required(),
     quantity: Joi.number().min(0).required(),
     images: Joi.array().items(Joi.string()).optional()
@@ -25,6 +25,9 @@ const validateUpdateProduct = (data) => {
   });
   return schema.validate(data);
 };
+
+
+
 
 module.exports = {
   validateCreateProduct,

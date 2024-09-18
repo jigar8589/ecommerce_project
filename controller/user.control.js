@@ -15,18 +15,18 @@ const {
   UpdateOTP,
   userExist,
   createTokenPromise,
-  LoginAdmin,
+  LoginAdmin,UpdateOTPinForgetpassword
 } = require("../service/userService");
 const Util = require("../Util/email");
-const {validateUser,validateLogin,validateResetPassword}=require("../validation/userValidation")
+const {validateUser,validateLogin,validateResetPassword,validateForgetPassword}=require("../validation/userValidation")
 
 //******************************** * create new user controller ****************************************
 
 async function handleUser(req, res) {
   try {
 
-    // const {error}=validateUser(req.body);
-    // if(error) return res.status(400).send(error.details[0].message);
+     const {error}=validateUser(req.body);
+     if(error) return res.status(400).send(error.details[0].message);
 
     const findUser = await userService.userExist(req.body); // Check User Exist or not
     if (findUser) {
@@ -141,8 +141,8 @@ async function resetPassword(req, res) {
 async function loginUser(req, res) {
   try {
 
-    // const {error}=validateLogin(req.body);
-    // if(error) return res.status(400).send(error.details[0].message)
+     const {error}=validateLogin(req.body);
+     if(error) return res.status(400).send(error.details[0].message)
 
     const User = await findUserByEmail(req.body); // check user Exist or not using email
     if (!User) {
@@ -177,35 +177,44 @@ async function loginUser(req, res) {
 //*************************************** forget password controller **************************************** */
 
 async function forgotPassword(req, res) {
-  try {
-    const verifyUser = await userService.findUserEmail(req.body); // find user using Email
 
-    if (verifyUser && verifyUser.isActive == true) {
-      // check user verify or not
-      const { otp, password: newpassword, email } = req.body;
 
-      // const userWithOtp = await user.findOne({ email: email, otp: otp });
-      if (verifyUser.otp != otp) {
-        return res.status(400).json({ message: "Invalid otp" });
-      }
+  // try {
 
-      const updateUser = await userService.updatePassword({
-        // update password
-        newpassword,
-        email,
-      });
+  //   const {error}=validateForgetPassword(req.body);
+  //   if(error) return res.status(400).send(error.details[0].message)
 
-      return res
-        .status(200)
-        .json({ message: "Password updated successfully", updateUser });
-    } else {
-      return res.status(404).json({ message: "User is not verified" });
-    }
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json({ message: "Internal Server Error" });
-  }
-}
+    //  const verifyUser = await userService.findUserEmail(req.body); // find user using Email
+
+      // if (verifyUser && verifyUser.isActive == true) {
+      //        const otp = Util.genrateOTP();
+      //       const sendemailis = await Util.sendmail(req.body.email, otp);
+      //       const otpUpdate = await UpdateOTPinForgetpassword(req.body, otp);
+  //       res.json({ Message: "send email successfully", data: sendemailis });
+
+  //     // check user verify or not
+  //     const { password: newpassword, email } = req.body;
+  //     const updateUser = await userService.updatePassword({
+  //       // update password
+  //       newpassword,
+  //       email,
+  //     });
+
+  //     return res
+  //       .status(200)
+  //       .json({ message: "Password updated successfully", updateUser });
+  //   } else {
+  //     return res.status(404).json({ message: "User is not verified" });
+  //   }
+  // } catch (error) {
+  //   console.log(error);
+  //   return res.status(500).json({ message: "Internal Server Error" });
+  // }
+ }
+
+
+
+
 // *************************************** update user controller ***************************************** */
 
 async function updateUser(req, res) {
