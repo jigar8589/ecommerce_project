@@ -95,9 +95,7 @@ async function getUserId(req, res) {
 
 async function resetPassword(req, res) {
   try {
-    const { error } = validateResetPassword(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
-
+  
     const userEmail = req.body.email;
     const tokenEmail = req.user.email;
     if (userEmail == tokenEmail) {
