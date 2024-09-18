@@ -18,19 +18,13 @@ const {
   LoginAdmin,
 } = require("../service/userService");
 const Util = require("../Util/email");
-const {validateUser,validateLogin,validateResetPassword}=require("../validation/userValidation")
-
 //******************************** * create new user controller ****************************************
 
 async function handleUser(req, res) {
   try {
-
-    // const {error}=validateUser(req.body);
-    // if(error) return res.status(400).send(error.details[0].message);
-
     const findUser = await userService.userExist(req.body); // Check User Exist or not
     if (findUser) {
-      res.status(404).send("User already exists..");
+      throw res.status(404).send("User already exists..");
     } else {
       const userCreate = await manageUser(req.body); // new user save in  databases
       res.json({ data: userCreate });
@@ -101,9 +95,8 @@ async function getUserId(req, res) {
 
 async function resetPassword(req, res) {
   try {
-
-    const {error}=validateResetPassword(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
+    const { error } = validateResetPassword(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
     const userEmail = req.body.email;
     const tokenEmail = req.user.email;
@@ -140,9 +133,8 @@ async function resetPassword(req, res) {
 
 async function loginUser(req, res) {
   try {
-
-    // const {error}=validateLogin(req.body);
-    // if(error) return res.status(400).send(error.details[0].message)
+    const { error } = validateLogin(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
 
     const User = await findUserByEmail(req.body); // check user Exist or not using email
     if (!User) {
@@ -276,31 +268,30 @@ async function sendOtp(req, res) {
 // }
 
 async function AdminLogin(req, res) {
+  try {
+    const adminLogin = await LoginAdmin(req.body);
+    if (!adminLogin) {
+      res.status(404).json({ Message: "EmailId not Found" });
+    }
 
-try {
-  const adminLogin = await LoginAdmin(req.body);
-  if (!adminLogin) {
-     res.status(404).json({ Message: "EmailId not Found" });
-  }
+    const CheckAdminPassword = await checkUserLoginPassword(req.body);
+    if (!CheckAdminPassword) {
+      res.status(400).json({ Message: "Email And Password incorrect" });
+    } else {
+      const Admintoken = await createTokenPromise(
+        { userId: adminLogin._id, email: adminLogin.email },
+        process.env.JWT_SECRECT,
+        { expiresIn: "2d" }
+      );
 
-  const CheckAdminPassword = await checkUserLoginPassword(req.body);
-  if (!CheckAdminPassword) {
-     res.status(400).json({ Message: "Email And Password incorrect" });
-  }else{
-    const Admintoken = await createTokenPromise(
-      { userId: adminLogin._id, email: adminLogin.email },
-      process.env.JWT_SECRECT,
-      { expiresIn: "2d" }
-    );
-  
-     res
-      .status(200)
-      .json({ Message: "Login Successfully", token: Admintoken });
+      res
+        .status(200)
+        .json({ Message: "Login Successfully", token: Admintoken });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ Message: "Internal Server Error" }); // Ensure you send an error response if something goes wrong
   }
-} catch (error) {
-  console.log(error);
-   res.status(500).json({ Message: "Internal Server Error" }); // Ensure you send an error response if something goes wrong
-}
 }
 module.exports = {
   handleUser,
