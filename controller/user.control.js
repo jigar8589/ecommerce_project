@@ -18,7 +18,7 @@ const {
   LoginAdmin,UpdateOTPinForgetpassword
 } = require("../service/userService");
 const Util = require("../Util/email");
-const {validateUser,validateLogin,validateResetPassword,validateForgetPassword}=require("../validation/userValidation")
+const {validateUser,validateLogin,validateResetPassword}=require("../validation/userValidation")
 
 //******************************** * create new user controller ****************************************
 
@@ -26,7 +26,7 @@ async function handleUser(req, res) {
   try {
 
      const {error}=validateUser(req.body);
-     if(error) return res.status(400).send(error.details[0].message);
+     if(error) return res.status(400).send(error.details[0].Message);
 
     const findUser = await userService.userExist(req.body); // Check User Exist or not
     if (findUser) {
@@ -103,7 +103,7 @@ async function resetPassword(req, res) {
   try {
 
     const {error}=validateResetPassword(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
+    if(error) return res.status(400).send(error.details[0].Message);
 
     const userEmail = req.body.email;
     const tokenEmail = req.user.email;
@@ -142,21 +142,21 @@ async function loginUser(req, res) {
   try {
 
      const {error}=validateLogin(req.body);
-     if(error) return res.status(400).send(error.details[0].message)
+     if(error) return res.status(400).send(error.details[0].Message)
 
     const User = await findUserByEmail(req.body); // check user Exist or not using email
     if (!User) {
-      return res.status(404).json({ message: "User not exist" });
+      return res.status(404).json({ Message: "User not exist" });
     }
 
     if (!User.isActive) {
       // check user Active ot not
-      return res.status(403).json({ message: "User is not active" });
+      return res.status(403).json({ Message: "User is not active" });
     }
 
     const isPasswordCorrect = await checkUserLoginPassword(req.body); // verify password
     if (!isPasswordCorrect) {
-      return res.status(401).json({ message: "Email and password incorrect" });
+      return res.status(401).json({ Message: "Email and password incorrect" });
     }
 
     const token = await createTokenPromise(
@@ -167,10 +167,10 @@ async function loginUser(req, res) {
     );
     return res
       .status(200)
-      .json({ message: "User login successfully", data: User, token: token });
+      .json({ Message: "User login successfully", data: User, token: token });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ Message: "Internal server error" });
   }
 }
 
@@ -178,41 +178,23 @@ async function loginUser(req, res) {
 
 async function forgotPassword(req, res) {
 
-
-  // try {
-
-  //   const {error}=validateForgetPassword(req.body);
-  //   if(error) return res.status(400).send(error.details[0].message)
-
-    //  const verifyUser = await userService.findUserEmail(req.body); // find user using Email
-
-      // if (verifyUser && verifyUser.isActive == true) {
-      //        const otp = Util.genrateOTP();
-      //       const sendemailis = await Util.sendmail(req.body.email, otp);
-      //       const otpUpdate = await UpdateOTPinForgetpassword(req.body, otp);
-  //       res.json({ Message: "send email successfully", data: sendemailis });
-
-  //     // check user verify or not
-  //     const { password: newpassword, email } = req.body;
-  //     const updateUser = await userService.updatePassword({
-  //       // update password
-  //       newpassword,
-  //       email,
-  //     });
-
-  //     return res
-  //       .status(200)
-  //       .json({ message: "Password updated successfully", updateUser });
-  //   } else {
-  //     return res.status(404).json({ message: "User is not verified" });
-  //   }
-  // } catch (error) {
-  //   console.log(error);
-  //   return res.status(500).json({ message: "Internal Server Error" });
-  // }
+   try {
+  
+    const verifyEmail = userService.findUserByEmail(body)
+    if(!verifyEmail){
+      res.json({Message:"User Not Exist"})
+    }
+    const verifyOTP =  userService.verfiyUser(body)
+    if(!verifyOTP){
+      res.json({Message:"OTP Wrong"})
+    }
+    const UpdatePassword = userService.updatePassword(body)
+    res.json({Massage:"Update Password Successfully", data:UpdatePassword})
+   } catch (error) {
+       console.log(error)
+   }
+ 
  }
-
-
 
 
 // *************************************** update user controller ***************************************** */
@@ -225,7 +207,7 @@ async function updateUser(req, res) {
     if (userEmail == tokenEmail) {
       const user = await findUserByEmail(req.body); // find user using email id
       if (!user) {
-        return res.status(404).json({ message: "User not exist" });
+        return res.status(404).json({ Message: "User not exist" });
       } else {
         const isActive = await userIsActiveCheck(req.body); // check user verify or not
 
@@ -246,7 +228,7 @@ async function updateUser(req, res) {
 
 // *************************************** send otp controller ********************************************* */
 
-async function sendOtp(req, res) {
+async function EmailveriifyForgetAPI(req, res) {
   const checkUserExist = await userExist(req.query);
   if (!checkUserExist) {
     res.send({ Message: "User not exist" });
@@ -259,30 +241,6 @@ async function sendOtp(req, res) {
 }
 
 //************************************************* Admin Login Controller **********************************/
-
-// async function AdminLogin(req, res) {
-//   try {
-//     const adminLogin = await LoginAdmin(req.body);
-//     if (!adminLogin) {
-//       res.json({ Message: "EmailId not Found" });
-//     }
-//     const CheckAdminPassword = await checkUserLoginPassword(req.body);
-//     if (!CheckAdminPassword) {
-//       res.json({ Message: "Email And Password incorrect" });
-//     }
-//     const Admintoken = await createTokenPromise(
-//       // create jwtToken
-//       { userId: adminLogin._id, email: adminLogin.email },
-//       process.env.JWT_SECRECT,
-//       { expiresIn: "2d" }
-//     );
-//     return res
-//       .status(200)
-//       .json({ Message: "Login Successfully", token: Admintoken });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 async function AdminLogin(req, res) {
 
@@ -318,7 +276,7 @@ module.exports = {
   loginUser,
   forgotPassword,
   updateUser,
-  sendOtp,
+  EmailveriifyForgetAPI,
   getUserId,
   AdminLogin,
 };

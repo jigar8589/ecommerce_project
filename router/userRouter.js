@@ -11,7 +11,7 @@ const {
   getUserId,
   forgotPassword,
   updateUser,
-  sendOtp,AdminLogin
+  EmailveriifyForgetAPI,AdminLogin
   
 } = require("../controller/user.control");
 
@@ -23,7 +23,7 @@ router.post("/resetpassword", auth,resetPassword);
 router.post("/verify", handleVerification);
 router.post("/login", loginUser);
 router.put("/updateuser", auth, updateUser);
-router.post("/sendotp", sendOtp);
+router.post("/sendotp", EmailveriifyForgetAPI);
 router.post("/Adminlogin",AdminLogin)
 
 module.exports = router;

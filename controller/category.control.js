@@ -11,7 +11,7 @@ async function Addcategory(req, res) {
     const product_id = req.body.product_id
 
     const {error}=validateCategory(req.body);
-    if(error) return res.status(400).send(error.details[0].message);
+    if(error) return res.status(400).send(error.details[0].Message);
 
     else{
       const findAdmin = await service.CheckAdmin(tokenId);
@@ -84,7 +84,7 @@ async function getProductByCategory(req,res){
     const category_id = req.params.id
     const getProductdata = await service.getProduct(category_id)
     if(getProductdata.length === 0){
-      return res.status(404).json({ message: 'No products found in this category' });
+      return res.status(404).json({ Message: 'No products found in this category' });
   }
   res.json(getProductdata);
     

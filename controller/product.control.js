@@ -8,7 +8,7 @@ async function createProduct(req, res) {
   try {
 
     const{error}=validateCreateProduct(req.body);
-    if(error) return res.status(400).json({message:error.details[0].message})
+    if(error) return res.status(400).json({Message:error.details[0].Message})
 
     const tokenid = req.user._id;
     const body = req.body;
@@ -31,7 +31,7 @@ async function updateproduct(req, res) {
   try {
 
     const {error}=validateUpdateProduct(req.body);
-    if(error) return res.status(400).json({message:error.details[0].message})
+    if(error) return res.status(400).json({Message:error.details[0].Message})
 
     const id = req.params.id;
     const tokenid = req.user._id;
@@ -63,12 +63,12 @@ async function deleteProductControl(req, res) {
     const id = req.params.id;
     const verifyAdmin = await categoryService.CheckAdmin(tokenid);
     if (!verifyAdmin) {
-      res.status(401).json({ message: "somthing went wrong" });
+      res.status(401).json({ Message: "somthing went wrong" });
     }
     const productDeleted = await productService.productDelete(id);
-    res.json({ message: "Product delete sucessfully" });
+    res.json({ Message: "Product delete sucessfully" });
   } catch (error) {
-    res.json({ message: "some error please try again letter" });
+    res.json({ Message: "some error please try again letter" });
   }
 }
 

@@ -181,25 +181,25 @@ async function checkUserLoginPassword(body) {
 
 //forget password
 
-async function forgetUserPassword(body) {
-  try {
-    const email = body.email;
-    const userActive = await user.findOne({ email: email });
+// async function forgetUserPassword(body) {
+//   try {
+//     const email = body.email;
+//     const userActive = await user.findOne({ email: email });
 
-    if (userActive && userActive.isActive) {
-      const otp = generateOTP();
-      await Util.sendmail(email, otp);
-      await user.findOneAndUpdate({ email: email }, { $set: { otp: otp } });
+//     if (userActive && userActive.isActive) {
+//       const otp = generateOTP();
+//       await Util.sendmail(email, otp);
+//       await user.findOneAndUpdate({ email: email }, { $set: { otp: otp } });
 
-      return { email: email, otpSent: true };
-    } else {
-      throw new Error("User is not active");
-    }
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
-}
+//       return { email: email, otpSent: true };
+//     } else {
+//       throw new Error("User is not active");
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     throw error;
+//   }
+// }
 
 function generateOTP() {
   return Math.floor(100000 + Math.random() * 900000).toString();
@@ -291,7 +291,6 @@ module.exports = {
   verfiyUser,
   checkUserLoginPassword,
   updateuser,
-  forgetUserPassword,
   verifyOtp,
   updateUserByOne,
   UpdateOTP,

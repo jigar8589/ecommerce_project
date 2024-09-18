@@ -30,4 +30,7 @@ productrouter.delete("/:id",auth, deleteProductControl);
 productrouter.get("/",allProducts);
 productrouter.get("/:id",auth, getProductcontroler);
 
+
+
+
 module.exports = productrouter;

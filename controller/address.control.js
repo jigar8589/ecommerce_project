@@ -7,7 +7,7 @@ async function adress(req, res) {
   try {
 
     const {error}=validateAddress(req.body);
-    if(error) return res.status(400).json({message:error.details[0].message})
+    if(error) return res.status(400).json({Message:error.details[0].Message})
 
     const tokenid = req.user._id;
     const Adress = await service.PostAdress(req.body, tokenid); // add user address
@@ -37,7 +37,7 @@ async function allAdressgetById(req, res) {
     const tokenId = req.user._id.toHexString(); // token id convert to hexString
     const address = await service.getAdreessDataById(req.params.id);
     if (tokenId !== address.userId._id.toHexString()) {
-      res.status(403).json({ message: "Access denied." });
+      res.status(403).json({ Message: "Access denied." });
     }
     res.json({ data: address });
   } catch (error) {
@@ -69,24 +69,24 @@ async function UpdateAddress(req, res) {
   try {
 
     const {error}=validateAddress(req.body);
-    if(error) return res.status(400).json({message:error.details[0].message})
+    if(error) return res.status(400).json({Message:error.details[0].Message})
 
     const tokenId = req.user._id.toHexString();
     const verifyAddress = await service.verifyAddressById(req.params.id);
 
     if (!verifyAddress) {
-      return res.status(404).json({ message: "Address not found" }); // Exit after response
+      return res.status(404).json({ Message: "Address not found" }); // Exit after response
     }
 
     if (tokenId !== verifyAddress.userId.toHexString()) {
-      return res.status(401).json({ message: "Unauthorized access" }); // Exit after response
+      return res.status(401).json({ Message: "Unauthorized access" }); // Exit after response
     }
 
     await service.updateAddressById(req.params.id, req.body);
-    return res.json({ message: "Address updated successfully" }); // Exit after response
+    return res.json({ Message: "Address updated successfully" }); // Exit after response
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Failed to update address" }); // Exit after response
+    return res.status(500).json({ Message: "Failed to update address" }); // Exit after response
   }
 }
 
