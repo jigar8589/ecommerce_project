@@ -23,12 +23,14 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
+const schemaValidation=require("../validation/schemaValidation")
+const {createproduct,updateProduct,deleteProduct,getProduct}=require("../validation/validations")
 
-productrouter.post("/", auth, createProduct);
-productrouter.put("/:id", auth,updateproduct);
-productrouter.delete("/:id",auth, deleteProductControl);
+productrouter.post("/", auth, schemaValidation(createproduct,"body"),createProduct);
+productrouter.put("/:id", auth,schemaValidation(updateProduct,"body"),updateproduct);
+productrouter.delete("/:id",auth, schemaValidation(deleteProduct,"params"),deleteProductControl);
 productrouter.get("/",allProducts);
-productrouter.get("/:id",auth, getProductcontroler);
+productrouter.get("/:id",auth, schemaValidation(getProduct,"params"),getProductcontroler);
 
 
 

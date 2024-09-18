@@ -2,14 +2,15 @@ const {Addcategory,getAllCategory,UpdateCategory,DeleteCategory,getProductByCate
 const auth = require("../middlewere/auth")
 const express  = require('express')
 const categoryRouter = express.Router();
+const schemaValidation=require("../validation/schemaValidation");
+const {createCategory,updateCategory,deleteCategory,getCategoryById}=require("../validation/validations")
 
 
-
-categoryRouter.post("/",auth,Addcategory)
+categoryRouter.post("/",auth,schemaValidation(createCategory,"body"),Addcategory)
 categoryRouter.get("/",auth,getAllCategory);
-categoryRouter.patch("/:id",auth,UpdateCategory)
-categoryRouter.delete("/:id",auth,DeleteCategory)
-categoryRouter.get("/:id",getProductByCategory)
+categoryRouter.patch("/:id",auth,schemaValidation(updateCategory,"body"),UpdateCategory)
+categoryRouter.delete("/:id",auth,schemaValidation(deleteCategory,"params"),DeleteCategory)
+categoryRouter.get("/:id",schemaValidation(getCategoryById,"params"),getProductByCategory)
 
 
 

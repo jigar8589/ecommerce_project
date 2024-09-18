@@ -1,14 +1,8 @@
 const service = require("../service/addressService");
-const { validateAddress } = require("../validation/addressValidation");
-
 
 // **************************************** Add Adress Controller ********************************************/
 async function adress(req, res) {
   try {
-
-    const {error}=validateAddress(req.body);
-    if(error) return res.status(400).json({Message:error.details[0].Message})
-
     const tokenid = req.user._id;
     const Adress = await service.PostAdress(req.body, tokenid); // add user address
     res.json({ data: Adress });
@@ -48,29 +42,25 @@ async function allAdressgetById(req, res) {
 
 // ************************************** Update Address Controller  *****************************************/
 async function UpdateAddress(req, res) {
-//   try {
-//     tokenId = req.user._id.toHexString();
-//     const verifyAddress = await service.verifyAddressById(req.params.id);
-//     // console.log(verifyAddress.userId.toHexString())
-//     if (tokenId !== verifyAddress.userId.toHexString()) {
-//       res.status(401).json({ Message: "Somthing went wrong" });
-//     }
-//     if (verifyAddress) {
-//       const addressUpdated = await service.updateAddressById(req.params.id, req.body);
-//       res.json({ Message:"Address Update sucessfully" });
-//     } else {
-//       res.json({ Message: "Address not found" });
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.json({ Message: "Address not Update " });
-//   }
+  //   try {
+  //     tokenId = req.user._id.toHexString();
+  //     const verifyAddress = await service.verifyAddressById(req.params.id);
+  //     // console.log(verifyAddress.userId.toHexString())
+  //     if (tokenId !== verifyAddress.userId.toHexString()) {
+  //       res.status(401).json({ Message: "Somthing went wrong" });
+  //     }
+  //     if (verifyAddress) {
+  //       const addressUpdated = await service.updateAddressById(req.params.id, req.body);
+  //       res.json({ Message:"Address Update sucessfully" });
+  //     } else {
+  //       res.json({ Message: "Address not found" });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     res.json({ Message: "Address not Update " });
+  //   }
 
   try {
-
-    const {error}=validateAddress(req.body);
-    if(error) return res.status(400).json({Message:error.details[0].Message})
-
     const tokenId = req.user._id.toHexString();
     const verifyAddress = await service.verifyAddressById(req.params.id);
 
@@ -90,9 +80,7 @@ async function UpdateAddress(req, res) {
   }
 }
 
- 
 //*************************************** Make Defualat Address Controller **************************************
-
 
 async function makeDafulatAddress(req, res) {
   try {
@@ -101,21 +89,19 @@ async function makeDafulatAddress(req, res) {
     const verifyUserId = await service.userVerify(id, tokenId);
 
     if (!verifyUserId) {
-       return res.status(404).json({ Message: "User address not found " });
-    } 
-      const addressDefualat = await service.defaultCheck(tokenId);
-      const data = await service.setDefaultAddress(id);
-       res.json({ Message: "address default successfully" });
+      return res.status(404).json({ Message: "User address not found " });
+    }
+    const addressDefualat = await service.defaultCheck(tokenId);
+    const data = await service.setDefaultAddress(id);
+    res.json({ Message: "address default successfully" });
   } catch (error) {
     console.log(error);
-    res.json({ Message: "Address Id wrong",  });
+    res.json({ Message: "Address Id wrong" });
   }
 }
 
-
 // *************************************** Delete Address Controller ********************************************
 async function DeleteAddress(req, res) {
-  
   const deleteadd = await service.userVerify(req.params.id, req.user._id);
   if (!deleteadd) {
     return res.status(404).json({ error: "Address not found" });
@@ -130,5 +116,5 @@ module.exports = {
   allAdressgetById,
   UpdateAddress,
   makeDafulatAddress,
-  DeleteAddress
+  DeleteAddress,
 };
