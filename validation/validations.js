@@ -332,14 +332,17 @@ const createAddress = Joi.object({
     "number.max": "pincode must have a length of {#limit}",
     "number.empty": "pincode should not be empty",
   }),
-  type: Joi.string().valid("House","Office","Apartement","Other").required().messages({
-    "string.base": "type must be string",
-    "any.required":
-      "type is required and should be from House,Office,Apartement,other",
-    "string.empty": "type should not be empty",
-    "string.min": "type must have a length of {#limit}",
-    "string.max": "type must have a length of {#limit}",
-  }),
+  type: Joi.string()
+    .valid("House", "Office", "Apartement", "Other")
+    .required()
+    .messages({
+      "string.base": "type must be string",
+      "any.required":
+        "type is required and should be from House,Office,Apartement,other",
+      "string.empty": "type should not be empty",
+      "string.min": "type must have a length of {#limit}",
+      "string.max": "type must have a length of {#limit}",
+    }),
   name: Joi.string().min(5).max(10).required().messages({
     "string.base": "name must be string",
     "any.required": "name is required",
