@@ -19,12 +19,11 @@ const userSchema = new mongoose.Schema({
   },
   otp: {
     type: Number,
-    required:true
   },
   password: {
     type: String,
     required: true,
-    select:false
+    select: false,
   },
   isActive: {
     type: Boolean,
@@ -43,11 +42,12 @@ const userSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  addresses: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Address',
-  }]
-
+  addresses: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Address",
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);
