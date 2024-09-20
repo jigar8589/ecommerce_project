@@ -406,7 +406,7 @@ const updateAddress = Joi.object({
   name: Joi.string().min(5).max(10).optional().messages({
     "string.base": "name must be string",
     "any.required": "name is required",
-    "string.min": "name must have a length of {#length}",
+    "string.min": "name must have a length of {#limit}",
     "string.max": "name must have a length of {#limit}",
     "string.empty": "name must not be empty",
   }),
