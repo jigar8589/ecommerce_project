@@ -11,8 +11,6 @@ const {
   updatePassword,
   userIsActiveCheck,
   checkUserLoginPassword,
-  updateuser,
-  verfiyUser,
   updateUserByOne,
   UpdateOTP,
   userExist,
@@ -103,7 +101,7 @@ async function resetPassword(req, res) {
       res.status(404).json({ massage: "user is not active" });
     }
   } else {
-    res.send("user  not exist");
+    res.status(404).send("user  not exist");
   }
 }
 
@@ -179,10 +177,10 @@ async function updateUser(req, res) {
   } else {
     const isActive = await userIsActiveCheck(req.body);
     if (!isActive) {
-      res.json({ massage: "User is not active" });
+      res.status(404).json({ massage: "User is not active" });
     } else {
       const updateuserone = await updateUserByOne(req.body);
-      res.json({ massage: "User Update Successfully" });
+      res.status(200).json({ massage: "User Update Successfully" });
     }
   }
 }

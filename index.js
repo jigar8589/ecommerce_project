@@ -12,7 +12,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/users/", router);
 app.use("/api/product", productrouter);
-app.use("/api/adress", addressRouter);
+app.use("/api/address", addressRouter);
 app.use("/api/cart", cartRouter);
 
 app.listen(port, () => {

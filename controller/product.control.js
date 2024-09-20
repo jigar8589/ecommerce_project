@@ -25,14 +25,17 @@ async function updateproduct(req, res) {
     description,
     quantity
   );
-  res.json({ massage: "Product update sucessfully" });
+  if (!productUpdated) {
+    return res.status(404).json({ message: "Product not found..!" });
+  }
+  res.status(200).json({ massage: "Product update sucessfully" });
 }
 
 // Delete product
 async function deleteProductControl(req, res) {
   const id = req.params.id;
   const productDeleted = await productService.productDelete(id);
-  res.json({ massage: "Product delete sucessfully" });
+  res.status(200).json({ massage: "Product delete sucessfully" });
 }
 
 async function allProducts(req, res) {
@@ -45,7 +48,7 @@ async function allProducts(req, res) {
 async function getProductcontroler(req, res) {
   const id = req.params.id;
   const product = await productService.getproductById(id);
-  res.json(product);
+  res.status(200).json(product);
 }
 
 module.exports = {

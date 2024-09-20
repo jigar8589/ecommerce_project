@@ -15,18 +15,14 @@ async function addproduct(body) {
 
 async function productUpdate(id, name, price, description, quantity) {
   try {
-    const Update = product.findOneAndUpdate(
-      { _id: id },
-      {
-        $set: {
-          name: name,
-          price: price,
-          description: description,
-          quantity: quantity,
-        },
-      }
-    );
-
+    const Update = product.findByIdAndUpdate(id, {
+      $set: {
+        name: name,
+        price: price,
+        description: description,
+        quantity: quantity,
+      },
+    });
     return Update;
   } catch (error) {
     console.log(error);

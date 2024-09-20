@@ -7,10 +7,12 @@ const {
   deleteProductToCart,
 } = require("../controller/cart.control");
 const authToken = require("../middleware/auth");
+const schemaValidation=require("../validation/schemaValidation");
+const {addProductTocart,updateProductTocart}=require("../validation/validations")
 
-cartRouter.post("/", authToken, addProductToCart);
+cartRouter.post("/", authToken, schemaValidation(addProductTocart,"body"),addProductToCart);
 cartRouter.get("/", authToken, getProductFromCart);
-cartRouter.put("/", authToken, updateProductToCart);
+cartRouter.put("/", authToken, schemaValidation(updateProductTocart,"body"),updateProductToCart);
 cartRouter.delete("/", authToken, deleteProductToCart);
 
 module.exports = cartRouter;
