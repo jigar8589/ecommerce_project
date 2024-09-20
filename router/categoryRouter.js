@@ -2,7 +2,7 @@ const {Addcategory,getAllCategory,UpdateCategory,DeleteCategory,getProductByCate
 const auth = require("../middlewere/auth")
 const express  = require('express')
 const categoryRouter = express.Router();
-const schemaValidation=require("../validation/schemaValidation");
+const schemaValidation=require("../middlewere/schemaValidation");
 const {createCategory,updateCategory,deleteCategory,getCategoryById}=require("../validation/validations")
 
 
