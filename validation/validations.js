@@ -92,27 +92,27 @@ const resetpassword = Joi.object({
 });
 
 const updateuser = Joi.object({
-  email: Joi.string().email().required().messages({
+  email: Joi.string().email().optional().messages({
     "string.base": "Email must be a string",
     "any.required": `Email required`,
     "string.email": `Email must be a valid`,
     "string.empty": `Email should not be empty`,
   }),
-  firstName: Joi.string().required().min(2).max(100).messages({
+  firstName: Joi.string().optional().min(2).max(100).messages({
     "string.base": "First name must be a string",
     "any.required": `First name required`,
     "string.empty": `First name should not be empty`,
     "string.min": `First name should have a minimum length oF {#limit}`,
     "string.max": `First name should have a maximum length of {#limit}`,
   }),
-  lastName: Joi.string().min(2).max(100).required().messages({
+  lastName: Joi.string().min(2).max(100).optional().messages({
     "string.base": "Last name must be a string",
     "any.required": `Last name required`,
     "string.empty": `Last name should not be empty`,
     "string.min": `Last name should have a minimum length of {#limit}`,
     "string.max": `Last name should have a maximum length of {#limit}`,
   }),
-  phoneNo: Joi.string().min(10).max(10).required().messages({
+  phoneNo: Joi.string().min(10).max(10).optional().messages({
     "string.base": "Phone number must be a string",
     "any.required": `Phone number required`,
     "string.empty": `Phone number should not be empty`,
@@ -160,12 +160,12 @@ const verifyuser = Joi.object({
     "string.empty": "email should not be empty",
     "string.email": "email must be valid email",
   }),
-  otp: Joi.string().min(4).max(4).required().messages({
-    "string.base": "otp should be number",
+  otp: Joi.number().min(4).max(4).required().messages({
+    "number.base": "otp should be number",
     "any.required": "otp is required",
-    "string.min": "otp should have a minimum length of {#limit}",
-    "string.max": "otp should have a maximum length of {#limit}",
-    "string.empty": "otp should not be empty",
+    "number.min": "otp should have a minimum length of {#limit}",
+    "number.max": "otp should have a maximum length of {#limit}",
+    "number.empty": "otp should not be empty",
   }),
 });
 
@@ -247,7 +247,7 @@ const getProduct = Joi.object({
 // category validations
 
 const createCategory = Joi.object({
-  categoryName: Joi.string().min(3).max(50).required().messages({
+  categoryName: Joi.string().min(3).max(50).optional().messages({
     "string.base": "Category name must be string",
     "any.required": "Category name is required",
     "string.min": "Category name must have minimum length of {#limit}",
@@ -257,7 +257,7 @@ const createCategory = Joi.object({
 });
 
 const updateCategory = Joi.object({
-  categoryName: Joi.string().min(3).max(50).required().messages({
+  categoryName: Joi.string().min(3).max(50).optional().messages({
     "string.base": "Category name must be string",
     "any.required": "Category name is required",
     "string.min": "Category name must be have minimum length of {#limit}",
@@ -353,49 +353,49 @@ const createaddress = Joi.object({
 });
 
 const updateAddress = Joi.object({
-  street: Joi.string().min(3).max(20).required().messages({
+  street: Joi.string().min(3).max(20).optional().messages({
     "string.base": "Street name must be string",
     "any.required": "Street name is required",
     "string.min": "Street name must be have minimum length of {#limit}",
     "string.max": "String name must have maximum length of {#limit}",
     "string.empty": "Street name should not be empty",
   }),
-  landmark: Joi.string().min(2).max(20).required().messages({
+  landmark: Joi.string().min(2).max(20).optional().messages({
     "string.base": "landmark name must be string",
     "any.required": "landmark name is required",
     "string.min": "landmark name must be have minimum length of {#limit}",
     "string.max": "landmark name must have maximum length of {#limit}",
     "string.empty": "landmark name should not be empty",
   }),
-  city: Joi.string().min(3).max(50).required().messages({
+  city: Joi.string().min(3).max(50).optional().messages({
     "string.base": "city name must be string",
     "any.required": "city name is required",
     "string.min": "city name must be have minimum length of {#limit}",
     "string.max": "city name must have maximum length of {#limit}",
     "string.empty": "city name should not be empty",
   }),
-  state: Joi.string().min(2).max(15).required().messages({
+  state: Joi.string().min(2).max(15).optional().messages({
     "string.base": "state name must be string",
     "any.required": "state name is required",
     "string.min": "state name must be have minimum length of {#limit}",
     "string.max": "state name must have a maximum length of {#limit}",
     "string.empty": "state name should not be empty",
   }),
-  country: Joi.string().min(2).max(20).required().messages({
+  country: Joi.string().min(2).max(20).optional().messages({
     "string.base": "country name must be",
     "any.required": "country name is required",
     "string.min": "country name must have length of {#limit}",
     "string.max": "country name must have length of {#limit}",
     "string.empty": "country name should not be empty",
   }),
-  pincode: Joi.number().min(6).max(6).required().messages({
+  pincode: Joi.number().min(6).max(6).optional().messages({
     "number.base": "pincode must be number",
     "any.required": "pincode is required",
     "number.min": "pincode must have a length of {#limit}",
     "number.max": "pincode must have a length of {#limit}",
     "number.empty": "pincode should not be empty",
   }),
-  type: Joi.string().min(2).max(10).required().messages({
+  type: Joi.string().min(2).max(10).optional().messages({
     "string.base": "type must be string",
     "any.required":
       "type is required and should be from House,Office,Apartement,other",
@@ -403,14 +403,14 @@ const updateAddress = Joi.object({
     "string.min": "type must have a length of {#limit}",
     "string.max": "type must have a length of {#limit}",
   }),
-  name: Joi.string().min(5).max(10).required().messages({
+  name: Joi.string().min(5).max(10).optional().messages({
     "string.base": "name must be string",
     "any.required": "name is required",
     "string.min": "name must have a length of {#length}",
     "string.max": "name must have a length of {#limit}",
     "string.empty": "name must not be empty",
   }),
-  phoneNo: Joi.string().min(10).max(10).required().messages({
+  phoneNo: Joi.string().min(10).max(10).optional().messages({
     "string.base": "Phone number must be a string",
     "any.required": `Phone number required`,
     "string.empty": `Phone number should not be empty`,
@@ -436,12 +436,12 @@ const makeDefault = Joi.object({
 // cart validations
 
 const addProductTocart = Joi.object({
-  UserId: Joi.string().required().messages({
+  userId: Joi.string().required().messages({
     "string.base": "user id should be string",
     "any.required": "user id is required",
     "string.empty": "user id should not be empty",
   }),
-  productid: Joi.string().required().messages({
+  productId: Joi.string().required().messages({
     "string.base": "product id should be string",
     "any.required": "product id is required",
     "string.empty": "product id should not be empty",
@@ -449,12 +449,12 @@ const addProductTocart = Joi.object({
 });
 
 const updateProductTocart = Joi.object({
-  productid: Joi.string().required().messages({
+  productid: Joi.string().optional().messages({
     "string.base": "product is should be string",
     "any.required": "product id is required",
     "string.empty": "product id should not be empty",
   }),
-  Quantity: Joi.number().min(1).max(20).required().messages({
+  Quantity: Joi.number().min(1).max(20).optional().messages({
     "number.base": "quantity should be a number",
     "any.required": "quantity is required",
     "number.min": "quantity must have a length of {#limit}",
