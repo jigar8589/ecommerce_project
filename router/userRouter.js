@@ -14,7 +14,7 @@ const {
   sendOtp,
 } = require("../controller/user.control");
 const authToken = require("../middleware/auth");
-const schemaValidation=require("../validation/schemaValidation")
+const schemaValidation=require("../middleware/schemaValidation")
 const {createUser,resetpassword,updateuser,forgetPassword,verifyuser}=require("../validation/validations")
 
 router.get("/", getAllUser);

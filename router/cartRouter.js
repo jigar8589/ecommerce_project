@@ -7,7 +7,7 @@ const {
   deleteProductToCart,
 } = require("../controller/cart.control");
 const authToken = require("../middleware/auth");
-const schemaValidation=require("../validation/schemaValidation");
+const schemaValidation=require("../middleware/schemaValidation");
 const {addProductTocart,updateProductTocart}=require("../validation/validations")
 
 cartRouter.post("/", authToken, schemaValidation(addProductTocart,"body"),addProductToCart);

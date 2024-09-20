@@ -7,7 +7,7 @@ const {
   allProducts,
   getProductcontroler,
 } = require("../controller/product.control");
-const schemaValidation=require("../validation/schemaValidation");
+const schemaValidation=require("../middleware/schemaValidation");
 const {createproduct,updateProduct,deleteProduct,getProduct}=require("../validation/validations")
 
 productrouter.post("/", schemaValidation(createproduct,"body"),createProduct);

@@ -8,7 +8,7 @@ const {
   checkDefault,
 } = require("../controller/address.control");
 const authToken = require("../middleware/auth");
-const schemaValidation=require("../validation/schemaValidation")
+const schemaValidation=require("../middleware/schemaValidation")
 const {createaddress,getAddressById,makeDefault}=require("../validation/validations")
 
 addressrouter.post("/", schemaValidation(createaddress,"body"),createAddress);
