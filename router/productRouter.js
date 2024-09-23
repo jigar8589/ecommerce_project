@@ -28,8 +28,8 @@ const {createproduct,updateProduct,deleteProduct,getProduct}=require("../validat
 
 productrouter.post("/", auth, schemaValidation(createproduct,"body"),createProduct);
 productrouter.put("/:id", auth,schemaValidation(updateProduct,"body"),updateproduct);
-productrouter.delete("/:id",auth, schemaValidation(deleteProduct,"params"),deleteProductControl);
+productrouter.delete("/:id",auth,deleteProductControl);
 productrouter.get("/",allProducts);
-productrouter.get("/:id",auth, schemaValidation(getProduct,"params"),getProductcontroler);
+productrouter.get("/:id",auth,getProductcontroler);
 
 module.exports = productrouter;
