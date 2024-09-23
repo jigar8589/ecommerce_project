@@ -113,8 +113,7 @@ async function updateCartProduct(req, res) {
       } else {
         const UpdateCart = cartservice.UpdateCartProductDetails(
           productid,
-          Quantity
-                                                                                      
+          Quantity                                                                             
         );
         res
           .status(200)
