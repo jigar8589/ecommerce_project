@@ -12,18 +12,18 @@ const {
   getProductcontroler,
 } = require("../controller/product.control");
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, path.resolve(__dirname, "../public/uploads"));
-  },
-  filename: function (req, file, cb) {
-    const filename = `${Date.now()}-${file.originalname}`;
-    cb(null, filename);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, path.resolve(__dirname, "../public/uploads"));
+//   },
+//   filename: function (req, file, cb) {
+//     const filename = `${Date.now()}-${file.originalname}`;
+//     cb(null, filename);
+//   },
+// });
 
-const upload = multer({ storage: storage });
-const schemaValidation=require("../validation/schemaValidation")
+// const upload = multer({ storage: storage });
+const schemaValidation=require("../middlewere/schemaValidation")
 const {createproduct,updateProduct,deleteProduct,getProduct}=require("../validation/validations")
 
 productrouter.post("/", auth, schemaValidation(createproduct,"body"),createProduct);

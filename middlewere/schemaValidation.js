@@ -15,7 +15,7 @@ const schemaValidator = (
           const message = err.details
             .map((i) => {
               return i.message;
-            })  
+            })
             .join(",");
           return res.status(200).json({
             success: false,

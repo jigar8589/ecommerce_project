@@ -54,7 +54,7 @@ const resetpassword = Joi.object({
     "string.email": `Email must be a valid`,
     "string.empty": `Email should not be empty`,
   }),
-  newPassword: Joi.string()
+  newpassword: Joi.string()
     .min(8)
     .required()
     .pattern(
@@ -109,9 +109,10 @@ const createproduct = Joi.object({
     "string.min": `Product name should have a minimum length of {#limit}`,
     "string.max": `Product name should have a maximum length of {#limit}`,
   }),
-  price: Joi.string().min(0).required().messages({
-    "string.min": "Price should be atleast 0",
+  price: Joi.number().min(10).required().messages({
+    "number.min": "Price should be atleast 10",
     "any.required": "Price is required",
+   
   }),
   description: Joi.string().min(10).max(200).required().messages({
     "string.base": "Description must be a string",
@@ -140,8 +141,8 @@ const updateProduct = Joi.object({
     "string.min": `Product name should have a minimum length of {#limit}`,
     "string.max": `Product name should have a maximum length of {#limit}`,
   }),
-  price: Joi.string().min(0).required().messages({
-    "string.min": "Price should not be 0",
+  price: Joi.number().min(10).required().messages({
+    "number.min": "Price minimum 10",
     "any.required": "Price is required",
   }),
   description: Joi.string().min(10).max(200).required().messages({
@@ -159,7 +160,7 @@ const updateProduct = Joi.object({
   }),
   images: Joi.array().length(1).required().messages({
     "any.required": "Image is required",
-    "array.min": "Atleast 1 image is required",
+    "array.length": "Atleast 1 image is required",
   }),
 });
 
@@ -179,6 +180,7 @@ const getProduct = Joi.object({
 
 const createCategory = Joi.object({
   categoryName: Joi.string().min(3).max(50).required().messages({
+    "string.empty":"Category can't Emapty",   
     "string.base": "Category name must be string",
     "any.required": "Category name is required",
     "string.min": "Category name must have minimum length of {#limit}",
@@ -245,17 +247,22 @@ const createAddress = Joi.object({
     "string.max": "country name must have length of {#limit}",
     "string.empty": "country name should not be empty",
   }),
-  pincode: Joi.number().min(6).max(6).required().messages({
-    "number.base": "pincode must be number",
-    "any.required": "pincode is required",
-    "number.min": "pincode must have a length of {#limit}",
-    "number.max": "pincode must have a length of {#limit}",
-    "number.empty": "pincode should not be empty",
+  pincode: Joi.number().integer() // Ensures the value is an integer (no decimals)
+  .min(100000) // Minimum 6-digit number (100000)
+  .max(999999) // Maximum 6-digit number (999999)
+  .required()
+  .messages({
+    'number.base': 'Pincode must be a number',
+    'number.min': 'Pincode must be exactly 6 digits long',
+    'number.max': 'Pincode must be exactly 6 digits long',
+    'any.required': 'Pincode is required',
   }),
-  type: Joi.string().min(2).max(10).required().messages({
+  type: Joi.string().min(2).max(10).
+  valid('House', 'Office', 'Apartment', 'Other').required().messages({
     "string.base": "type must be string",
     "any.required":
       "type is required and should be from House,Office,Apartement,other",
+    'any.only': 'Type must be one of House, Office, Apartment, or Other',
     "string.empty": "type should not be empty",
     "string.min": "type must have a length of {#limit}",
     "string.max": "type must have a length of {#limit}",
@@ -267,31 +274,33 @@ const createAddress = Joi.object({
     "string.max": "name must have a length of {#limit}",
     "string.empty": "name must not be empty",
   }),
-  phoneNo: Joi.string().min(10).max(10).required().messages({
+  PhoneNo: Joi.string()
+  .pattern(/^[0-9]{10}$/) // Ensures exactly 10 digits
+  .required()
+  .messages({
     "string.base": "Phone number must be a string",
-    "any.required": `Phone number required`,
-    "string.empty": `Phone number should not be empty`,
-    "string.min": `Phone number should have a minimum length of {#limit}`,
-    "string.max": `Phone number should have a maximum length of {#limit}`,
+    "string.empty": "Phone number should not be empty",
+    "string.pattern.base": "Phone number must be exactly 10 digits long",
+  
   }),
 });
 
 const updateAddress = Joi.object({
-  street: Joi.string().min(3).max(20).required().messages({
+  street: Joi.string().min(3).max(100).required().messages({
     "string.base": "Street name must be string",
     "any.required": "Street name is required",
     "string.min": "Street name must be have minimum length of {#limit}",
     "string.max": "String name must have maximum length of {#limit}",
     "string.empty": "Street name should not be empty",
   }),
-  landmark: Joi.string().min(2).max(20).required().messages({
+  landmark: Joi.string().min(2).max(100).required().messages({
     "string.base": "landmark name must be string",
     "any.required": "landmark name is required",
     "string.min": "landmark name must be have minimum length of {#limit}",
     "string.max": "landmark name must have maximum length of {#limit}",
     "string.empty": "landmark name should not be empty",
   }),
-  city: Joi.string().min(3).max(50).required().messages({
+  city: Joi.string().min(3).max(100).required().messages({
     "string.base": "city name must be string",
     "any.required": "city name is required",
     "string.min": "city name must be have minimum length of {#limit}",
@@ -305,19 +314,22 @@ const updateAddress = Joi.object({
     "string.max": "state name must have a maximum length of {#limit}",
     "string.empty": "state name should not be empty",
   }),
-  country: Joi.string().min(2).max(20).required().messages({
+  country: Joi.string().min(2).max(20).optional().messages({
     "string.base": "country name must be",
     "any.required": "country name is required",
     "string.min": "country name must have length of {#limit}",
     "string.max": "country name must have length of {#limit}",
     "string.empty": "country name should not be empty",
   }),
-  pincode: Joi.number().min(6).max(6).required().messages({
-    "number.base": "pincode must be number",
-    "any.required": "pincode is required",
-    "number.min": "pincode must have a length of {#limit}",
-    "number.max": "pincode must have a length of {#limit}",
-    "number.empty": "pincode should not be empty",
+  pincode: Joi.number().integer() // Ensures the value is an integer (no decimals)
+  .min(100000) // Minimum 6-digit number (100000)
+  .max(999999) // Maximum 6-digit number (999999)
+  .required()
+  .messages({
+    'number.base': 'Pincode must be a number',
+    'number.min': 'Pincode must be exactly 6 digits long',
+    'number.max': 'Pincode must be exactly 6 digits long',
+    'any.required': 'Pincode is required',
   }),
   type: Joi.string().min(2).max(10).required().messages({
     "string.base": "type must be string",
@@ -330,18 +342,20 @@ const updateAddress = Joi.object({
   name: Joi.string().min(5).max(10).required().messages({
     "string.base": "name must be string",
     "any.required": "name is required",
-    "string.min": "name must have a length of {#length}",
+    "string.min": "name must have a length of {#limit}",
     "string.max": "name must have a length of {#limit}",
     "string.empty": "name must not be empty",
   }),
-  phoneNo: Joi.string().min(10).max(10).required().messages({
+  phoneNo: Joi.string()
+  .pattern(/^[0-9]{10}$/) // Ensures exactly 10 digits
+  .required()
+  .messages({
     "string.base": "Phone number must be a string",
-    "any.required": `Phone number required`,
-    "string.empty": `Phone number should not be empty`,
-    "string.min": `Phone number should have a minimum length of {#limit}`,
-    "string.max": `Phone number should have a maximum length of {#limit}`,
+    "string.empty": "Phone number should not be empty",
+    "string.pattern.base": "Phone number must be exactly 10 digits long",
   }),
-});
+
+})
 
 const getAddressById=Joi.object({
   id:Joi.string().required().messages({
@@ -359,19 +373,16 @@ const makeDefault=Joi.object({
 // cart validations
 
 const addProductToCart=Joi.object({
-  UserId:Joi.string().required().messages({
-    "any.required":"user id is required"
-  }),
-  productid:Joi.string().required().messages({
-    "any.required":"product id is required"
+  productId:Joi.string().required().messages({
+    "string.empty":"product id is required"
   })
 })
 
 const updateProductToCart=Joi.object({
-  productid:Joi.string().required().messages({
-    "any.required":"product id is required"
+  productId:Joi.string().required().messages({
+    "string.empty":"product id is required"
   }),
-  Quantity:Joi.number().min(1).required().messages({
+  quantity:Joi.number().min(1).max(10).required().messages({
     "any.required":"quantity is required",
     "number.min":"quantity must have a length of {#limit}",
     "number.empty":"quantity should not be empty"

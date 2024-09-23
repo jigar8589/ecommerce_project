@@ -34,7 +34,7 @@ const addressSchema = new mongoose.Schema({
     required: true,
   },
   PhoneNo: {
-    type: Number,
+    type: String,
     required: true,
   },
   isDefault: {

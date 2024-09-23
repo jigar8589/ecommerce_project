@@ -14,7 +14,7 @@ const {
   EmailveriifyForgetAPI,AdminLogin
   
 } = require("../controller/user.control");
-const schemaValidator=require("../validation/schemaValidation")
+const schemaValidator=require("../middlewere/schemaValidation")
 const {createUser,resetpassword,updateuser}=require("../validation/validations")
 
 router.get("/", auth, getAllUser);

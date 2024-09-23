@@ -1,28 +1,61 @@
 const cartservice = require("../service/cartService");
 
+
 // *********************************** Add to Cart Controller ******************************************
+
+// async function postAddtoCart(req, res) {
+//   try {
+//     const tokenId = req.user._id.toHexString();
+//     const UserId = req.body.userId;
+//     const productid = req.body.productId;
+//     const Quantity = req.body.quantity;
+//     const CheckproductIdExist = await cartservice.findUserId(
+//       tokenId,
+//       productid
+//     );
+
+//     if (!CheckproductIdExist) {
+//        const addcart =  await cartservice.addToCart(productid, tokenId, Quantity);
+//        res.json({ Massaeg: "New Product Add Successfully " });
+//     } else {
+//       if (!Quantity) {
+//         const updateQuantity = await cartservice.Updatequantity(productid);
+//         return res.json({ Message: "Quantity Increment Successfully" });
+//       }
+//       const findquantity = await cartservice.QuantityPlus(productid, Quantity);
+//       res.json({ Message: "Quntity Update Successfully" });
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.json({ error: "please try agin letter" });
+//   }
+// }
 
 async function postAddtoCart(req, res) {
   try {
     const tokenId = req.user._id.toHexString();
-    const UserId = req.body.userId;
-    const productid = req.body.productId;
-    const CheckproductIdExist = await cartservice.findUserId(
-      tokenId,
-      productid
-    );
-    if (!CheckproductIdExist) {
-      const addcart = cartservice.addToCart(productid, tokenId);
-      res.json({ Massaeg: "New Product Add Successfully ", data: addcart });
-    } else {
-      const updateQuantity = await cartservice.Updatequantity(productid);
-      res.json({ Message: "Quntity Update Successfully" });
+    const { productId, quantity } = req.body;
+
+    const productExists = await cartservice.findUserId(tokenId, productId);
+
+    if (!productExists) {
+      await cartservice.addToCart(productId, tokenId, quantity);
+      return res.json({ message: "Product added successfully." });
     }
+
+    if (!quantity) {
+      await cartservice.Updatequantity(productId);
+      return res.json({ message: "Quantity incremented successfully." });
+    }
+
+    await cartservice.QuantityPlus(productId, quantity);
+    res.json({ message: "Quantity updated successfully." });
   } catch (error) {
     console.log(error);
-    res.json({ error: "please try agin letter" });
+    res.status(500).json({ error: "An error occurred. Please try again later." });
   }
 }
+
 
 // ***********************************  Get Cart Details **********************************************
 
@@ -80,7 +113,7 @@ async function updateCartProduct(req, res) {
       } else {
         const UpdateCart = cartservice.UpdateCartProductDetails(
           productid,
-          Quantity
+                                                                                      
         );
         res
           .status(200)

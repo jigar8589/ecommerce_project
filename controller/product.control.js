@@ -28,7 +28,7 @@ async function updateproduct(req, res) {
 
     const verifyAdmin = await categoryService.CheckAdmin(tokenid);
     if (!verifyAdmin) {
-      res.status(401).json({ Message: "you are Unauthorised" });
+     return res.status(401).json({ Message: "you are Unauthorised" });
     }
     const productUpdated = await productService.productUpdate(
       id,
@@ -39,9 +39,12 @@ async function updateproduct(req, res) {
       category_id,
       images
     );
-    res.json({ Message: "Product update sucessfully" });
+    if(!productUpdated){
+      return res.json({ Message: "Product Not Found" });
+    }
+      res.json({Massage:"Product Update Successfully"})
   } catch (error) {
-    res.json({ Message: "some error please tya again latter" });
+    res.json({ error: "some error please tya again latter" });
   }
 }
 //**************************************** Delete Product Controller************************************************** */

@@ -18,25 +18,22 @@ const {
   LoginAdmin,UpdateOTPinForgetpassword
 } = require("../service/userService");
 const Util = require("../Util/email");
-const {validateUser,validateLogin,validateResetPassword}=require("../validation/userValidation")
+
 
 //******************************** * create new user controller ****************************************
 
 async function handleUser(req, res) {
   try {
 
-     const {error}=validateUser(req.body);
-     if(error) return res.status(400).send(error.details[0].Message);
-
     const findUser = await userService.userExist(req.body); // Check User Exist or not
     if (findUser) {
-      return res.status(404).send("User already exists..");
+       res.status(404).send("User already exists..");
     } else {
       const userCreate = await manageUser(req.body); // new user save in  databases
       res.json({ data: userCreate });
 
       if (!userCreate) {
-        res.status(404).send({ Message: "User not create" }); // user not create then resopnse in server
+         res.status(404).send({ Message: "User not create" }); // user not create then resopnse in server
       } else {
         const sendmailservice = await Util.sendmail(
           // send otp in user Email id using sendEmail function
@@ -44,7 +41,7 @@ async function handleUser(req, res) {
           req.body.otp
         );
 
-       return res.status(200).send("User created");
+        res.status(200).send("User created");
       }
     }
     // res.status(200).send({ data: userCreate });
@@ -59,9 +56,9 @@ async function handleVerification(req, res) {
     const verifyUser = await verfiyUser(req.query); // check user Verify
     if (verifyUser) {
       const updateUser = await updateuser(verifyUser._id, (isActive = true)); // user veify and isActive: true
-      res.status(200).send({ data: updateUser });
+      return res.status(200).send({ Massage:"User Verify Successfully"});
     } else {
-      res.status(404).json("user not found");
+      return  res.status(404).json("user not found");
     }
   } catch (error) {
     console.log(error);
@@ -88,7 +85,7 @@ async function getUserId(req, res) {
     console.log("id", id);
     console.log("userid", userid);
     if (id != userid) {
-      res.status(404).json({ Message: "Somthing went wrong" });
+      return  res.status(404).json({ Message: "Somthing went wrong" });
     }
     const user = await getUserById(id); // get user function
     res.status(200).json({ data: user });
@@ -101,9 +98,7 @@ async function getUserId(req, res) {
 
 async function resetPassword(req, res) {
   try {
-    const { error } = validateResetPassword(req.body);
-    if (error) return res.status(400).send(error.details[0].Message);
-
+    
     const userEmail = req.body.email;
     const tokenEmail = req.user.email;
     if (userEmail == tokenEmail) {
@@ -140,9 +135,6 @@ async function resetPassword(req, res) {
 async function loginUser(req, res) {
   try {
 
-     const {error}=validateLogin(req.body);
-     if(error) return res.status(400).send(error.details[0].Message)
-
     const User = await findUserByEmail(req.body); // check user Exist or not using email
     if (!User) {
       return res.status(404).json({ Message: "User not exist" });
@@ -161,7 +153,7 @@ async function loginUser(req, res) {
     const token = await createTokenPromise(
       // create jwttoken
       { userId: User._id, email: User.email },
-      "process.env.JWT_SECRECT",
+        process.env.JWT_SECRECT,
       { expiresIn: "2d" }
     );
     return res
@@ -178,16 +170,17 @@ async function loginUser(req, res) {
 async function forgotPassword(req, res) {
 
    try {
-  
-    const verifyEmail = userService.findUserByEmail(body)
+     const body = req.body
+    const verifyEmail =  await userService.findUserByEmail(body)
     if(!verifyEmail){
-      res.json({Message:"User Not Exist"})
+      return res.json({Message:"User Not Exist"})
     }
-    const verifyOTP =  userService.verfiyUser(body)
+    const verifyOTP = await userService.verifyOtp(body)
+    console.log(verifyOTP)
     if(!verifyOTP){
-      res.json({Message:"OTP Wrong"})
+     return res.json({Message:"OTP Wrong"})
     }
-    const UpdatePassword = userService.updatePassword(body)
+    const UpdatePassword = await userService.updatePassword(body)
     res.json({Massage:"Update Password Successfully", data:UpdatePassword})
    } catch (error) {
        console.log(error)
@@ -234,7 +227,7 @@ async function EmailveriifyForgetAPI(req, res) {
   } else {
     const otp = Util.genrateOTP();
     const sendemailis = await Util.sendmail(req.query.email, otp);
-    const otpUpdate = await UpdateOTP(req.query, otp);
+    const otpUpdate = await UpdateOTPinForgetpassword(req.body, otp);
     res.json({ Message: "send email successfully", data: sendemailis });
   }
 }
@@ -245,12 +238,11 @@ async function AdminLogin(req, res) {
   try {
     const adminLogin = await LoginAdmin(req.body);
     if (!adminLogin) {
-      res.status(404).json({ Message: "EmailId not Found" });
+       return res.status(404).json({ Message: "EmailId not Found" });
     }
-
     const CheckAdminPassword = await checkUserLoginPassword(req.body);
     if (!CheckAdminPassword) {
-      res.status(400).json({ Message: "Email And Password incorrect" });
+      return  res.status(400).json({ Message: "Email And Password incorrect" });
     } else {
       const Admintoken = await createTokenPromise(
         { userId: adminLogin._id, email: adminLogin.email },
@@ -258,7 +250,7 @@ async function AdminLogin(req, res) {
         { expiresIn: "2d" }
       );
 
-      res
+     return  res
         .status(200)
         .json({ Message: "Login Successfully", token: Admintoken });
     }

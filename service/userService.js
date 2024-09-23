@@ -32,7 +32,6 @@ async function verfiyUser(body) {
   const email = body.email;
   const otp = body.otp;
   const verfiyUser = await user.findOne({ email: email, otp: otp });
-
   return verfiyUser;
 }
 
@@ -117,7 +116,8 @@ async function updatePassword(body) {
     );
     return updatedUser;
   } catch (error) {
-    console.log(error);
+    throw new Error(error)
+    // console.log(error);
   }
 }
 
@@ -133,23 +133,6 @@ async function userIsActiveCheck(body) {
 }
 
 // Login user checkpassword correct or not
-
-// async function checkUserLoginPassword(body) {
-//   try {
-//     const users = await user
-//       .findOne({ email: body.email })
-//       .select("+password");
-//       const password = users.password
-//       console.log("users:",password)
-//     const pass = body.password;
-//     console.log(pass)
-//     const match = await bcrypt.compare(pass, password);
-//     console.log(match)
-//     return match;
-//   } catch (error) {
-//     throw new Error("error !!!!!!!!!!");
-//   }
-// }
 
 async function checkUserLoginPassword(body) {
   try {
@@ -201,13 +184,14 @@ async function checkUserLoginPassword(body) {
 //   }
 // }
 
-function generateOTP() {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
+// function generateOTP() {
+//   return Math.floor(100000 + Math.random() * 900000).toString();
+// }
+// This function use for forget Password 
 async function verifyOtp(body) {
   const otp = body.otp;
-  const verifyOtp = await user.findOne({ otp: otp });
+  const Email = body.email
+  const verifyOtp = await user.findOne({email:Email,otp: otp });
   return verifyOtp;
 }
 

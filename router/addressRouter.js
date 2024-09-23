@@ -8,7 +8,7 @@ const {
 const express = require("express");
 const auth = require("../middlewere/auth");
 const addressRouter = express();
-const schemaValidation=require("../validation/schemaValidation")
+const schemaValidation=require("../middlewere/schemaValidation")
 const {createAddress,updateAddress,getAddressById,makeDefault}=require("../validation/validations")
 
 addressRouter.post("/", auth, schemaValidation(createAddress,"body"),adress);

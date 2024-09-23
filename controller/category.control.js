@@ -10,7 +10,7 @@ async function Addcategory(req, res) {
 
     const findAdmin = await service.CheckAdmin(tokenId);
     if (!findAdmin) {
-      res.json({ Message: " can't access" });
+      return res.json({ Message: " can't access" });
     }
     const category = await service.AddCategory(categoryName, product_id);
     res.json({ Message: "Add category Successfully" });
