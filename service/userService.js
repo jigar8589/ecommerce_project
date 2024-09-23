@@ -5,9 +5,7 @@ const { genrateOTP } = require("../Util/email");
 const user = require("../model/user.model");
 const Util = require("../Util/email");
 const Address = require("../model/address.model");
-const jwt = require('jsonwebtoken')
-
-
+const jwt = require("jsonwebtoken");
 
 // Define the manageUser function
 async function manageUser(body) {
@@ -38,7 +36,7 @@ async function verfiyUser(body) {
 
 //  getall user
 async function getUser() {
-  const User = await user.find()
+  const User = await user.find();
   return User;
 }
 
@@ -74,13 +72,10 @@ async function getUserById(id) {
 async function findUserByEmail(body) {
   try {
     const useremail = body.email;
-      const users = await user.findOne({ email: useremail });
-      return users;
-    }
-  
-   catch (error) {
+    const users = await user.findOne({ email: useremail });
+    return users;
+  } catch (error) {
     return error;
-  
   }
 }
 
@@ -136,23 +131,15 @@ async function userIsActiveCheck(body) {
 
 async function checkUserLoginPassword(body) {
   try {
-    const users = await user
-      .findOne({ email: body.email })
-      .select("+password");
-      const password = users.password
-      console.log("users:",password)
+    const users = await user.findOne({ email: body.email }).select("+password");
+    const password = users.password;
     const pass = body.password;
-    console.log(pass)
     const match = await bcrypt.compare(pass, password);
-    console.log(match)
     return match;
   } catch (error) {
     throw new Error("error !!!!!!!!!!");
   }
 }
-
-
-
 
 //forget password
 
@@ -228,7 +215,6 @@ async function UpdateOTP(query, otp) {
   return OTP;
 }
 
-
 const createTokenPromise = (payload, key, options) => {
   return new Promise((resolve, reject) => {
     jwt.sign(payload, key, options, (error, token) => {
@@ -236,14 +222,12 @@ const createTokenPromise = (payload, key, options) => {
       resolve(token);
     });
   });
+};
 
-}
-
-
-async function LoginAdmin(body){
-  const Email = body.email
-  const findAdminorNot = await user.findOne({email:Email,role:"admin"})
-  return findAdminorNot
+async function LoginAdmin(body) {
+  const Email = body.email;
+  const findAdminorNot = await user.findOne({ email: Email, role: "admin" });
+  return findAdminorNot;
 }
 
 module.exports = {
@@ -264,6 +248,5 @@ module.exports = {
   UpdateOTP,
   userExist,
   createTokenPromise,
-  LoginAdmin
-
+  LoginAdmin,
 };
