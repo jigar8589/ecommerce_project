@@ -24,7 +24,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 const schemaValidation=require("../middlewere/schemaValidation")
-const {createproduct,updateProduct,deleteProduct,getProduct}=require("../validation/validations")
+const {createproduct,updateProduct}=require("../validation/validations")
 
 productrouter.post("/", auth, schemaValidation(createproduct,"body"),createProduct);
 productrouter.put("/:id", auth,schemaValidation(updateProduct,"body"),updateproduct);

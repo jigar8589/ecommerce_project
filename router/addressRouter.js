@@ -9,12 +9,12 @@ const express = require("express");
 const auth = require("../middlewere/auth");
 const addressRouter = express();
 const schemaValidation=require("../middlewere/schemaValidation")
-const {createAddress,updateAddress,getAddressById,makeDefault}=require("../validation/validations")
+const {createAddress,updateAddress}=require("../validation/validations")
 
 addressRouter.post("/", auth, schemaValidation(createAddress,"body"),adress);
 addressRouter.get("/", auth, allAdressget);
-addressRouter.get("/:id", auth, schemaValidation(getAddressById,"params"),allAdressgetById);
+addressRouter.get("/:id", auth,allAdressgetById);
 addressRouter.put("/:id", auth,schemaValidation(updateAddress,"body"),UpdateAddress);
-addressRouter.patch("/:id/make-default", auth,schemaValidation(makeDefault,"params"), makeDafulatAddress);
+addressRouter.patch("/:id/make-default", auth,makeDafulatAddress);
 addressRouter.delete("/:id",auth,DeleteAddress)
 module.exports = addressRouter;

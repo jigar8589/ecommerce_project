@@ -251,20 +251,6 @@ const updateCategory = Joi.object({
   }),
 });
 
-const deleteCategory = Joi.object({
-  id: Joi.string().required().messages({
-    "any.required": "Id is required",
-    "string.empty": "id should not be empty",
-  }),
-});
-
-const getCategoryById = Joi.object({
-  category_id: Joi.string().required().messages({
-    "any.required": "Id is required",
-    "string.empty": "id should not be empty",
-  }),
-});
-
 // address validations
 
 const createaddress = Joi.object({
@@ -401,20 +387,6 @@ const updateAddress = Joi.object({
     "string.empty": `Phone number should not be empty`,
     "string.min": `Phone number should have a minimum length of {#limit}`,
     "string.max": `Phone number should have a maximum length of {#limit}`,
-  }),
-});
-
-const getAddressById = Joi.object({
-  id: Joi.string().required().messages({
-    "any.required": "id is required",
-    "string.empty": "id should not be empty",
-  }),
-});
-
-const makeDefault = Joi.object({
-  id: Joi.string().required().messages({
-    "any.required": "id is required",
-    "string.empty": "id should not be empty",
   }),
 });
 
