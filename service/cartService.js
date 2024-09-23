@@ -11,21 +11,21 @@ async function addToCart(productid,id,quantity) {
     }
       } 
       
-async function Updatequantity(userId) {
+async function Updatequantity(userId,productId) {
   const Quantityincrement = await cart.findOneAndUpdate(
-    { userId: userId },
+    { productId: productId ,userId:userId },
     { $inc: { quantity: 1 } }
   );
   return Quantityincrement;
 }
 
-async function QuantityPlus(userId,quantity) {
-  const findQuantity = await cart.findOne({userId:userId})
+async function QuantityPlus(userId,productId,quantity) {
+  const findQuantity = await cart.findOne({userId:userId,productId:productId})
   const plusQuantity = findQuantity.quantity + quantity
   console.log(plusQuantity)
   console.log(findQuantity)
 
-  const UpdateQuantity = cart.findOneAndUpdate({userId:userId ,quantity:plusQuantity})
+  const UpdateQuantity = cart.findOneAndUpdate({userId:userId,productId:productId,quantity:plusQuantity})
   return UpdateQuantity
 }
 

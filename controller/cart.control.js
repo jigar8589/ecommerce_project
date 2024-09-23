@@ -44,11 +44,11 @@ async function postAddtoCart(req, res) {
     }
 
     if (!quantity) {
-      await cartservice.Updatequantity(tokenId);
+      await cartservice.Updatequantity(tokenId,productId);
       return res.json({ message: "Quantity incremented successfully." });
     }
 
-    await cartservice.QuantityPlus(tokenId, quantity);
+    await cartservice.QuantityPlus(tokenId,productId,quantity);
     res.json({ message: "Quantity updated successfully." });
   } catch (error) {
     console.log(error);
