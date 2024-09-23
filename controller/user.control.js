@@ -150,7 +150,7 @@ async function loginUser(req, res) {
     const token = await createTokenPromise(
       // create jwttoken
       { userId: User._id, email: User.email },
-      "process.env.JWT_SECRECT",
+      process.env.JWT_SECRECT,
       { expiresIn: "2d" }
     );
     return res
