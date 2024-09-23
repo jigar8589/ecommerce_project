@@ -8,7 +8,7 @@ const {addProductToCart,updateProductToCart}=require("../validation/validations"
 cartRouter.post("/",auth,schemaValidation(addProductToCart,"body"),postAddtoCart)
 cartRouter.get("/",auth,getaddcartDetails)
 cartRouter.delete("/",auth,deletecartdetails)
-cartRouter.put("/",auth,schemaValidation(updateProductToCart,"body"),updateCartProduct)
+cartRouter.patch("/",auth,schemaValidation(updateProductToCart,"body"),updateCartProduct)
 
 
 

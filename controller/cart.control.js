@@ -44,11 +44,11 @@ async function postAddtoCart(req, res) {
     }
 
     if (!quantity) {
-      await cartservice.Updatequantity(productId);
+      await cartservice.Updatequantity(tokenId);
       return res.json({ message: "Quantity incremented successfully." });
     }
 
-    await cartservice.QuantityPlus(productId, quantity);
+    await cartservice.QuantityPlus(tokenId, quantity);
     res.json({ message: "Quantity updated successfully." });
   } catch (error) {
     console.log(error);
@@ -113,6 +113,7 @@ async function updateCartProduct(req, res) {
       } else {
         const UpdateCart = cartservice.UpdateCartProductDetails(
           productid,
+          Quantity
                                                                                       
         );
         res
