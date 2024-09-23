@@ -7,25 +7,6 @@ async function addToCart(body) {
     quantity: body.quantity,
   });
 
-  const findUser=await cart.findOne({userId:productData.userId});
-  if (findUser) {
-    console.log(findUser);
-    
-    const findProduct=await cart.findOne({productId:findUser.productId});
-    if (findProduct&&findProduct) {
-      console.log(findProduct);
-      console.log(productData.quantity);
-      
-      const cartQuantity=await cart.findOne({quantity:findUser.quantity})
-      console.log(cartQuantity.quantity);
-      
-      const updatedQuantity=productData.quantity+cartQuantity.quantity
-      // console.log(updatedQuantity);
-      const updateProductQuantity=await cart.updateOne({quantity:updatedQuantity})
-      console.log(updateProductQuantity);
-    }
-  }
-
   const find_with_userId = await cart.findOne({
     userId: productData.userId,
     productId: productData.productId,
