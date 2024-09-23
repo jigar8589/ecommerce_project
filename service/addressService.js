@@ -10,7 +10,7 @@ async function addAddress(body) {
     pincode: body.pincode,
     type: body.type,
     name: body.name,
-    phone: body.phone,
+    phoneNo: body.phoneNo,
     isDefault: body.isDefault,
     userId: body.userId,
   });

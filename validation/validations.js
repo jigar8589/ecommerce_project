@@ -345,7 +345,7 @@ const createaddress = Joi.object({
   }),
   phoneNo: Joi.string().min(10).max(10).required().messages({
     "string.base": "Phone number must be a string",
-    "any.required": `Phone number required`,
+    "any.required": `Phone number is required`,
     "string.empty": `Phone number should not be empty`,
     "string.min": `Phone number should have a minimum length of {#limit}`,
     "string.max": `Phone number should have a maximum length of {#limit}`,
