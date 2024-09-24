@@ -254,7 +254,7 @@ const updateCategory = Joi.object({
 // address validations
 
 const createaddress = Joi.object({
-  street: Joi.string().min(3).max(20).required().messages({
+  street: Joi.string().min(3).max(200).required().messages({
     "string.base": "Street name must be string",
     "any.required": "Street name is required",
     "string.min": "Street name must be have minimum length of {#limit}",
@@ -297,7 +297,7 @@ const createaddress = Joi.object({
     "number.empty": "pincode should not be empty",
   }),
   type: Joi.string()
-    .valid("House", "Office", "Apartement", "Other")
+    .valid("house", "office", "apartement", "other")
     .required()
     .messages({
       "string.base": "type must be string",
@@ -403,11 +403,11 @@ const addProductTocart = Joi.object({
     "any.required": "product id is required",
     "string.empty": "product id should not be empty",
   }),
-  quantity:Joi.number().min(1).required().strict().messages({
+  quantity: Joi.number().min(1).required().strict().messages({
     "number.base": "quantity should be a number",
     "any.required": "quantity is required",
     "number.min": "quantity must have a length of {#limit}",
-  })
+  }),
 });
 
 const updateProductTocart = Joi.object({
