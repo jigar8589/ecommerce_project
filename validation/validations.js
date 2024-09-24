@@ -261,7 +261,7 @@ const createaddress = Joi.object({
     "string.max": "String name must have maximum length of {#limit}",
     "string.empty": "Street name should not be empty",
   }),
-  landmark: Joi.string().min(2).max(20).required().messages({
+  landmark: Joi.string().min(2).max(20).optional().messages({
     "string.base": "landmark name must be string",
     "any.required": "landmark name is required",
     "string.min": "landmark name must be have minimum length of {#limit}",
