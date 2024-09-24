@@ -184,7 +184,7 @@ const createproduct = Joi.object({
     "number.base": "Price should be a number",
     "number.empty": "Price should not be empty",
   }),
-  description: Joi.string().min(10).max(500).required().messages({
+  description: Joi.string().min(10).max(3000).required().messages({
     "string.base": "Description must be a string",
     "any.required": "Description is required",
     "string.empty": "Description should not be empty",
@@ -403,6 +403,12 @@ const addProductTocart = Joi.object({
     "any.required": "product id is required",
     "string.empty": "product id should not be empty",
   }),
+  quantity:Joi.number().optional().messages({
+    "number.base": "quantity should be a number",
+    "any.required": "quantity is required",
+    "number.min": "quantity must have a length of {#limit}",
+    "number.max": "qunanityt must have a length of {#limit}",
+  })
 });
 
 const updateProductTocart = Joi.object({
@@ -429,12 +435,8 @@ module.exports = {
   updateProduct,
   createCategory,
   updateCategory,
-  deleteCategory,
-  getCategoryById,
   createaddress,
   updateAddress,
-  getAddressById,
-  makeDefault,
   addProductTocart,
   updateProductTocart,
 };
