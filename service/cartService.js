@@ -3,7 +3,7 @@ const product = require("../model/product.model");
 
 async function addToCart(productid,id,quantity) {
     try {
-      const cartadd = cart.create({productId:productid,
+      const cartadd = await cart.create({productId:productid,
         userId:id ,quantity:quantity});
       return cartadd;
     } catch (error) {
@@ -22,10 +22,17 @@ async function Updatequantity(userId,productId) {
 async function QuantityPlus(userId,productId,quantity) {
   const findQuantity = await cart.findOne({userId:userId,productId:productId})
   const plusQuantity = findQuantity.quantity + quantity
+  console.log("Get Quantity",findQuantity.quantity)
   console.log(plusQuantity)
   console.log(findQuantity)
 
-  const UpdateQuantity = cart.findOneAndUpdate({userId:userId,productId:productId,quantity:plusQuantity})
+  const UpdateQuantity = cart.findOneAndUpdate({ 
+    userId: userId, 
+    productId: productId },                     // Match on userId and productId
+    { $set: { quantity: plusQuantity } },      // Update the quantity field
+    { new: true }                              // Return the updated document
+  );
+  console.log(UpdateQuantity)
   return UpdateQuantity
 }
 

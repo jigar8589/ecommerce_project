@@ -127,38 +127,38 @@ const createproduct = Joi.object({
     "number.empty": "Quantity should not be empty",
     "number.min": "Quantity number should be atleast {#limit}",
   }),
-  images: Joi.array().length(1).required().messages({
+  images: Joi.array().required().messages({
     "any.required": "Image is required",
     "array.min": "Atleast 1 image is required",
   }),
 });
 
 const updateProduct = Joi.object({
-  name: Joi.string().min(3).max(100).required().messages({
+  name: Joi.string().min(3).max(100).optional().messages({
     "string.base": "Product name must be a string",
     "any.required": `Product name required`,
     "string.empty": `Product name should not be empty`,
     "string.min": `Product name should have a minimum length of {#limit}`,
     "string.max": `Product name should have a maximum length of {#limit}`,
   }),
-  price: Joi.number().min(10).required().messages({
+  price: Joi.number().min(10).optional().messages({
     "number.min": "Price minimum 10",
     "any.required": "Price is required",
   }),
-  description: Joi.string().min(10).max(200).required().messages({
+  description: Joi.string().min(10).max(200).optional().messages({
     "string.base": "Description must be a string",
     "any.required": "Description is required",
     "string.empty": "Description should not be empty",
     "string.min": "Description name should have a minimum length of {#limit}",
     "string.max": "Description name should have a maximum length of {#limit}",
   }),
-  quantity: Joi.number().min(1).required().messages({
+  quantity: Joi.number().min(1).optional().messages({
     "number.base": "Quantity must be a number",
     "any.required": "Quantity is required",
     "number.empty": "Quantity should not be empty",
     "number.min": "Quantity number should be atleast {#limit}",
   }),
-  images: Joi.array().length(1).required().messages({
+  images: Joi.array().optional().messages({
     "any.required": "Image is required",
     "array.length": "Atleast 1 image is required",
   }),
