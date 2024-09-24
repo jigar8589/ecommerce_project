@@ -242,7 +242,7 @@ const createCategory = Joi.object({
 });
 
 const updateCategory = Joi.object({
-  categoryName: Joi.string().min(3).max(50).required().messages({
+  categoryName: Joi.string().min(3).max(50).optional().messages({
     "string.base": "Category name must be string",
     "any.required": "Category name is required",
     "string.min": "Category name must be have minimum length of {#limit}",
@@ -393,31 +393,35 @@ const updateAddress = Joi.object({
 // cart validations
 
 const addProductTocart = Joi.object({
-  UserId: Joi.string().required().messages({
+  userId: Joi.string().required().messages({
     "string.base": "user id should be string",
     "any.required": "user id is required",
     "string.empty": "user id should not be empty",
   }),
-  productid: Joi.string().required().messages({
+  productId: Joi.string().required().messages({
     "string.base": "product id should be string",
     "any.required": "product id is required",
     "string.empty": "product id should not be empty",
   }),
-  quantity:Joi.number().optional().messages({
+  quantity:Joi.number().min(1).required().strict().messages({
     "number.base": "quantity should be a number",
     "any.required": "quantity is required",
     "number.min": "quantity must have a length of {#limit}",
-    "number.max": "qunanityt must have a length of {#limit}",
   })
 });
 
 const updateProductTocart = Joi.object({
-  productid: Joi.string().required().messages({
+  userId: Joi.string().optional().messages({
+    "string.base": "user id should be string",
+    "any.required": "user id is required",
+    "string.empty": "user id should not be empty",
+  }),
+  productId: Joi.string().optional().messages({
     "string.base": "product is should be string",
     "any.required": "product id is required",
     "string.empty": "product id should not be empty",
   }),
-  Quantity: Joi.number().min(1).max(20).required().messages({
+  quantity: Joi.number().min(1).max(20).optional().strict().messages({
     "number.base": "quantity should be a number",
     "any.required": "quantity is required",
     "number.min": "quantity must have a length of {#limit}",
