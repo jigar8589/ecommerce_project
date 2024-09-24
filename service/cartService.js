@@ -11,25 +11,51 @@ async function addToCart(productid,id,quantity) {
     }
       } 
       
-async function Updatequantity(userId,productId) {
-  const Quantityincrement = await cart.findOneAndUpdate(
-    { productId: productId ,userId:userId },
-    { $inc: { quantity: 1 } }
-  );
-  return Quantityincrement;
+//****************************** Working On This API********************************************* */
+
+// async function Updatequantity(userId,productId) {
+//   const Quantityincrement = await cart.findOneAndUpdate(
+//     { productId: productId ,userId:userId },
+//     { $inc: { quantity: 1 }, }
+
+//   );
+//   return Quantityincrement;
+// }
+
+// async function findQuntityInDB(userId, productId) {
+//     // Find the cart item first
+//     
+//     return cartItem
+    
+// }
+
+async function Updatequantity(userId,productId){
+
+  const cartItem = await cart.findOne({ productId: productId, userId: userId });
+  const newQuantity = Math.min(cartItem.quantity + 1, 10);
+
+const updatedCartItem = await cart.findOneAndUpdate(
+  { userId: userId, productId: productId },
+  { $set: { quantity: newQuantity } },
+  { new: true } // Return the updated document
+);
+  console.log(updatedCartItem)
+  return updatedCartItem
 }
+
+//***************************************************************************************************** */
 
 async function QuantityPlus(userId,productId,quantity) {
   const findQuantity = await cart.findOne({userId:userId,productId:productId})
-  const plusQuantity = findQuantity.quantity + quantity
+  const newQuantity = Math.min(findQuantity.quantity + quantity, 10);
   console.log("Get Quantity",findQuantity.quantity)
-  console.log(plusQuantity)
+  console.log(newQuantity)
   console.log(findQuantity)
 
   const UpdateQuantity = cart.findOneAndUpdate({ 
     userId: userId, 
     productId: productId },                     // Match on userId and productId
-    { $set: { quantity: plusQuantity } },      // Update the quantity field
+    { $set: { quantity: newQuantity } },      // Update the quantity field
     { new: true }                              // Return the updated document
   );
   console.log(UpdateQuantity)
@@ -68,7 +94,8 @@ module.exports = {
   deleteaddcartDetails,
   Updatequantity,
   UpdateCartProductDetails,
-  QuantityPlus
+  QuantityPlus,
+ 
 };
 
 

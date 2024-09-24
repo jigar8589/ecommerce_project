@@ -13,8 +13,9 @@ const {createAddress,updateAddress,getAddressById,makeDefault}=require("../valid
 
 addressRouter.post("/", auth, schemaValidation(createAddress,"body"),adress);
 addressRouter.get("/", auth, allAdressget);
-addressRouter.get("/:id", auth, schemaValidation(getAddressById,"params"),allAdressgetById);
+addressRouter.get("/", auth,allAdressgetById);
 addressRouter.put("/:id", auth,schemaValidation(updateAddress,"body"),UpdateAddress);
 addressRouter.patch("/:id/make-default", auth,schemaValidation(makeDefault,"params"), makeDafulatAddress);
 addressRouter.delete("/:id",auth,DeleteAddress)
+
 module.exports = addressRouter;

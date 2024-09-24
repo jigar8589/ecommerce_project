@@ -145,7 +145,7 @@ const updateProduct = Joi.object({
     "number.min": "Price minimum 10",
     "any.required": "Price is required",
   }),
-  description: Joi.string().min(10).max(200).optional().messages({
+  description: Joi.string().min(10).max(3000).optional().messages({
     "string.base": "Description must be a string",
     "any.required": "Description is required",
     "string.empty": "Description should not be empty",
@@ -212,49 +212,45 @@ const getCategoryById = Joi.object({
 // address validations
 
 const createAddress = Joi.object({
-  street: Joi.string().min(3).max(20).required().messages({
+  street: Joi.string().min(3).max(200).required().messages({
     "string.base": "Street name must be string",
     "any.required": "Street name is required",
     "string.min": "Street name must be have minimum length of {#limit}",
     "string.max": "String name must have maximum length of {#limit}",
     "string.empty": "Street name should not be empty",
   }),
-  landmark: Joi.string().min(2).max(20).required().messages({
+  landmark: Joi.string().min(2).max(200).required().messages({
     "string.base": "landmark name must be string",
     "any.required": "landmark name is required",
     "string.min": "landmark name must be have minimum length of {#limit}",
     "string.max": "landmark name must have maximum length of {#limit}",
     "string.empty": "landmark name should not be empty",
   }),
-  city: Joi.string().min(3).max(50).required().messages({
+  city: Joi.string().min(3).max(100).required().messages({
     "string.base": "city name must be string",
     "any.required": "city name is required",
     "string.min": "city name must be have minimum length of {#limit}",
     "string.max": "city name must have maximum length of {#limit}",
     "string.empty": "city name should not be empty",
   }),
-  state: Joi.string().min(2).max(15).required().messages({
+  state: Joi.string().min(2).max(100).required().messages({
     "string.base": "state name must be string",
     "any.required": "state name is required",
     "string.min": "state name must be have minimum length of {#limit}",
     "string.max": "state name must have a maximum length of {#limit}",
     "string.empty": "state name should not be empty",
   }),
-  country: Joi.string().min(2).max(20).required().messages({
+  country: Joi.string().min(2).max(100).required().messages({
     "string.base": "country name must be",
     "any.required": "country name is required",
     "string.min": "country name must have length of {#limit}",
     "string.max": "country name must have length of {#limit}",
     "string.empty": "country name should not be empty",
   }),
-  pincode: Joi.number().integer() // Ensures the value is an integer (no decimals)
-  .min(100000) // Minimum 6-digit number (100000)
-  .max(999999) // Maximum 6-digit number (999999)
-  .required()
+  pincode: Joi.string().length(6) // Ensures the value is an integer (no decimals)
   .messages({
-    'number.base': 'Pincode must be a number',
-    'number.min': 'Pincode must be exactly 6 digits long',
-    'number.max': 'Pincode must be exactly 6 digits long',
+    'string.base': 'Pincode must be a number',
+    'string.length': 'Pincode must be exactly 6 digits long',
     'any.required': 'Pincode is required',
   }),
   type: Joi.string().min(2).max(10).
@@ -267,7 +263,7 @@ const createAddress = Joi.object({
     "string.min": "type must have a length of {#limit}",
     "string.max": "type must have a length of {#limit}",
   }),
-  name: Joi.string().min(5).max(10).required().messages({
+  name: Joi.string().min(2).max(50).required().messages({
     "string.base": "name must be string",
     "any.required": "name is required",
     "string.min": "name must have a length of {#length}",
@@ -321,14 +317,10 @@ const updateAddress = Joi.object({
     "string.max": "country name must have length of {#limit}",
     "string.empty": "country name should not be empty",
   }),
-  pincode: Joi.number().integer() // Ensures the value is an integer (no decimals)
-  .min(100000) // Minimum 6-digit number (100000)
-  .max(999999) // Maximum 6-digit number (999999)
-  .required()
+  pincode: Joi.string().length(6) // Ensures the value is an integer (no decimals)
   .messages({
-    'number.base': 'Pincode must be a number',
-    'number.min': 'Pincode must be exactly 6 digits long',
-    'number.max': 'Pincode must be exactly 6 digits long',
+    'string.base': 'Pincode must be a number',
+    'string.length': 'Pincode must be exactly 6 digits long',
     'any.required': 'Pincode is required',
   }),
   type: Joi.string().min(2).max(10).required().messages({
@@ -339,7 +331,7 @@ const updateAddress = Joi.object({
     "string.min": "type must have a length of {#limit}",
     "string.max": "type must have a length of {#limit}",
   }),
-  name: Joi.string().min(5).max(10).required().messages({
+  name: Joi.string().min(2).max(50).required().messages({
     "string.base": "name must be string",
     "any.required": "name is required",
     "string.min": "name must have a length of {#limit}",
@@ -357,11 +349,11 @@ const updateAddress = Joi.object({
 
 })
 
-const getAddressById=Joi.object({
-  id:Joi.string().required().messages({
-    "any.required":"id is required"
-  })
-})
+// const getAddressById=Joi.object({
+//   id:Joi.string().required().messages({
+//     "any.required":"id is required"
+//   })
+// })
 
 const makeDefault=Joi.object({
   id:Joi.string().required().messages({
@@ -372,11 +364,17 @@ const makeDefault=Joi.object({
 
 // cart validations
 
-const addProductToCart=Joi.object({
-  productId:Joi.string().required().messages({
-    "string.empty":"product id is required"
+const addProductToCart = Joi.object({
+  productId: Joi.string().required().messages({
+    "string.empty": "Product ID is required"
+  }),
+  quantity: Joi.number().max(10).optional().strict().messages({
+    "any.required": "Quantity is required",
+    "number.base": "Quantity should be a number",
+    "number.max": "Maximum quantity is 10"
   })
-})
+});
+
 
 const updateProductToCart=Joi.object({
   productId:Joi.string().required().messages({
@@ -403,7 +401,6 @@ module.exports = {
   getCategoryById,
   createAddress,
   updateAddress,
-  getAddressById,
   makeDefault,
   addProductToCart,
   updateProductToCart

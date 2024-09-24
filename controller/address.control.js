@@ -29,11 +29,10 @@ async function allAdressget(req, res) {
 async function allAdressgetById(req, res) {
   try {
     const tokenId = req.user._id.toHexString(); // token id convert to hexString
-    const address = await service.getAdreessDataById(req.params.id);
-    if (tokenId !== address.userId._id.toHexString()) {
-      res.status(403).json({ Message: "Access denied." });
+    const address = await service.getAdreessDataById(tokenId);
+    if(address){
+      res.json({ data: address });
     }
-    res.json({ data: address });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server reror. Please try again." });

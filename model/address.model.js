@@ -1,3 +1,4 @@
+const { string } = require("joi");
 const mongoose = require("mongoose");
 
 const addressSchema = new mongoose.Schema({
@@ -22,7 +23,7 @@ const addressSchema = new mongoose.Schema({
     default: "India",
   },
   pincode: {
-    type: Number,
+    type: String,
     required: true,
   },
   type: {

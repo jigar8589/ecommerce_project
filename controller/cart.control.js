@@ -1,6 +1,5 @@
 const cartservice = require("../service/cartService");
 
-
 // *********************************** Add to Cart Controller ******************************************
 
 // async function postAddtoCart(req, res) {
@@ -44,18 +43,26 @@ async function postAddtoCart(req, res) {
     }
 
     if (!quantity) {
-      await cartservice.Updatequantity(tokenId,productId);
-      return res.json({ message: "Quantity incremented successfully." });
+      if (productExists.quantity < 10) {
+        await cartservice.Updatequantity(tokenId, productId);
+        return res.json({ message: "Quantity incremented successfully." });
+      } else {
+        return res.json({ error: "Maximum quantity reached" });
+      }
     }
-
-    await cartservice.QuantityPlus(tokenId,productId,quantity);
-    res.json({ message: "Quantity updated successfully." });
+    if (productExists.quantity < 10) {
+      await cartservice.QuantityPlus(tokenId, productId, quantity);
+      return res.json({ message: "Quantity updated successfully." });
+    } else {
+      return res.json({ error: "Product Maximum quantity reached " });
+    }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "An error occurred. Please try again later." });
+    res
+      .status(500)
+      .json({ error: "An error occurred. Please try again later." });
   }
 }
-
 
 // ***********************************  Get Cart Details **********************************************
 
@@ -70,7 +77,7 @@ async function getaddcartDetails(req, res) {
     res.json({ Message: "Some Error" });
   }
 }
- 
+
 // ********************************** Delete Cart Details ************************************************
 async function deletecartdetails(req, res) {
   try {
@@ -113,7 +120,7 @@ async function updateCartProduct(req, res) {
       } else {
         const UpdateCart = cartservice.UpdateCartProductDetails(
           productid,
-          Quantity                                                                             
+          Quantity
         );
         res
           .status(200)

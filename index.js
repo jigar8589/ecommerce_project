@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use("/api/users/", router);
 app.use("/api/product", productrouter);
-app.use("/api/adress",addressRouter)
+app.use("/api/address",addressRouter)
 app.use("/api/cart",cartRouter)
 app.use("/api/category",categoryRouter)
 
