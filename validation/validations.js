@@ -254,7 +254,7 @@ const updateCategory = Joi.object({
 // address validations
 
 const createaddress = Joi.object({
-  street: Joi.string().min(3).max(20).required().messages({
+  street: Joi.string().min(3).max(200).required().messages({
     "string.base": "Street name must be string",
     "any.required": "Street name is required",
     "string.min": "Street name must be have minimum length of {#limit}",
