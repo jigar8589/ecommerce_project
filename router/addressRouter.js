@@ -9,12 +9,12 @@ const {
 } = require("../controller/address.control");
 const authToken = require("../middleware/auth");
 const schemaValidation=require("../middleware/schemaValidation")
-const {createaddress,getAddressById,makeDefault}=require("../validation/validations")
+const {createaddress}=require("../validation/validations")
 
 addressrouter.post("/", schemaValidation(createaddress,"body"),createAddress);
-addressrouter.get("/:id", authToken, schemaValidation(getAddressById,"params"),getUserById);
+addressrouter.get("/:id", authToken,getUserById);
 addressrouter.delete("/:id", authToken, deleteAddressById);
 addressrouter.get("/:id", authToken, getAddress);
-addressrouter.patch("/:id", schemaValidation(makeDefault,"params"),checkDefault);
+addressrouter.patch("/:id",checkDefault);
 
 module.exports = addressrouter;

@@ -8,12 +8,12 @@ const {
   getProductcontroler,
 } = require("../controller/product.control");
 const schemaValidation=require("../middleware/schemaValidation");
-const {createproduct,updateProduct,deleteProduct,getProduct}=require("../validation/validations")
+const {createproduct,updateProduct}=require("../validation/validations")
 
 productrouter.post("/", schemaValidation(createproduct,"body"),createProduct);
 productrouter.put("/:id", schemaValidation(updateProduct,"body"),updateproduct);
-productrouter.delete("/:id", schemaValidation(deleteProduct,"params"),deleteProductControl);
+productrouter.delete("/:id",deleteProductControl);
 productrouter.get("/", allProducts);
-productrouter.get("/:id", schemaValidation(getProduct,"params"),getProductcontroler);
+productrouter.get("/:id",getProductcontroler);
 
 module.exports = productrouter;
