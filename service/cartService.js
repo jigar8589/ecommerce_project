@@ -21,7 +21,7 @@ async function addToCart(body) {
       { $inc: { quantity: 1 } }
     );
 
-    return updateQuantity;
+    return { message: "quantity updated.", updateQuantity };
   } else {
     const addProductToCart = await productData.save();
     return addProductToCart;
@@ -39,17 +39,23 @@ async function findUserProduct(userid, productid, qnty) {
   const findUser = await cart.findOne({ userId: userid });
   console.log(findUser);
   if (findUser) {
-    const findProduct = await cart.findOne({ productId: productid });
+    const findProduct = await cart.findOne({
+      userId: userid,
+      productId: productid,
+    });
     console.log(findProduct);
     if (findProduct) {
-      const updateProduct = await cart.updateOne({ quantity: qnty });
+      const updateProduct = await cart.updateOne(
+        { userId: userid, productId: productid },
+        { $set: { quantity: qnty } }
+      );
       return updateProduct;
     } else {
-      return;
+      return { message: "product not found in user cart" };
     }
     // console.log(updateProduct);
   } else {
-    return;
+    return { message: "user cart not found" };
   }
 }
 

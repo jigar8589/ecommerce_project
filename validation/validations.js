@@ -214,7 +214,7 @@ const updateProduct = Joi.object({
     "number.base": "Price should be a number",
     "number.min": "Price should be at least 1",
   }),
-  description: Joi.string().min(10).max(200).optional().messages({
+  description: Joi.string().min(10).max(3000).optional().messages({
     "string.base": "Description must be a string",
     "string.empty": "Description should not be empty",
     "string.min": "Description should have a minimum length of {#limit}",
