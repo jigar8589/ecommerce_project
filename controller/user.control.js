@@ -26,7 +26,7 @@ async function handleUser(req, res) {
       const userCreate = await manageUser(req.body);
       res.json({ message: "user registered successfully.." });
       if (!userCreate) {
-        return res.status(404).send({ massage: "User not create" });
+        return res.status(404).send({ message: "User not create" });
       } else {
         const sendmailservice = await Util.sendmail(
           req.body.email,
@@ -92,13 +92,13 @@ async function resetPassword(req, res) {
       const userPasscheck = await checkUserPassword(req.body);
 
       if (!userPasscheck) {
-        res.status(404).json({ massage: "Email and password incorrect" });
+        res.status(404).json({ message: "Email and password incorrect" });
       } else {
         const newPassword = await updatePassword(req.body);
-        res.status(200).json({ massage: "password update successfuly" });
+        res.status(200).json({ message: "password update successfuly" });
       }
     } else {
-      res.status(404).json({ massage: "user is not active" });
+      res.status(404).json({ message: "user is not active" });
     }
   } else {
     res.status(404).send("user  not exist");
@@ -177,10 +177,10 @@ async function updateUser(req, res) {
   } else {
     const isActive = await userIsActiveCheck(req.body);
     if (!isActive) {
-      res.status(404).json({ massage: "User is not active" });
+      res.status(404).json({ message: "User is not active" });
     } else {
       const updateuserone = await updateUserByOne(req.body);
-      res.status(200).json({ massage: "User Update Successfully" });
+      res.status(200).json({ message: "User Update Successfully" });
     }
   }
 }
@@ -188,12 +188,12 @@ async function updateUser(req, res) {
 async function sendOtp(req, res) {
   const checkUserExist = await userExist(req.query);
   if (!checkUserExist) {
-    res.send({ massage: "User not exist" });
+    res.send({ message: "User not exist" });
   } else {
     const otp = Util.genrateOTP();
     const sendemailis = await Util.sendmail(req.query.email, otp);
     const otpUpdate = await UpdateOTP(req.query, otp);
-    res.json({ massage: "send email successfully", data: sendemailis });
+    res.json({ message: "send email successfully", data: sendemailis });
   }
 }
 
