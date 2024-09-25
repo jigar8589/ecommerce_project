@@ -369,7 +369,7 @@ const updateAddress = Joi.object({
   type: Joi.string().min(2).max(10).optional().messages({
     "string.base": "type must be string",
     "any.required":
-      "type is required and should be from House,Office,Apartement,other",
+      "type is required and should be from house,office,apartement,other",
     "string.empty": "type should not be empty",
     "string.min": "type must have a length of {#limit}",
     "string.max": "type must have a length of {#limit}",
