@@ -37,13 +37,11 @@ async function getFromCart(userid) {
 
 async function findUserProduct(userid, productid, qnty) {
   const findUser = await cart.findOne({ userId: userid });
-  console.log(findUser);
   if (findUser) {
     const findProduct = await cart.findOne({
       userId: userid,
       productId: productid,
     });
-    console.log(findProduct);
     if (findProduct) {
       const updateProduct = await cart.updateOne(
         { userId: userid, productId: productid },
@@ -53,7 +51,6 @@ async function findUserProduct(userid, productid, qnty) {
     } else {
       return { message: "product not found in user cart" };
     }
-    // console.log(updateProduct);
   } else {
     return { message: "user cart not found" };
   }
