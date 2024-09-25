@@ -37,16 +37,17 @@ async function getFromCart(userid) {
 
 async function findUserProduct(userid, productid, qnty) {
   const findUser = await cart.findOne({ userId: userid });
-  // console.log(findUser);
+  console.log(findUser);
   if (findUser) {
-    const findUserProduct = await cart.findOne({ productId: productid });
-    if (findUserProduct) {
+    const findProduct = await cart.findOne({ productId: productid });
+    console.log(findProduct);
+    if (findProduct) {
       const updateProduct = await cart.updateOne({ quantity: qnty });
-      // console.log(updateProduct);
       return updateProduct;
     } else {
       return;
     }
+    // console.log(updateProduct);
   } else {
     return;
   }

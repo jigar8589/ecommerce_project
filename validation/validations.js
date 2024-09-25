@@ -421,11 +421,11 @@ const updateProductTocart = Joi.object({
     "any.required": "product id is required",
     "string.empty": "product id should not be empty",
   }),
-  quantity: Joi.number().min(1).max(20).optional().strict().messages({
+  quantity: Joi.number().optional().strict().messages({
     "number.base": "quantity should be a number",
     "any.required": "quantity is required",
     "number.min": "quantity must have a length of {#limit}",
-    "number.max": "qunanityt must have a length of {#limit}",
+    "number.max": "qunanity must have a length of {#limit}",
   }),
 });
 
