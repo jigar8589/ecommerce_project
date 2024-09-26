@@ -28,7 +28,7 @@ const addressSchema = new mongoose.Schema({
   },
   type: {
     type: String,
-    enum: ["House", "office", "Apartment", "other"],
+    enum: ["House", "Office", "Apartment", "Other"],
   },
   name: {
     type: String,
