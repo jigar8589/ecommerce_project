@@ -114,7 +114,7 @@ const createproduct = Joi.object({
     "any.required": "Price is required",
    
   }),
-  description: Joi.string().min(10).max(200).required().messages({
+  description: Joi.string().min(10).max(3000).required().messages({
     "string.base": "Description must be a string",
     "any.required": "Description is required",
     "string.empty": "Description should not be empty",
