@@ -204,7 +204,7 @@ const deleteCategory = Joi.object({
 });
 
 const getCategoryById = Joi.object({
-  category_id: Joi.string().required().messages({
+  id: Joi.string().required().messages({
     "any.required": "Id is required",
   }),
 });

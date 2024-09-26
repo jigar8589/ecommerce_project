@@ -42,7 +42,7 @@ async function updateproduct(req, res) {
     if(!productUpdated){
       return res.json({ Message: "Product Not Found" });
     }
-      res.json({Massage:"Product Update Successfully"})
+      res.json({Message:"Product Update Successfully"})
   } catch (error) {
     res.json({ error: "some error please tya again latter" });
   }

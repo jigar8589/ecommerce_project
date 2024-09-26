@@ -7,7 +7,7 @@ const {createCategory,updateCategory,deleteCategory,getCategoryById}=require("..
 
 
 categoryRouter.post("/",auth,schemaValidation(createCategory,"body"),Addcategory)
-categoryRouter.get("/",auth,getAllCategory);
+categoryRouter.get("/",getAllCategory);
 categoryRouter.patch("/:id",auth,schemaValidation(updateCategory,"body"),UpdateCategory)
 categoryRouter.delete("/:id",auth,schemaValidation(deleteCategory,"params"),DeleteCategory)
 categoryRouter.get("/:id",schemaValidation(getCategoryById,"params"),getProductByCategory)

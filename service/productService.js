@@ -1,5 +1,6 @@
 
 const product = require("../model/product.model");
+const cart = require("../model/cart.model")
 const Joi = require("joi")
 
 async function addproduct(body) {
@@ -45,8 +46,10 @@ async function productUpdate(id, name, price, description, quantity,category_id,
   } 
 
 async function productDelete(id) {
-  const Delete = await product.findByIdAndDelete({ _id: id });
-  return Delete;
+  const productDeleted = await product.findByIdAndDelete({ _id: id });
+ if(productDeleted)
+    await cart.deleteMany({productId:id})
+    return productDeleted
 }
 
 async function getAllProducts() {

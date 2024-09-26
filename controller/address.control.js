@@ -92,7 +92,7 @@ async function makeDafulatAddress(req, res) {
     }
     const addressDefualat = await service.defaultCheck(tokenId);
     const data = await service.setDefaultAddress(id);
-    res.json({ Message: "address default successfully" });
+    res.json({ Message: "address default successfully" ,data:data});
   } catch (error) {
     console.log(error);
     res.json({ Message: "Address Id wrong" });

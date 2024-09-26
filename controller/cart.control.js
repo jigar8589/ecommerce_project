@@ -71,6 +71,7 @@ async function getaddcartDetails(req, res) {
     const tokenId = req.user._id.toHexString();
     // const UserId = req.body;
     const getaddcart = await cartservice.addcartdetailsByUserId(tokenId);
+    console.log(getaddcart)
     res.json({ data: getaddcart });
   } catch (error) {
     console.log(error);

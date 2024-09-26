@@ -64,9 +64,17 @@ async function QuantityPlus(userId,productId,quantity) {
 
 async function addcartdetailsByUserId(userId) {
   const addtocart = await cart.find({userId:userId}).populate('productId');
-  
+
+ 
   return addtocart;
 }
+ async function productTotal(userId,productId){
+
+  const Total  = await cart.find({userId:userId,productId:productId})
+
+ }
+
+
 
 async function findUserId(userId, productId) {
   const finduserid = await cart

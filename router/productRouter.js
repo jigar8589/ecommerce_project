@@ -30,7 +30,7 @@ productrouter.post("/", auth, schemaValidation(createproduct,"body"),createProdu
 productrouter.put("/:id", auth,schemaValidation(updateProduct,"body"),updateproduct);
 productrouter.delete("/:id",auth, schemaValidation(deleteProduct,"params"),deleteProductControl);
 productrouter.get("/",allProducts);
-productrouter.get("/:id",auth, schemaValidation(getProduct,"params"),getProductcontroler);
+productrouter.get("/:id", schemaValidation(getProduct,"params"),getProductcontroler);
 
 
 

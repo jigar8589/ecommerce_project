@@ -103,7 +103,7 @@ async function setDefaultAddress(id) {
     const isDefault = true;
     const updateDefault = await Address.findByIdAndUpdate(
       { _id: id },
-      { $set: { isDefault: isDefault } }
+      { $set: { isDefault: isDefault }}
     );
     return updateDefault;
   } catch (error) {
