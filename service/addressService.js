@@ -24,7 +24,7 @@ async function getAddressData() {
 // get all address in db
 
 async function getAdreessDataById(id) {
-  const adress = await Address.findById({ _id: id }).populate("userId");
+  const adress = await Address.findOne({ userId: id })
   return adress;
 }
 // Update address in db
